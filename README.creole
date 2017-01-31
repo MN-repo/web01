@@ -15,6 +15,6 @@ $tuser and $token (the same Bandwidth AP credentials that sgx-catapult uses).
 
 Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
 
-Copying and distribution of this file, with or without modification, are
-permitted in any medium without royalty provided the copyright notice and this
-notice are preserved.
+Copying and distribution of this README.creole file, with or without
+modification, are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
