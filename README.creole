@@ -1,0 +1,20 @@
+= jmp-register =
+
+The registration wizard for JMP.  This wizard requires sgx-catapult to operate.
+
+The project should run on any web server configured to serve PHP (and to show
+index.php and index.xhtml as default directory pages) that has phpredis (ie. the
+php5-redis package in Debian).
+
+Note that a settings file must be placed at ../../../../settings-jmp.php
+(relative to register3/index.php for example).  The file must define these
+variables: $redis_host and $redis_port (should match what sgx-catapult uses),
+$redis_auth (empty string if no auth), $key_ttl_seconds (recommended: 3600), and
+$tuser and $token (the same Bandwidth AP credentials that sgx-catapult uses).
+
+
+Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
+
+Copying and distribution of this file, with or without modification, are
+permitted in any medium without royalty provided the copyright notice and this
+notice are preserved.
