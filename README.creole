@@ -10,6 +10,7 @@ Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
 variables: $redis_host and $redis_port (should match what sgx-catapult uses),
 $redis_auth (empty string if no auth), $key_ttl_seconds (recommended: 3600), and
+$user (the user ID of the Bandwidth AP user being used; starts with "u-") and
 $tuser and $token (the same Bandwidth AP credentials that sgx-catapult uses).
 
 
