@@ -88,9 +88,6 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 
 		$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
-		#$numKey = '';
-		#$reg_tmp_num = '';
-
 		# TODO: add a counter here, and error out if too many tries
 		do {
 			# sfx is a (mostly) random number between 0 and 16777215
