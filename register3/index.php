@@ -130,15 +130,34 @@ JID (<?php echo htmlentities($_GET['jid']) ?>) already registered.  Please press
 Back and choose a different JID or <a href="../">start again</a>.
 <?php
 		} else {
-		# TODO: use Bandwidth AP API to send from "JMP support number"
-		#  to $reg_tmp_num - this'll b sent to $_GET['jid'] due to above
+			$options = array('http' => array(
+			'header'   => "Content-type: application/json\r\n",
+			'method'   => 'POST',
+			'content'  => '{"direction":"in","eventType":"sms",'.
+				'"from":"'.$support_number.'",'.
+				'"to":"'.$reg_tmp_num.'",'.
+				# TODO: construct & add register4 URL to message
+				'"text":"Your JMP verification code is '.
+				$redis->get($jcodeKey).' - if you require '.
+				'assistance, either now or after registration '.
+				'completion, please message this number."}'
+			));
 
-		# TODO: remove (along with below)
-		$jcode = $redis->get($jcodeKey);
+			$context = stream_context_create($options);
+			$result = file_get_contents($sgx_url, false, $context);
+			if ($result === FALSE) {
 ?>
-		TODO TODO TODO remove - verification code is <?php
-	echo $jcode.'; would be sent to temporary number '.$reg_tmp_num;
-?> - remove TODO TODO TODO
+There was an error sending your confirmation code.  Please <a href=
+"../register3/?number=<?php
+	echo urlencode($_GET['number']);
+?>&amp;sid=<?php
+	echo urlencode($_GET['sid']);
+?>&amp;jid=<?php
+	echo urlencode($_GET['jid']);
+?>">click here</a> to try again.
+<?php
+		        } else {
+?>
 </p>
 
 <h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
@@ -167,6 +186,7 @@ If you have not yet received the verification code, please <a href=
 	echo urlencode($_GET['jid']);
 ?>">click here</a> to try again.
 <?php
+			}
 		}
 	}
 } else {
