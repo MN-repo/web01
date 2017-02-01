@@ -88,7 +88,46 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 
 		$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
-		# TODO: send verification code 2 $_GET['jid'] w Bandwidth AP API
+		#$numKey = '';
+		#$reg_tmp_num = '';
+
+		# TODO: add a counter here, and error out if too many tries
+		#do {
+			# suffix_num is a random number between 0 and 16777215
+			# no $crypto_strong check needed; guessing doesn't help
+			#$suffix_num = bindec(openssl_random_pseudo_bytes(3));
+
+			# temp number used during registration: +1 12N NNN NNNN;
+			#  not a valid NANP number (since starts with 1) so fine
+			#  for our use; we effectively reserve +10* and +111*
+			#  for future use if we need different temp number class
+			#$reg_tmp_num = '+112'.sprintf('%08d', $suffix_num);
+
+			#$numKey = 'catapult_num-'.$reg_tmp_num;
+		#} while (!$redis->setNx($numKey, $_GET['jid']));
+		#$redis->expire($numKey, $key_ttl_seconds);
+
+		#$credKey = 'catapult_cred-'.$_GET['jid'];
+		#if ($redis->exists($credKey)) {
+			# TODO: check if cred is for a temp number - use if so
+			#  (let the number key we created above simply expire);
+			#  if not then print error saying JID already registered
+
+			#($reg_tmp_num s/b set to "lrange($credKey)[3]" from DB)
+		#} else {
+			#$redis->rPush($credKey, $user);
+			#$redis->rPush($credKey, $tuser);
+			#$redis->rPush($credKey, $token);
+			#$redis->rPush($credKey, $reg_tmp_num);
+			#$redis->expire($credKey, $key_ttl_seconds);
+			# TODO: MUST unexpire this when rename()'ing to real num
+			# TODO: race detection: confirm $credKey list size == 4
+		#}
+
+		# TODO: use Bandwidth AP API to send from "JMP support number"
+		#  to $reg_tmp_num - this'll b sent to $_GET['jid'] due to above
+
+		# TODO: remove (along with below)
 		$jcode = $redis->get($jcodeKey);
 ?>
 		TODO TODO TODO remove - verification code is <?php
