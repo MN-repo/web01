@@ -97,11 +97,11 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 			# no $crypto_strong check needed; guessing doesn't help
 			$sfx = hexdec(bin2hex(openssl_random_pseudo_bytes(3)));
 
-			# temp number used during registration: +1 12N NNN NNNN;
-			#  not a valid NANP number (since starts with 1) so fine
-			#  for our use; we effectively reserve +10* and +111*
+			# temp number used during registration: +1 02N NNN NNNN;
+			#  not a valid NANP number (since starts with 0) so fine
+			#  for our use; we effectively reserve +11* and +100*
 			#  for future use if we need different temp number class
-			$reg_tmp_num = '+112'.sprintf('%08d', $sfx);
+			$reg_tmp_num = '+102'.sprintf('%08d', $sfx);
 
 			$numKey = 'catapult_num-'.$reg_tmp_num;
 		} while (!$redis->setNx($numKey, $_GET['jid']));
@@ -122,7 +122,7 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 			# TODO: race detection: confirm $credKey list size == 4
 		}
 
-		if (substr($reg_tmp_num, 0, 4) != '+112') {
+		if (substr($reg_tmp_num, 0, 4) != '+102') {
 			# only encountered if $credKey exists and is not tmp num
 			# TODO: hide user list by returning "code sent" instead?
 ?>
