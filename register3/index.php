@@ -76,7 +76,7 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 		$jcodeBytes = openssl_random_pseudo_bytes(4);
 		$jcode = bin2hex($jcodeBytes);
 
-		$jcodeKey = 'reg-jcode-'.$_GET['sid'];
+		$jcodeKey = 'reg-jcode-'.$_GET['jid'];
 		if ($redis->setNx($jcodeKey, $jcode)) {
 			$redis->expire($jcodeKey, $key_ttl_seconds);
 		}

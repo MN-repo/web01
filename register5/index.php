@@ -84,7 +84,7 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 		$pcodeBytes = openssl_random_pseudo_bytes(4);
 		$pcode = bin2hex($pcodeBytes);
 
-		$pcodeKey = 'reg-pcode-'.$_GET['sid'];
+		$pcodeKey = 'reg-pcode-'.$clean_fwdphone;
 		if ($redis->setNx($pcodeKey, $pcode)) {
 			$redis->expire($pcodeKey, $key_ttl_seconds);
 		}

@@ -53,8 +53,6 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 		$redis->auth($redis_auth);
 	}
 
-	$jcodeKey = 'reg-jcode-'.$_GET['sid'];
-
 	$jidMaybeKey = 'reg-jid_maybe-'.$_GET['sid'];
 	$jidGoodKey = 'reg-jid_good-'.$_GET['sid'];
 
@@ -63,6 +61,8 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 
 	$hitsKey = 'reg-jid_hits-'.$maybeJid;
 	$hitCount = $redis->incr($hitsKey);
+
+	$jcodeKey = 'reg-jcode-'.$maybeJid;
 
 	$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 

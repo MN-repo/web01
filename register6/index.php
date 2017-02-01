@@ -53,8 +53,6 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 		$redis->auth($redis_auth);
 	}
 
-	$pcodeKey = 'reg-pcode-'.$_GET['sid'];
-
 	$phoneMaybeKey = 'reg-phn_maybe-'.$_GET['sid'];
 	$phoneGoodKey = 'reg-phn_good-'.$_GET['sid'];
 
@@ -63,6 +61,8 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 
 	$hitsKey = 'reg-phn_hits-'.$maybePhone;
 	$hitCount = $redis->incr($hitsKey);
+
+	$pcodeKey = 'reg-pcode-'.$maybePhone;
 
 	$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
