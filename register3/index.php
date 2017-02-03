@@ -100,9 +100,9 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 			#  for future use if we need different temp number class
 			$reg_tmp_num = '+102'.sprintf('%08d', $sfx);
 
-			$numKey = 'catapult_num-'.$reg_tmp_num;
-		} while (!$redis->setNx($numKey, $_GET['jid']));
-		$redis->expire($numKey, $key_ttl_seconds);
+			$jidKey = 'catapult_jid-'.$reg_tmp_num;
+		} while (!$redis->setNx($jidKey, $_GET['jid']));
+		$redis->expire($jidKey, $key_ttl_seconds);
 
 		$credKey = 'catapult_cred-'.$_GET['jid'];
 		if ($redis->exists($credKey)) {
