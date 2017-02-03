@@ -148,10 +148,10 @@ There was an error sending your confirmation code.  Please <a href=
 "../register3/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
-	echo urlencode($_GET['sid']);
+	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($_GET['jid']);
-?>">click here</a> to try again.
+?>">click here</a> to try again or press Back to select a different JID to use.
 <?php
 		        } else {
 ?>
@@ -178,10 +178,10 @@ If you have not yet received the verification code, please <a href=
 "../register3/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
-	echo urlencode($_GET['sid']);
+	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($_GET['jid']);
-?>">click here</a> to try again.
+?>">click here</a> to try again or press Back to select a different JID to use.
 <?php
 			}
 		}
