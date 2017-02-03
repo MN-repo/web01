@@ -96,12 +96,49 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 
 		$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
-		# TODO: send verification code to $clean_fwdphone w Bandwidth AP
-		$pcode = $redis->get($pcodeKey);
+		$jid = $redis->get('reg-jid_good-'.$_GET['sid']);
+		if (!$jid) {
 ?>
-		TODO TODO TODO remove - verification code is <?php
-	echo $pcode;
-?> - remove TODO TODO TODO
+No Jabber ID (JID) found for this session ID (sid).  Either find a sid that has
+an associated JID or (likely easier) <a href="../">start again</a>.
+<?php
+		} else {
+			# TODO: should check if exists, but very unlikely not to
+			$credKey = 'catapult_cred-'.$jid;
+			$reg_tmp_num = $redis->lRange($credKey, 0, 3)[3];
+
+			# if number exists, overwrite; user has sid so fine w us
+			$fKey = 'catapult_fwd-'.$reg_tmp_num;
+			$redis->setEx($fKey, $key_ttl_seconds, $clean_fwdphone);
+			# TODO: check return code of set()
+
+			# call the fwdphone; jmp-fwdcalls will deliver the pcode
+			$options = array('http' => array(
+			'header'   => "Content-type: application/json\r\n",
+			'method'   => 'POST',
+			'content'  => '{"tag":"'.$jid.'",'.  # for creds lookup
+				'"from":"'.$support_number.'",'.
+				'"to":"'.$clean_fwdphone.'",'.
+				'"callbackUrl":"'.$fwdcalls_url.'"}'
+			));
+
+			$context = stream_context_create($options);
+			$result = file_get_contents("https://$tuser:$token".
+				'@api.catapult.inetwork.com/v1/users/'.
+				"$user/calls", false, $context);
+			if ($result === FALSE) {
+?>
+There was an error calling your number to deliver the code.  Please <a href=
+"../register5/?number=<?php
+	echo urlencode($_GET['number']);
+?>&amp;sid=<?php
+	echo $clean_sid;
+?>&amp;fwdphone=<?php
+	echo urlencode($clean_fwdphone);
+?>">click here</a> to try again or press Back to change your forwarding number.
+<?php
+		        } else {
+?>
 </p>
 
 <h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
@@ -127,9 +164,12 @@ If you have not yet received the verification code, please <a href=
 	echo $clean_sid;
 ?>&amp;fwdphone=<?php
 	echo urlencode($clean_fwdphone);
-?>">click here</a> to try again or press Back to use a different forward number.
+?>">click here</a> to try again or press Back to change your forwarding number.
 <?php
+			}
 		}
+	}
+	# TODO: above should be indented by another tab, but leave as-is for now
 	} else {
 	echo "Forwarding number provided (".htmlentities($_GET['fwdphone']);
 ?>

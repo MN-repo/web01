@@ -1,6 +1,7 @@
 = jmp-register =
 
-The registration wizard for JMP.  This wizard requires sgx-catapult to operate.
+The registration wizard for JMP.  This wizard requires sgx-catapult and
+jmp-fwdcalls to operate.
 
 The project should run on any web server configured to serve PHP (and to show
 index.php and index.xhtml as default directory pages) that has phpredis (ie. the
@@ -9,6 +10,7 @@ php5-redis package in Debian).
 Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
 variables: $support_number (an sgx-catapult hosted E.164 number to send from),
+$fwdcalls_url (the "Voice Callback" URL that jmp-fwdcalls makes available),
 $sgx_url (the Bandwidth AP "Messaging Callback" URL sgx-catapult uses), and also
 variables: $redis_host and $redis_port (should match what sgx-catapult uses),
 $redis_auth (empty string if no auth), $key_ttl_seconds (recommended: 3600), and
