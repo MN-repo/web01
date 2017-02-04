@@ -118,6 +118,10 @@ Could not find phone number (<?php echo $phone ?>) and/or JID (<?php
 <h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
 
 <p>
+Your forwarding number (<?php echo $phone ?>) has been successfully verified.
+</p>
+
+<p>
 To confirm, you plan to use the Jabber ID <?php echo htmlentities($jid) ?> to
 send and receive text and pictures messages on your JMP number, and you intend
 for all phone calls to your JMP number to be forwarded to <?php echo $phone ?>.
