@@ -103,15 +103,6 @@ No Jabber ID (JID) found for this session ID (sid).  Either find a sid that has
 an associated JID or (likely easier) <a href="../">start again</a>.
 <?php
 		} else {
-			# TODO: should check if exists, but very unlikely not to
-			$credKey = 'catapult_cred-'.$jid;
-			$reg_tmp_num = $redis->lRange($credKey, 0, 3)[3];
-
-			# if number exists, overwrite; user has sid so fine w us
-			$fKey = 'catapult_fwd-'.$reg_tmp_num;
-			$redis->setEx($fKey, $key_ttl_seconds, $clean_fwdphone);
-			# TODO: check return code of set()
-
 			# call the fwdphone; jmp-fwdcalls will deliver the pcode
 			$options = array('http' => array(
 			'header'   => "Content-type: application/json\r\n",
