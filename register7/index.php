@@ -250,7 +250,7 @@ received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
 <?php
 			}
 		} else {
-			echo htmlentities($_GET['number']);
+			echo htmlentities($_GET['jmp-number']);
 ?>
 , the JMP number that you attempted to purchase, is not an E.164 NANP number.
 Payment was received, but the number is not available for use with JMP.  Please
