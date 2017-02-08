@@ -211,12 +211,23 @@ Payment was received, but the verification for the phone number and/or Jabber ID
 has expired.  Please contact support to complete the registration, including the
 following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
 <?php
+			} elseif ($redis->get('catapult_num-'.$_GET['tx']) &&
+				$redis->get('catapult_num-'.$_GET['tx']) !=
+				$_GET['jmp-number']) {
+?>
+Your payment details have already been used to activate a different JMP number.
+If you believe this is an error, please contact support with this information:
+<?php
 			} else {
 				# TODO: buy $_GET['jmp-number']; message if fail
 				# TODO: check $_GET['jmp-number'] works b4 using
 				# TODO: set Catapult app for $_GET['jmp-number']
 
 				# for now assume bought and correct app assigned
+
+				# this transaction has been used for activation
+				$redis->set('catapult_num-'.$_GET['tx'],
+					$_GET['jmp-number']);
 
 				# re-create catapult_cred-$jid w real JMP number
 				$credKey = 'catapult_cred-'.$jid;
