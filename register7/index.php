@@ -219,15 +219,51 @@ Your payment details have already been used to activate a different JMP number.
 If you believe this is an error, please contact support with this information:
 <?php
 			} else {
-				# TODO: buy $_GET['jmp-number']; message if fail
-				# TODO: check $_GET['jmp-number'] works b4 using
-				# TODO: set Catapult app for $_GET['jmp-number']
+				# buy the number
+				$options = array('http' => array(
+				'header'=> "Content-type: application/json\r\n",
+				'method'=> 'POST',
+				'content'=>
+					'{"number":"'.$_GET['jmp-number'].'"}'
+                        	));
 
-				# for now assume bought and correct app assigned
+				$context = stream_context_create($options);
+				$result = file_get_contents(
+					"https://$tuser:$token".
+					'@api.catapult.inetwork.com/v1/users/'.
+					"$user/phoneNumbers", false, $context);
+
+	                        if ($result === FALSE) {
+					# TODO: if not in catapult_num- then err
+				}
 
 				# this transaction has been used for activation
 				$redis->set('catapult_num-'.$_GET['tx'],
 					$_GET['jmp-number']);
+
+
+				# TODO: check $_GET['jmp-number'] works b4 using
+
+
+				# set $_GET['jmp-number'] to use JMP application
+				$options = array('http' => array(
+				'header'=> "Content-type: application/json\r\n",
+				'method'=> 'POST',
+				'content'=> '{"applicationId":"'.
+					$catapult_application_id.'"}'
+                        	));
+
+				$context = stream_context_create($options);
+				$result = file_get_contents(
+					"https://$tuser:$token".
+					'@api.catapult.inetwork.com/v1/users/'.
+					"$user/phoneNumbers/".urlencode(
+					$_GET['jmp-number']), false, $context);
+
+	                        if ($result === FALSE) {
+					# TODO: unlikely, but "contact support"
+				}
+
 
 				# re-create catapult_cred-$jid w real JMP number
 				$credKey = 'catapult_cred-'.$jid;
@@ -251,8 +287,6 @@ If you believe this is an error, please contact support with this information:
 </p>
 
 <h2><?php echo $_GET['jmp-number'] ?> is now your JMP number!</h2>
-
-<p>TODO TODO TODO - actually buy number so below is necessarily true - TODO</p>
 
 <p>
 Success!  Text messages to/from <?php echo $_GET['jmp-number'] ?> can be
