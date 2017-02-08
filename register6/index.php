@@ -128,12 +128,24 @@ for all phone calls to your JMP number to be forwarded to <?php echo $phone ?>.
 </p>
 
 <p>
-Is that correct?  If so, please press the [TODO:name] button below to finish the
+Is that correct?  If so, please press the Subscribe button below to finish the
 registration and start using your JMP number!
 </p>
 
+<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+<p style="text-align:center;">
+<input name="return" value="<?php
+echo $register_base_url;
+?>/register7/?jmp-sid=<?php
+echo $clean_sid;
+?>&amp;jmp-number=<?php
+echo urlencode($_GET['number']);
+?>" type="hidden" />
+<?php echo $paypal_input_tags ?>
+</p>
+</form>
+
 <p>
-[TODO:name] button
 <?php
 		}
 	}

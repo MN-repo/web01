@@ -1,11 +1,16 @@
 = jmp-register =
 
 The registration wizard for JMP.  This wizard requires sgx-catapult and
-jmp-fwdcalls to operate.
+jmp-fwdcalls to operate.  It also requires a PayPal premier/merchant account.
 
 The project should run on any web server configured to serve PHP (and to show
 index.php and index.xhtml as default directory pages) that has phpredis (ie. the
 php5-redis package in Debian).
+
+A PayPal subscription button must be setup and the details configured below.
+jmp-register is configured by default to use the PayPal Sandbox - in order to
+run jmp-register in production you must change "sandbox.paypal" to "paypal" (in
+register6/index.php and register7/index.php ).
 
 Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
@@ -14,6 +19,11 @@ variables:
 * $support_number (an sgx-catapult hosted E.164 number to send from)
 * $fwdcalls_url (the "Voice Callback" URL that jmp-fwdcalls makes available)
 * $sgx_url (the Bandwidth AP "Messaging Callback" URL sgx-catapult uses)
+* $register_base_url (the "http://a.b/c" in "http://a.b/c/register3/index.php")
+* $paypal_receiver_email (where button delivers funds, ie. "user%40example.com")
+* $paypal_price_per_month (price that subscription button configured to charge)
+* $paypal_pdt_token (your PayPal "PDT identity token" - see settings pages)
+* $paypal_input_tags (the code for your PayPal button minus the <form>/</form>)
 * $redis_host (should match what sgx-catapult uses)
 * $redis_port (should match what sgx-catapult uses)
 * $redis_auth (should match what sgx-catapult uses; empty string if no auth)
