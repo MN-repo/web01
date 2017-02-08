@@ -252,7 +252,7 @@ received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
 		} else {
 			echo htmlentities($_GET['jmp-number']);
 ?>
-, the JMP number that you attempted to purchase, is not an E.164 NANP number.
+, the JMP number that you attempted to activate, is not an E.164 NANP number.
 Payment was received, but the number is not available for use with JMP.  Please
 contact support to select a number and complete your registration, including the
 following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
