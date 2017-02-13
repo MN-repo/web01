@@ -77,7 +77,7 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 Too many verification attempts.  Please refresh this page in about 10 minutes or
 <a href="../">start again</a>.
 <?php
-	} elseif ($_GET['jcode'] != $redis->get($jcodeKey)) {
+	} elseif (strtolower($_GET['jcode']) != $redis->get($jcodeKey)) {
 ?>
 </p>
 <form action="../register4/">
