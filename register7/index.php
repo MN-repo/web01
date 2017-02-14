@@ -358,6 +358,11 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 Success!  Text messages to/from <?php echo $_GET['jmp-number'] ?> can be
 received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
 <?php echo $_GET['jmp-number'] ?> will be forwarded to <?php echo $phone ?>.
+</p><p>
+The easiest way to begin using JMP is by texting your JMP number (<?php
+	echo $_GET['jmp-number'];
+?>) from another phone.  Alternatively, you can start sending text messages
+using <a href="../#q6">the instructions in the FAQ</a>.
 <?php
 			}
 		} else {
