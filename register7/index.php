@@ -300,7 +300,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 					"$user/phoneNumbers", false, $context);
 
 	                        if ($result === FALSE) {
-					# TODO: if not in catapult_num- then err
+					# TODO: err; num DNE or there's buy race
 				}
 
 				# this transaction has been used for activation
