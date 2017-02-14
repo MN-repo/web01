@@ -285,6 +285,10 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 <p>
 <?php
 			} else {
+				# this transaction has been used for activation
+				$redis->set('catapult_num-'.$_GET['tx'],
+					$_GET['jmp-number']);
+
 				# buy the number
 				$options = array('http' => array(
 				'header'=> "Content-type: application/json\r\n",
@@ -301,11 +305,8 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 
 	                        if ($result === FALSE) {
 					# TODO: err; num DNE or there's buy race
+					# can unset 'catapult_num-'.$_GET['tx']
 				}
-
-				# this transaction has been used for activation
-				$redis->set('catapult_num-'.$_GET['tx'],
-					$_GET['jmp-number']);
 
 
 				# TODO: check $_GET['jmp-number'] works b4 using
