@@ -17,6 +17,7 @@ Note that a settings file must be placed at ../../../../settings-jmp.php
 variables:
 
 * $support_number (an sgx-catapult hosted E.164 number to send from)
+* $notify_receiver_email (the email address where notification list requests go)
 * $fwdcalls_url (the "Voice Callback" URL that jmp-fwdcalls makes available)
 * $sgx_url (the Bandwidth AP "Messaging Callback" URL sgx-catapult uses)
 * $register_base_url (the "http://a.b/c" in "http://a.b/c/register3/index.php")
