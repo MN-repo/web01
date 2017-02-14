@@ -30,16 +30,19 @@
 <p>
 <?php
 
-# TODO: find "contact support" below and add appropriate details, for example:
-#  * who to contact - email?  phone?  JID?
-#  * include list of items to send to support (see "if (empty($_GET['tx']))")
-#  * how to retry the payment process (add Subscribe button?  return to Step 6?)
-
 if (empty($_GET['tx'])) {
 ?>
 Payment information incomplete - no transaction ID was received.  If you believe
 that your payment succeeded, please contact support to finish your registration.
-To include when contacting support:
+Otherwise, please <a href="../">start again</a> to complete the payment.  You
+can contact support by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
 </p>
 <ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
 </li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
@@ -148,7 +151,21 @@ To include when contacting support:
 ?>
 The payment was not received or there was an error verifying your transaction.
 It is unlikely that a payment was charged, but it would help to confirm this.
-Please contact support with these details: ...
+If you know that no payment was charged, you can <a href="../">start again</a>.
+Or, contact support by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
+</p>
+<ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
+</li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
+</li><li>transaction ID: "<?php echo htmlentities($_GET['tx']) ?>"
+</li></ul>
+<p>
 <?php
 	} else {
 		$fail_text = '';
@@ -183,11 +200,20 @@ Please contact support with these details: ...
 		if (!empty($fail_text)) {
 ?>
 Incorrect payment information was received.  It is possible that a payment was
-still sent - please contact support to correct and/or refund, including this:
-...
+still sent.  If you know that no payment was charged, you can <a
+href="../">start again</a>.  Otherwise, please contact support to correct this.
+You can do that by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
 </p>
 <ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
 </li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
+</li><li>transaction ID: "<?php echo htmlentities($_GET['tx']) ?>"
 </li><li>failure reason: <?php echo $fail_text ?>
 </li></ul>
 <p>
@@ -196,8 +222,21 @@ still sent - please contact support to correct and/or refund, including this:
 			empty($_GET['jmp-sid'])) {
 ?>
 Payment was received, but session ID and/or number were not provided.  Please
-contact support to select a number and complete your registration, including the
-following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
+contact support to select a number and complete your registration.
+You can do this by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
+</p>
+<ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
+</li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
+</li><li>transaction ID: "<?php echo htmlentities($_GET['tx']) ?>"
+</li></ul>
+<p>
 <?php
 		# TODO: update "== 12" for when we support non-NANPA numbers
 		} elseif (strlen($_GET['jmp-number']) == 12 &&
@@ -208,15 +247,42 @@ following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
 			if (!$jid || !$phone) {
 ?>
 Payment was received, but the verification for the phone number and/or Jabber ID
-has expired.  Please contact support to complete the registration, including the
-following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
+has expired.  Please contact support to complete your registration.
+You can do this by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
+</p>
+<ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
+</li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
+</li><li>transaction ID: "<?php echo htmlentities($_GET['tx']) ?>"
+</li></ul>
+<p>
 <?php
 			} elseif ($redis->get('catapult_num-'.$_GET['tx']) &&
 				$redis->get('catapult_num-'.$_GET['tx']) !=
 				$_GET['jmp-number']) {
 ?>
 Your payment details have already been used to activate a different JMP number.
-If you believe this is an error, please contact support with this information:
+If you believe this is an error, please contact support.
+You can do this by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.  Please include the above as well as the following when contacting support:
+</p>
+<ul><li>JMP number: "<?php echo htmlentities($_GET['jmp-number']) ?>"
+</li><li>session ID: "<?php echo htmlentities($_GET['jmp-sid']) ?>"
+</li><li>transaction ID: "<?php echo htmlentities($_GET['tx']) ?>"
+</li></ul>
+<p>
 <?php
 			} else {
 				# buy the number
@@ -301,6 +367,14 @@ received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
 Payment was received, but the number is not available for use with JMP.  Please
 contact support to select a number and complete your registration, including the
 following transaction ID: <?php echo htmlentities($_GET['tx']) ?>.
+You can do this by replying to the verification message you received in your
+XMPP client (or, equivalently, send an XMPP message to <a href=
+"xmpp:+14169938000@catapult.sgx.soprani.ca"
+>+14169938000@catapult.sgx.soprani.ca</a>), sending a text message with the
+details to +1 416 993 8000 (Canada) or +1 312 796 8000 (US), or by sending a
+private message to "ossguy" in the JMP/Soprani.ca MUC at <a
+href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
+.
 <?php
 		}
 	}
