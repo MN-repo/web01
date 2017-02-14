@@ -119,7 +119,8 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 	));
 
 	$context = stream_context_create($options);
-	$result = file_get_contents('https://www.sandbox.paypal.com/cgi-bin/webscr',
+	$result = file_get_contents(
+		'https://www.sandbox.paypal.com/cgi-bin/webscr',
 		false, $context);
 
 
