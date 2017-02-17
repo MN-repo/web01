@@ -37,37 +37,66 @@
 </div>
 <p>
 JMP gives you a real phone number for sending picture and text messages right
-from your existing XMPP account.
-</p><p>
-(If you are unfamiliar with XMPP, you can learn more <a
-href="https://xmpp.org/software/clients.html">here</a>.  Or, to be notified when
-the JMP app is ready to use, <a href="notify_signup/">add your email address
-to our list</a>.)
+from a <a href="https://xmpp.org">Jabber</a> account.
+</p>
+
+<p>
+Text with friends cross-border without paying international texting
+fees, chat with friends over SMS even if you don't have a cell phone,
+or add an extra number for business or protecting your privacy!
+</p>
+
+
+<p>
+
+We are busy squirreling code away on new features including an easy JMP app!
+To get low-volume notifications of our progress,
+<a href="notify_signup/">add your email address to our list</a>.
 </p>
 <hr />
 <h3 style="text-align:center;">Signup</h3>
 <p>
-To register for JMP, begin by picking a <a href=
-"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
->NANP area code</a> to see if JMP numbers are available there; if you're unsure,
-numbers are normally available in at least 613 (Ottawa area) and 312 (Chicago):
+To register for JMP, begin by choosing a <i>federated</i> JID to link to your new number --
+you can change it later, but you need one to start with. If you have an @gmail.com address
+then you already have one, though you may choose to make a separate account.
+If you do not have one, there are <a href="https://xmpp.net">many</a> free servers available
+which you can use with any client; we recommend installing <a href="https://conversations.im/">Conversations.im</a> and signing up on their server.
+
 </p>
+
+<p>
+You will also need an existing phone number ready if you want to enable call-forwarding.
+</p>
+
+<p>
+Then, pick a North American <a href=
+"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
+>area code</a> you would like a number for, like 613 (Ottawa area) and 312 (Chicago) and search for a number you would like to buy:
+</p>
+
+<div style="text-align:center;">
 <form action="register1/">
 <p>
-Area code: <input type="text" name="areacode" /> (ie. 647 for Toronto, 617 for
-Boston area, or 604 for Vancouver area) <input type="submit" value="Submit" />
+<input placeholder="Area code" type="text" name="areacode" /> 
+<!-- (ie. 647 for Toronto, 617 for
+Boston area, or 604 for Vancouver area) --> <input type="submit" value="Check Availability" />
 </p>
 </form>
-<p>
+</div>
+
+<p class="warning"> <!-- FIXME: add css for this class -->
 <b>Note:</b> While JMP does provide phone numbers and voice/SMS features, JMP is
 not a telephone company and it does not provide 911, 112, 999 or other emergency
 services over voice or SMS.  Please ensure that your existing telephony provider
 supports those services.
 </p>
 <hr />
+
+
 <div style="text-align:center;">
 <h3>Frequently Asked Questions</h3>
 </div>
+
 <dl>
 <dt id="q1">Q1. What do I get when I signup for JMP?</dt>
 <dd>
@@ -77,71 +106,126 @@ you to send and receive text messages and picture messages using your XMPP
 client, as well as to receive voice calls, which are forwarded to your existing
 Canadian or US phone number.
 </p><p>
-Some examples use cases include: texting friends in another country (ie. the US
-if you are in Canada) who can then reply without paying international texting
-fees, or chatting with friends over SMS using a real phone number even if you
-don't have or want a cell phone.
+
+<!-- Maybe-features:
+ * Voicemail
+ * 
+-->
 </p>
 </dd>
 <dt id="q2">Q2. What do I need in order to signup for and use JMP?</dt>
 <dd>
-<p>Signing up for JMP requires only the following:</p>
+<p>Signing up for JMP requires the following:</p>
 <ul>
-<li>a federated XMPP account (an easy way to get one is with <a
-href="https://conversations.im/">Conversations</a>)</li>
 <li>a Canadian or US phone number (can be voice-only, no Touch-Tone needed);
 support for using a SIP URI instead is <a href="notify_signup/">in the
 works</a></li>
 <li>payment details (see <a href="#q3">below</a>)</li>
 </ul>
 </dd>
-<dt id="q3">Q3. How much does JMP cost?</dt>
+
+<dt id="q3">Q3. What's this Jabber thing?</dt>
+<dd>
+<p>
+Jabber, or XMPP, is a
+<!-- FIXME: add links around each of the services here -->
+<a href="https://xmpp.org/about/history.html">long-standing</a>,
+widely-used, privacy-focused and open-source chat protocol. If you have ever used
+<a href="https://developers.google.com/talk/open_communications">Google Chat</a>,
+HipChat, the pre-2016 Facebook Messenger, WhatsApp, Kik,
+<a href="https://movim.eu">Movim</a>, or <!-- FIXME --> <a href="gcm-is-xmpp">Android Push Notifications</a>.
+or a private company chat server, then you have used XMPP.
+</p>
+
+<p>
+Unlike the private servers, The <a href="https://xmpp.net/">public XMPP network</a>
+is and always will be a federated system, which means that like email or the web,
+anyone on any server can communicate with anyone else without artificial
+limitations.
+</p>
+<p>
+JMP extends the freedom of the XMPP network to cellphone texting.
+</p>
+</dd>
+
+<dt id="q4">Q4. How do I send text messages?</dt>
+<dd>
+<p>
+Text messages are sent and receive using special Jabber IDs (JIDs).  To send a
+text message, first add the JID representing the destination phone number to
+your roster.  For example, to send a text message to +1 416 993 8000 you would
+add "+14169938000@catapult.sgx.soprani.ca" to your roster.  You can then send
+the contact a message or picture and they will receive it as an SMS/MMS message.
+</p><p>
+To send text messages to short codes, use the special suffix for short codes,
+ie. "33733;phone-context=ca-us.phone-context.soprani.ca@catapult.sgx.soprani.ca"
+represents the 33733 short code.  This will be simplified in the future, but is
+required for now in order to maintain proper uniqueness going forward.
+</p>
+</dd>
+
+
+<dt id="q5">Q5. How much does JMP cost?</dt>
 <dd>
 <p>
 JMP is currently in beta and the introductory rate for beta users is US$2.99 per
 month.  This includes unlimited SMS and MMS, as well as 50 minutes of incoming
 voice calls.
-</p><p>
-You may cancel your subscription at any time (via PayPal or by <a
-href="#support">contacting the support team</a>). If you have chosen not to port
-your JMP number to a different carrier, your JMP number will be reclaimed after
-30 days.
-</p><p>
+</p>
+<p>
 Once the beta period for JMP is over, the US$2.99 subscription will still be
 available and will still have unlimited incoming SMS and MMS, but the number of
 outgoing SMS/MMS will be limited; other plans will be available.
-</p><p>
+</p>
+<p>
+You may cancel your subscription at any time (via PayPal or by <a
+href="#support">contacting the support team</a>). After cancellation,
+your number will be reclaimed after 30 days unless you
+<a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a>
+it to another carrier.
+</p>
+
+<p>
 The beta period will last until at least April 2017, and a new unlimited
 messaging plan will be made available once the beta period has ended.  After the
 beta period, additional <a href="#q7">non-PayPal methods of payment</a> will be
 made available.
 </p>
 </dd>
-<dt id="q4">Q4. How do I get help with JMP or learn more about it?</dt>
+<a id="support" /><dt id="q6">Q6. How do I get help with JMP?</dt>
 <dd>
 <p>
 The best venue for help using or developing features for JMP is the
-JMP/Soprani.ca multi-user chat (MUC, or group chat) room at <a
-href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
-, accessible from most XMPP clients.  Your questions can be answered most
-quickly there as several JMP users and developers are likely to be present at
-any given time.
-</p><p id="support">
-If you'd like to send a private inquiry instead, or if the MUC
-does not work for you for some reason, please send a text message to the support
-team at +1 416 993 8000 (Canada) or +1 312 796 8000 (US) and we will get back to
-you within 24 hours.  Both numbers can be texted from most other countries,
-though your carrier may charge an extra fee for international text messaging.
-</p><p>
-All of the software that makes up JMP is free and open source software.  You can
-view, download, and modify the source code <a
+Soprani.ca chatroom at
+<a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>,
+accessible from most XMPP clients.  It is an active and enthusiastic channel,
+and the fastest way to solve problems with the developers or other users.
+</p>
+<p>
+If you'd like to send a private inquiry instead, or if you cannot join the chatroom
+send a text message to the support team at +1 416 993 8000 (Canada) or +1 312 796 8000 (US)
+and we will get back to you within 24 hours.  Both numbers can be texted from most other countries,
+though your carrier may charge a fee for international text messaging.
+</p>
+
+<p>If you have found a bug in JMP, please file an issue at
+<a href="https://gitlab.com/ossguy/sgx-catapult/issues">https://gitlab.com/ossguy/sgx-catapult/issues</a>
+</p>
+</dd>
+
+<dt id="q7">Q7. How do I learn more about JMP?</dt>
+<dd>
+<p>
+All of the software that makes up JMP is
+<a href="http://www.fsf.org/about/what-is-free-software">free and open source</a>
+software.  You can view, download, and modify the source code <a
 href="https://gitlab.com/users/ossguy/projects">here</a>.
 </p><p>
 For news about JMP, you can signup for our low-volume notification list <a
 href="notify_signup/">here</a>.
 </p>
 </dd>
-<dt id="q5">Q5. Which text messaging features are supported?</dt>
+<dt id="q8">Q8. Which text messaging features are supported?</dt>
 <dd>
 <p>JMP supports the following text messaging features:</p>
 <ul>
@@ -162,22 +246,8 @@ given contact, they must be in your contact list (roster).</li>
 <li>Send text messages to countries outside the US and Canada.</li>
 </ul>
 </dd>
-<dt id="q6">Q6. How do I send text messages?</dt>
-<dd>
-<p>
-Text messages are sent and received using special Jabber IDs (JIDs).  To send a
-text message, first add the JID representing the destination phone number to
-your roster.  For example, to send a text message to +1 416 993 8000 you would
-add "+14169938000@catapult.sgx.soprani.ca" to your roster.  You can then send
-the contact a message or picture and they will receive it as an SMS/MMS message.
-</p><p>
-To send text messages to short codes, use the special suffix for short codes,
-ie. "33733;phone-context=ca-us.phone-context.soprani.ca@catapult.sgx.soprani.ca"
-represents the 33733 short code.  This will be simplified in the future, but is
-required for now in order to maintain proper uniqueness going forward.
-</p>
-</dd>
-<dt id="q7">Q7. Do I have to use PayPal to signup for JMP?</dt>
+
+<dt id="q9">Q9. Do I have to use PayPal to signup for JMP?</dt>
 <dd>
 <p>
 No.  Other payment methods are available.  For details, please contact our
@@ -188,7 +258,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 .
 </p>
 </dd>
-<dt id="q8">Q8. Can I port my existing number into JMP?</dt>
+<dt id="q10">Q10. Can I port my existing number into JMP?</dt>
 <dd>
 <p>
 Yes, but the process is not currently automated, and may take 1-2 weeks,
@@ -200,7 +270,8 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 .
 </p>
 </dd>
-<dt id="q9">Q9. Which XMPP clients are supported?</dt>
+
+<dt id="q11">Q11. Which XMPP clients are supported?</dt>
 <dd>
 <p>
 You can use any XMPP client you like.  If a client doesn't work for some reason,
@@ -212,6 +283,7 @@ needed XEPs for JMP's complete feature set (which includes XEP-0184, XEP-0234,
 and XEP-0261, among others).
 </p>
 </dd>
+
 </dl>
 <hr />
 <h3 style="text-align:center;">Signup</h3>
