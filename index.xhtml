@@ -37,7 +37,7 @@
 </div>
 <p>
 JMP gives you a real phone number for sending picture and text messages right
-from a <a href="https://xmpp.org">Jabber</a> account.
+from a <a href="https://xmpp.org/software/clients.html">Jabber</a> account.
 </p>
 
 <p>
@@ -54,30 +54,31 @@ To get low-volume notifications of our progress,
 <a href="notify_signup/">add your email address to our list</a>.
 </p>
 <hr />
+
+<!-- BEWARE: duplicated below; make sure to copy-paste changes -->
 <h3 style="text-align:center;">Signup</h3>
 <p>
-To register for JMP, begin by choosing a <i>federated</i> JID to link to your new number --
-you can change it later, but you need one to start with. If you have an @gmail.com address
-then you already have one, though you may choose to make a separate account.
-If you do not have one, there are <a href="https://xmpp.net">many</a> free servers available
-which you can use with any client; we recommend installing <a href="https://conversations.im/">Conversations.im</a> and signing up on their server.
-
+To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
+you can change it later, but you need one to start with. There are <a href="https://xmpp.net/directory.php">many</a>
+free and open servers available which you can use with any client; one of the smoothest options is to install the
+<a href="https://conversations.im/">Conversations</a> Android app and follow the prompts to sign up on their server.
 </p>
 
 <p>
-You will also need an existing phone number ready if you want to enable call-forwarding.
+<em>If</em> you want to enable incoming voice calls, you will need an existing
+Canadian or US phone number (can be voice-only, no Touch-Tone needed) for call forwarding;
+support for using a SIP URI instead is <a href="notify_signup/">in the works</a>.
 </p>
 
 <p>
-Then, pick a North American <a href=
-"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
->area code</a> you would like a number for, like 613 (Ottawa area) and 312 (Chicago) and search for a number you would like to buy:
+Then, pick a Canadian or US <a href="https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes">area code</a>
+you would like a number for, like 613 (Ottawa area) or 312 (Chicago), and search for availability:
 </p>
 
 <div style="text-align:center;">
 <form action="register1/">
 <p>
-<input placeholder="Area code" type="text" name="areacode" /> 
+<input placeholder="Area code" type="text" name="areacode" />
 <!-- (ie. 647 for Toronto, 617 for
 Boston area, or 604 for Vancouver area) --> <input type="submit" value="Check Availability" />
 </p>
@@ -113,18 +114,8 @@ Canadian or US phone number.
 -->
 </p>
 </dd>
-<dt id="requirements">Q2. What do I need in order to signup for and use JMP?</dt>
-<dd>
-<p>Signing up for JMP requires the following:</p>
-<ul>
-<li>a Canadian or US phone number (can be voice-only, no Touch-Tone needed);
-support for using a SIP URI instead is <a href="notify_signup/">in the
-works</a></li>
-<li>payment details (see <a href="#payment">below</a>)</li>
-</ul>
-</dd>
 
-<dt id="jabber">Q3. What's this Jabber thing?</dt>
+<dt id="jabber">Q2. What's this Jabber thing?</dt>
 <dd>
 <p>
 Jabber, or XMPP, is a
@@ -144,11 +135,11 @@ anyone on any server can communicate with anyone else without artificial
 limitations.
 </p>
 <p>
-JMP extends the freedom of the XMPP network to cellphone texting.
+JMP extends the freedom of the XMPP network to cell phone texting.
 </p>
 </dd>
 
-<dt id="sending">Q4. How do I send text messages?</dt>
+<dt id="sending">Q3. How do I send text messages?</dt>
 <dd>
 <p>
 Text messages are sent and receive using special Jabber IDs (JIDs).  To send a
@@ -165,7 +156,7 @@ required for now in order to maintain proper uniqueness going forward.
 </dd>
 
 
-<dt id="pricing">Q5. How much does JMP cost?</dt>
+<dt id="pricing">Q4. How much does JMP cost?</dt>
 <dd>
 <p>
 JMP is currently in beta and the introductory rate for beta users is US$2.99 per
@@ -192,7 +183,8 @@ beta period, additional <a href="#paypal">non-PayPal methods of payment</a> will
 made available.
 </p>
 </dd>
-<dt id="support">Q6. How do I get help with JMP?</dt>
+
+<dt id="support">Q5. How do I get help with JMP?</dt>
 <dd>
 <p>
 The best venue for help using or developing features for JMP is the
@@ -213,11 +205,11 @@ though your carrier may charge a fee for international text messaging.
 </p>
 </dd>
 
-<dt id="about">Q7. How do I learn more about JMP?</dt>
+<dt id="about">Q6. How do I learn more about JMP?</dt>
 <dd>
 <p>
 All of the software that makes up JMP is
-<a href="http://www.fsf.org/about/what-is-free-software">free and open source</a>
+<a href="https://www.fsf.org/about/what-is-free-software">free and open source</a>
 software.  You can view, download, and modify the source code <a
 href="https://gitlab.com/users/ossguy/projects">here</a>.
 </p><p>
@@ -225,7 +217,7 @@ For news about JMP, you can signup for our low-volume notification list <a
 href="notify_signup/">here</a>.
 </p>
 </dd>
-<dt id="sms_features">Q8. Which text messaging features are supported?</dt>
+<dt id="sms_features">Q7. Which text messaging features are supported?</dt>
 <dd>
 <p>JMP supports the following text messaging features:</p>
 <ul>
@@ -287,26 +279,45 @@ and XEP-0261, among others).
 
 </dl>
 <hr />
+
 <h3 style="text-align:center;">Signup</h3>
 <p>
-To register for JMP, begin by picking a <a href=
-"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
->NANP area code</a> to see if JMP numbers are available there; if you're unsure,
-numbers are normally available in at least 613 (Ottawa area) and 312 (Chicago):
+To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
+you can change it later, but you need one to start with. There are <a href="https://xmpp.net/directory.php">many</a>
+free and open servers available which you can use with any client; one of the smoothest options is to install the
+<a href="https://conversations.im/">Conversations</a> Android app and follow the prompts to sign up on their server.
 </p>
+
+<p>
+<em>If</em> you want to enable incoming voice calls, you will need an existing
+Canadian or US phone number (can be voice-only, no Touch-Tone needed) for call forwarding;
+support for using a SIP URI instead is <a href="notify_signup/">in the works</a>.
+</p>
+
+<p>
+Then, pick a Canadian or US <a href="https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes">area code</a>
+you would like a number for, like 613 (Ottawa area) or 312 (Chicago), and search for availability:
+</p>
+
+<div style="text-align:center;">
 <form action="register1/">
 <p>
-Area code: <input type="text" name="areacode" /> (ie. 647 for Toronto, 617 for
-Boston area, or 604 for Vancouver area) <input type="submit" value="Submit" />
+<input placeholder="Area code" type="text" name="areacode" />
+<!-- (ie. 647 for Toronto, 617 for
+Boston area, or 604 for Vancouver area) --> <input type="submit" value="Check Availability" />
 </p>
 </form>
-<p>
+</div>
+
+<p class="warning"> <!-- FIXME: add css for this class -->
 <b>Note:</b> While JMP does provide phone numbers and voice/SMS features, JMP is
 not a telephone company and it does not provide 911, 112, 999 or other emergency
 services over voice or SMS.  Please ensure that your existing telephony provider
 supports those services.
 </p>
+
 <hr />
+
 <p>
 Copyright &copy; 2017 Denver Gingerich.  jmp-register is licensed under AGPLv3+.
 You can download the Complete Corresponding Source code <a
