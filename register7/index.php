@@ -245,7 +245,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 			&& is_numeric(substr($_GET['jmp-number'], 1))) {
 
 			# if user made it this far, $jid and $phone better exist
-			if (!$jid || !$phone) {
+			if (!$jid || is_null($phone)) {
 ?>
 Payment was received, but the verification for the phone number and/or Jabber ID
 has expired.  Please contact support to complete your registration.
@@ -359,7 +359,19 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 <p>
 Success!  Text messages to/from <?php echo $_GET['jmp-number'] ?> can be
 received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
+<?php
+				if (empty($phone)) {
+?>
+<?php echo $_GET['jmp-number'] ?> will receive a pre-recorded message saying
+"This phone number does not receive voice calls; please send a text message
+instead".
+<?php
+				} else {
+?>
 <?php echo $_GET['jmp-number'] ?> will be forwarded to <?php echo $phone ?>.
+<?php
+				}
+?>
 </p><p>
 The easiest way to begin using JMP is by texting your JMP number (<?php
 	echo $_GET['jmp-number'];

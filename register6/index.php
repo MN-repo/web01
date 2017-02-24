@@ -56,11 +56,20 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 	$phoneMaybeKey = 'reg-phn_maybe-'.$_GET['sid'];
 	$phoneGoodKey = 'reg-phn_good-'.$_GET['sid'];
 
+	if ($_GET['pcode'] == 'nofwdnum') {
+		# TODO: make this a little prettier and/or check return values
+		$redis->set($phoneMaybeKey, '');
+		$redis->set($phoneGoodKey, '');
+	}
+
 	$maybePhone = $redis->get($phoneMaybeKey);
 	# TODO: check if $maybePhone is non-empty, etc.
 
 	$hitsKey = 'reg-phn_hits-'.$maybePhone;
-	$hitCount = $redis->incr($hitsKey);
+	$hitCount = 0;
+	if ($_GET['pcode'] != 'nofwdnum') {
+		$hitCount = $redis->incr($hitsKey);
+	}
 
 	$pcodeKey = 'reg-pcode-'.$maybePhone;
 
@@ -77,7 +86,8 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 Too many verification attempts.  Please refresh this page in about 10 minutes or
 <a href="../">start again</a>.
 <?php
-	} elseif (strtolower($_GET['pcode']) != $redis->get($pcodeKey)) {
+	} elseif ($_GET['pcode'] != 'nofwdnum' &&
+		strtolower($_GET['pcode']) != $redis->get($pcodeKey)) {
 ?>
 </p>
 <form action="../register6/">
@@ -104,7 +114,7 @@ enter a new code to try again: <input type="text" name="pcode" />
 		$jidGoodKey = 'reg-jid_good-'.$_GET['sid'];
 		$jid = $redis->get($jidGoodKey);
 
-		if (!$phone || !$jid || empty($phone) || empty($jid)) {
+		if (is_null($phone) || !$jid || empty($jid)) {
 ?>
 Could not find phone number (<?php echo $phone ?>) and/or JID (<?php
 	echo htmlentities($jid);
@@ -117,14 +127,31 @@ Could not find phone number (<?php echo $phone ?>) and/or JID (<?php
 
 <h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
 
+<?php
+			if (!empty($phone)) {
+?>
 <p>
 Your forwarding number (<?php echo $phone ?>) has been successfully verified.
 </p>
+<?php
+			}
+?>
 
 <p>
 To confirm, you plan to use the Jabber ID <?php echo htmlentities($jid) ?> to
 send and receive text and pictures messages on your JMP number, and you intend
+<?php
+			if (empty($phone)) {
+?>
+for callers to hear "This phone number does not receive voice calls; please send
+a text message instead".
+<?php
+			} else {
+?>
 for all phone calls to your JMP number to be forwarded to <?php echo $phone ?>.
+<?php
+			}
+?>
 </p>
 
 <p>

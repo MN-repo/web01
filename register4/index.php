@@ -113,7 +113,15 @@ Your JID (<?php echo htmlentities($jid) ?>) has been successfully verified.
 <p>
 Please enter a phone number that will receive all voice calls delivered to your
 JMP number.  This phone number will receive a call when you press Submit and you
-will enter the verification code that it provides to you on the next page:
+will enter the verification code that it provides to you on the next page.
+</p>
+
+<p>
+<b>Note:</b> You may choose not to enter a phone number - in that case any calls
+to your JMP number will receive a pre-recorded message saying "This phone number
+does not receive voice calls; please send a text message instead" and the caller
+will not be able to leave a voicemail. Please just click Submit without entering
+a phone number if that is your preference.
 </p>
 
 <form action="../register5/">

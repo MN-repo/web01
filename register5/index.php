@@ -32,9 +32,28 @@
 
 if (empty($_GET['fwdphone'])) {
 ?>
-Forwarding phone number not entered.  Please press Back and enter a forwarding
-phone number or <a href="../">start again</a>.
+</p>
+
+<h2>You've selected <?php echo htmlentities($_GET['number']) ?> as your JMP
+number</h2>
+
+<p>
+No forwarding phone number was entered, which means that all calls to your JMP
+number would receive a pre-recorded message saying "This phone number does not
+receive voice calls; please send a text message instead" and the caller would
+not be able to leave a voicemail.
+</p>
+
+<p>
+If you would prefer to enter a phone number that will be called when your JMP
+number is called instead, then please press Back and enter a phone number.
+Otherwise, please <a href="../register6/?number=<?php
+	echo urlencode($_GET['number']);
+?>&amp;sid=<?php
+	echo urlencode($_GET['sid']);
+?>&amp;pcode=nofwdnum">click here</a> to continue.
 <?php
+
 } elseif (empty($_GET['number']) || empty($_GET['sid'])) {
 ?>
 Session ID and/or number empty.  Please <a href="../">start again</a>.
