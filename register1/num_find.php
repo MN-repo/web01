@@ -117,8 +117,8 @@ if (empty($num_list) &&
 	$mm_region = strtolower($result['subdivisions'][0]['iso_code']);
 
 	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
-		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
-		$mm_region;
+		"Numbers/local?quantity=3000&city=".urlencode($mm_city).
+		"&state=".$mm_region;
 
 	$num_list = file_get_contents($url);
 	$num_list = json_decode($num_list, true);
