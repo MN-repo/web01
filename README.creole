@@ -12,6 +12,9 @@ jmp-register is configured by default to use the PayPal Sandbox - in order to
 run jmp-register in production you must change "sandbox.paypal" to "paypal" (in
 register6/index.php and register7/index.php ).
 
+As-written, jmp-register uses MaxMind's GeoIP2 Precision Web Services.  Please
+ensure you have an account configured below, or disable the code before running.
+
 Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
 variables:
@@ -29,6 +32,8 @@ variables:
 * $redis_port (should match what sgx-catapult uses)
 * $redis_auth (should match what sgx-catapult uses; empty string if no auth)
 * $key_ttl_seconds (recommended: 3600)
+* $mm_user (MaxMind "User ID", for GeoIP2 Precision Web Services)
+* $mm_token (MaxMind "License key", for GeoIP2 Precision Web Services)
 * $user (the user ID of the Bandwidth AP user being used; starts with "u-")
 * $tuser (the Bandwidth AP "Api Token" that sgx-catapult uses; starts with "t-")
 * $token (the Bandwidth AP "Api Secret" that sgx-catapult uses)

@@ -68,7 +68,10 @@ Please enter an area code above and press Submit to get a list of numbers.
 <?php foreach ($num_list as $number): ?>
 <tr>
 	<td><a href="../register2/?number=<?php
-		echo urlencode($number["number"]);
+		echo urlencode($number["number"]).'&city='.urlencode(
+			str_replace(' - ', '-', ucwords(strtolower(str_replace(
+				'-', ' - ', $number["city"])))).
+			', '.$number["state"]);
 	?>"><?php echo $number["nationalNumber"] ?></a></td>
 	<td><?php echo $number["rateCenter"] ?></td>
 	<td><?php echo $number["city"] ?></td>

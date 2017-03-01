@@ -50,7 +50,9 @@ No phone number entered.  Please <a href="../">choose one</a>.
 ?>
 </p>
 
-<h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
+<h2>You've selected <?php
+	echo $_GET['number'].' ('.htmlentities($_GET['city']).')';
+?> as your JMP number</h2>
 
 <p>
 Please enter the Jabber ID (JID) for your XMPP account and press Submit (a

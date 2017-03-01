@@ -23,10 +23,19 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>JMP - JIDs for Messaging with Phones</title>
 <style type="text/css">
 	dt { font-weight: bold }
 	dd { margin-top: 5px; margin-bottom: 10px }
+	#signup_bottom {
+		display: inline-block;
+		border-radius: 0.5rem;
+		background-color: #00a;
+		color: white;
+		padding: 1em;
+		text-decoration-line: none;
+	}
 </style>
 </head>
 <body style="padding: 0 5%;">
@@ -54,8 +63,7 @@ To get low-volume notifications of our progress,
 </p>
 <hr />
 
-<!-- BEWARE: duplicated below; make sure to copy-paste changes -->
-<h3 style="text-align:center;">Signup</h3>
+<h3 id="signup" style="text-align:center;">Signup</h3>
 <p>
 To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
 you can change it later, but you need one to start with. There are <a href="https://xmpp.net/directory.php">many</a>
@@ -71,20 +79,20 @@ and voicemail right in your chat history are <a href="notify_signup/">in the wor
 </p>
 
 <p>
-Then, pick a Canadian or US <a href="https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes">area code</a>
-you would like a number for, like 613 (Ottawa area) or 617 (Boston area), and
-search for availability:
-</p>
-
+Next, pick a JMP number.  Here are a few we found for you:
 <div style="text-align:center;">
-<form action="register1/">
-<p>
-<input placeholder="Area code" type="text" name="areacode" />
-<!-- (ie. 647 for Toronto, 617 for
-Boston area, or 604 for Vancouver area) --> <input type="submit" value="Check Availability" />
-</p>
-</form>
+
+<!-- TODO: add text but "Text not allowed in element iframe in this context" -->
+<iframe style="border:0;width:18rem;height:14rem;"
+	src="register1/num_find.php"></iframe>
+
 </div>
+<p style="text-align:center;">
+Or search <a href="register1/">by area code</a> to find even more numbers.
+</p>
+<p style="text-align:center;">
+You can also <a href="#existing">bring your own number</a> to JMP if you like.
+</p>
 
 <p class="warning"> <!-- FIXME: add css for this class -->
 <b>Note:</b> While JMP does provide phone numbers and voice/SMS features, JMP is
@@ -278,42 +286,8 @@ and XEP-0261, among others).
 </dl>
 <hr />
 
-<h3 style="text-align:center;">Signup</h3>
-<p>
-To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
-you can change it later, but you need one to start with. There are <a href="https://xmpp.net/directory.php">many</a>
-free and open servers available which you can use with any client; one of the smoothest options is to install the
-<a href="https://conversations.im/">Conversations</a> Android app and follow the prompts to sign up on their server.
-</p>
-
-<p>
-<em>If</em> you want to enable incoming voice calls, you will need an existing
-Canadian or US phone number (can be voice-only, no Touch-Tone needed) for call forwarding;
-forwarding to <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
-and voicemail right in your chat history are <a href="notify_signup/">in the works</a>.
-</p>
-
-<p>
-Then, pick a Canadian or US <a href="https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes">area code</a>
-you would like a number for, like 613 (Ottawa area) or 617 (Boston area), and
-search for availability:
-</p>
-
-<div style="text-align:center;">
-<form action="register1/">
-<p>
-<input placeholder="Area code" type="text" name="areacode" />
-<!-- (ie. 647 for Toronto, 617 for
-Boston area, or 604 for Vancouver area) --> <input type="submit" value="Check Availability" />
-</p>
-</form>
-</div>
-
-<p class="warning"> <!-- FIXME: add css for this class -->
-<b>Note:</b> While JMP does provide phone numbers and voice/SMS features, JMP is
-not a telephone company and it does not provide 911, 112, 999 or other emergency
-services over voice or SMS.  Please ensure that your existing telephony provider
-supports those services.
+<p style="text-align:center;">
+<a id="signup_bottom" href="#signup">Signup today!</a>
 </p>
 
 <hr />
