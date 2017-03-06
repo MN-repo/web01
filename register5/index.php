@@ -64,15 +64,33 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 	is_numeric(substr($_GET['number'], 1))) {
 
 	# first, normalize the fwdphone
-	$clean_fwdphone = preg_replace('/[^0-9]/', '', $_GET['fwdphone']);
 
-	if (strlen($clean_fwdphone) == 11 && $clean_fwdphone[0] == '1') {
-		$clean_fwdphone = substr($clean_fwdphone, 1);
+	$clean_fwdphone = '';
+
+	# see if it's a likely SIP address
+	if (strpos($_GET['fwdphone'], '@') !== FALSE) {
+		$clean_fwdphone = 'sip:'.$_GET['fwdphone'];
+	} else {
+		$clean_fwdphone = preg_replace('/[^0-9]/','',$_GET['fwdphone']);
+
+		if (strlen($clean_fwdphone) == 11 && $clean_fwdphone[0] == '1'){
+			$clean_fwdphone = substr($clean_fwdphone, 1);
+		}
+
+		if (strlen($clean_fwdphone) == 15 &&
+			substr($clean_fwdphone, 0, 7) == '8835100') {
+
+			$clean_fwdphone =
+				'sip:'.$clean_fwdphone.'@sip.inum.net';
+		} else if (strlen($clean_fwdphone) != 10) {
+			# for E.164 numbers, we only currently support iNum/NANP
+			$clean_fwdphone = '';
+		} else {
+			$clean_fwdphone = '+1'.$clean_fwdphone;
+		}
 	}
 
-	if (strlen($clean_fwdphone) == 10) {
-		$clean_fwdphone = '+1'.$clean_fwdphone;
-
+	if (!empty($clean_fwdphone)) {
 		include '../../../../settings-jmp.php';
 
 		$redis = new Redis();
@@ -185,7 +203,8 @@ If you have not yet received the verification code, please <a href=
 ?>
 ) is not a <a href="https://en.wikipedia.org/wiki/North_American_Numbering_Plan"
 >NANP</a> phone number (ie. +1 800 622 6232 or (800) 622-6232 - any format is
-acceptable).  Please press Back and try a different number or
+acceptable), a SIP URI (ie. sip_user@example.com), or an iNum (ie. +883 510 000
+000 094).  Please press Back and try a different number or
 <a href="../">start again</a>.
 <?php
 	}

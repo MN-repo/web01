@@ -111,24 +111,25 @@ Your JID (<?php echo htmlentities($jid) ?>) has been successfully verified.
 </p>
 
 <p>
-Please enter a phone number that will receive all voice calls delivered to your
-JMP number.  This phone number will receive a call when you press Submit and you
+Please enter a phone number (including <a href="https://www.inum.net/">iNum</a>)
+or SIP address that will receive all voice calls delivered to your JMP number.
+This phone number or SIP address will receive a call when you press Submit; you
 will enter the verification code that it provides to you on the next page.
 </p>
 
 <p>
-<b>Note:</b> You may choose not to enter a phone number - in that case any calls
+<b>Note:</b> You may choose to leave the below box empty; in that case any calls
 to your JMP number will receive a pre-recorded message saying "This phone number
 does not receive voice calls; please send a text message instead" and the caller
 will not be able to leave a voicemail. Please just click Submit without entering
-a phone number if that is your preference.
+anything in the box if that is your preference.
 </p>
 
 <form action="../register5/">
 <p>
 <input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
 <input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
-Phone number that receives calls: <input type="text" name="fwdphone" />
+Number or SIP address that receives calls: <input type="text" name="fwdphone" />
 <input type="submit" value="Submit" />
 </p>
 </form>

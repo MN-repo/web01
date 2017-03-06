@@ -68,6 +68,11 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 	$phone = $redis->get('reg-phn_good-'.$_GET['jmp-sid']);
 	$jid = $redis->get('reg-jid_good-'.$_GET['jmp-sid']);
 
+	# Catapult naming is used until this point - here we switch to URI form
+	if (!is_null($phone) && !empty($phone) && $phone[0] == '+') {
+		$phone = 'tel:'.$phone;
+	}
+
 
 	# log the GET params - put in a variable keyed on transaction ID
 	$pLog = '';
@@ -366,10 +371,15 @@ received/sent from your Jabber ID (<?php echo $jid ?>) while calls to
 "This phone number does not receive voice calls; please send a text message
 instead".
 <?php
-				} else {
+				} elseif (substr($phone, 0, 4) == 'sip:') {
 ?>
-<?php echo $_GET['jmp-number'] ?> will be forwarded to <?php echo $phone ?>.
-<?php
+<?php echo $_GET['jmp-number'] ?> will be forwarded to this SIP address: <?php
+					echo substr($phone, 4)." .\n";
+
+				} else {  # substr($phone, 0, 4) == 'tel:'
+?>
+<?php echo $_GET['jmp-number'] ?> will be forwarded to <?php
+					echo substr($phone, 4).".\n";
 				}
 ?>
 </p><p>
