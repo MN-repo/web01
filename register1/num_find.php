@@ -194,7 +194,7 @@ if (empty($num_list)) {
 } else {
 	$redis->set($numberKey, $num_list[0]['number']);
 
-	$print_keys = array_rand($num_list, 5);
+	$print_keys = array_rand($num_list, $_GET['count'] ? intval($_GET['count']) : 5);
 ?>
 <table style="margin-left:auto;margin-right:auto;">
 <?php foreach ($print_keys as $key): ?>
