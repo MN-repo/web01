@@ -41,6 +41,7 @@ if (!empty($redis_auth)) {
 
 $result = '';
 $resultKey = 'mmgp_result-'.$_SERVER['REMOTE_ADDR'];
+$catHdrKey = 'mmgp_ctplth-'.$_SERVER['REMOTE_ADDR'];
 
 if ($redis->exists($resultKey)) {
 	$result = $redis->get($resultKey);
@@ -67,6 +68,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&areaCode=613";
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -78,6 +80,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&state=on";
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -92,6 +95,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&zip=".$result['postal']['code'];
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -121,6 +125,7 @@ if (empty($num_list) &&
 		"&state=".$mm_region;
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -136,6 +141,7 @@ if (empty($num_list) &&
 		$mm_region;
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -163,6 +169,7 @@ if (empty($num_list) &&
 		$npa_result['area_code'];
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
@@ -175,6 +182,7 @@ if (empty($num_list) &&
 		$result['subdivisions'][0]['iso_code'];
 
 	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
 	$num_list = json_decode($num_list, true);
 }
 
