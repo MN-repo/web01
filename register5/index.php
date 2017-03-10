@@ -162,7 +162,7 @@ There was an error calling your number to deliver the code.  Please <a href=
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;fwdphone=<?php
-	echo urlencode($clean_fwdphone);
+	echo urlencode($_GET['fwdphone']);
 ?>">click here</a> to try again or press Back to change your forwarding number.
 <?php
 		        } else {
@@ -191,7 +191,7 @@ If you have not yet received the verification code, please <a href=
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;fwdphone=<?php
-	echo urlencode($clean_fwdphone);
+	echo urlencode($_GET['fwdphone']);
 ?>">click here</a> to try again or press Back to change your forwarding number.
 <?php
 			}
