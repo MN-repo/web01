@@ -5,7 +5,8 @@ jmp-fwdcalls to operate.  It also requires a PayPal premier/merchant account.
 
 The project should run on any web server configured to serve PHP (and to show
 index.php and index.xhtml as default directory pages) that has phpredis (ie. the
-php5-redis package in Debian).
+php5-redis package in Debian).  It also requires Ruby and a properly-configured
+register4/.htaccess file (that will run config.ru, ie. using CGI or Passenger).
 
 A PayPal subscription button must be setup and the details configured below.
 jmp-register is configured by default to use the PayPal Sandbox - in order to
