@@ -8,6 +8,13 @@ index.php and index.xhtml as default directory pages) that has phpredis (ie. the
 php5-redis package in Debian).  It also requires Ruby and a properly-configured
 register4/.htaccess file (that will run config.ru, ie. using CGI or Passenger).
 
+jmp-register requires that an instance of Cheogram be setup, as it assumes that
+you will want users to be able to use Cheogram JIDs for their contacts (ie.
++12113114111@cheogram.com instead of +12113114111@example.sgx.soprani.ca).  You
+must setup a separate JID for registering users with Cheogram (via <forwarded/>)
+and configure Cheogram to accept that JID.  If you don't want to use Cheogram,
+you will need to replace that code in register[34] before running jmp-register.
+
 A PayPal subscription button must be setup and the details configured below.
 jmp-register is configured by default to use the PayPal Sandbox - in order to
 run jmp-register in production you must change "sandbox.paypal" to "paypal" (in
@@ -23,7 +30,12 @@ variables:
 * $support_number (an sgx-catapult hosted E.164 number to send from)
 * $notify_receiver_email (the email address where notification list requests go)
 * $fwdcalls_url (the "Voice Callback" URL that jmp-fwdcalls makes available)
-* $sgx_url (the Bandwidth AP "Messaging Callback" URL sgx-catapult uses)
+* $sgx_url (should match the <delivery_receipt_url> that sgx-catapult uses)
+* $sgx_jid (the JID that sgx-catapult uses, ie. "example.sgx.soprani.ca")
+* $cheogram_did (the DID that Cheogram uses, ie. "+12266669977")
+* $cheogram_jid (the JID that Cheogram uses, ie. "cheogram.com")
+* $cheogram_register_jid (the JID that Cheogram trusts for registering users)
+* $cheogram_register_token (the password for $cheogram_register_jid)
 * $register_base_url (the "http://a.b/c" in "http://a.b/c/register3/index.php")
 * $paypal_receiver_email (where button delivers funds, ie. "user%40example.com")
 * $paypal_price_per_month (price that subscription button configured to charge)

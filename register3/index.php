@@ -55,7 +55,11 @@ No session ID found.  Please <a href="../">start again</a>.
 		# TODO: check return value to confirm login succeeded
 		$redis->auth($redis_auth);
 	}
-	$hitsKey = 'reg-jid_hits-'.$_GET['jid'];
+
+	# trim and strip the resourcepart - we only accept bare JIDs
+	$jid = explode('/', trim($_GET['jid']), 2)[0];
+
+	$hitsKey = 'reg-jid_hits-'.$jid;
 	$hitCount = $redis->incr($hitsKey);
 
 	# if more than 10 hits, do NOT allow verification to occur (rate limit)
@@ -69,6 +73,13 @@ No session ID found.  Please <a href="../">start again</a>.
 Too many verification attempts.  Please refresh this page in about 10 minutes or
 <a href="../">start again</a>.
 <?php
+	} elseif (strpos($jid, ' ') !== FALSE ||
+		strpos($jid, '"') !== FALSE) {
+?>
+The JID that was entered (<?php echo htmlentities($jid)?>) contains at least one
+space or quotation mark (").  Spaces and quotation marks are not allowed in bare
+JIDs - please press Back and enter a valid JID or <a href="../">start again</a>.
+<?php
 	} else {
 		# 4 bytes is based on Gmail verification code - 9 base-10 digits
 		# might have to throw this away, but easier/safer than not doing
@@ -76,7 +87,7 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 		$jcodeBytes = openssl_random_pseudo_bytes(4);
 		$jcode = bin2hex($jcodeBytes);
 
-		$jcodeKey = 'reg-jcode-'.$_GET['jid'];
+		$jcodeKey = 'reg-jcode-'.$jid;
 		if ($redis->setNx($jcodeKey, $jcode)) {
 			$redis->expire($jcodeKey, $key_ttl_seconds);
 		}
@@ -84,64 +95,46 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 		# it's important this is last so JID expires after jcode expires
 		# blow away the existing JID - if user wants to change, let them
 		$jidKey = 'reg-jid_maybe-'.$_GET['sid'];
-		$redis->setEx($jidKey, $key_ttl_seconds, $_GET['jid']);
+		$redis->setEx($jidKey, $key_ttl_seconds, $jid);
 
 		$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
-		# TODO: add a counter here, and error out if too many tries
-		do {
-			# sfx is a (mostly) random number between 0 and 16777215
-			# no $crypto_strong check needed; guessing doesn't help
-			$sfx = hexdec(bin2hex(openssl_random_pseudo_bytes(3)));
+		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
+		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",   '/',
+			':',   '<',   '>',   '@');
+		$ej_replace = array('\5c', '\20', '\22', '\26', '\27', '\2f',
+			'\3a', '\3c', '\3e', '\40');
+		$cheo_jid = str_replace($ej_search, $ej_replace, $jid).'@'.
+			$cheogram_jid;
 
-			# temp number used during registration: +1 02N NNN NNNN;
-			#  not a valid NANP number (since starts with 0) so fine
-			#  for our use; we effectively reserve +11* and +100*
-			#  for future use if we need different temp number class
-			$reg_tmp_num = '+102'.sprintf('%08d', $sfx);
-
-			$jidKey = 'catapult_jid-'.$reg_tmp_num;
-		} while (!$redis->setNx($jidKey, $_GET['jid']));
-		$redis->expire($jidKey, $key_ttl_seconds);
-
-		$credKey = 'catapult_cred-'.$_GET['jid'];
+		$credKey = 'catapult_cred-'.$cheo_jid;
 		if ($redis->exists($credKey)) {
-			# replace and let the number key we created above expire
-			# TODO: confirm that list size == 4 before accessing
-			$reg_tmp_num = $redis->lRange($credKey, 0, 3)[3];
-		} else {
-			$redis->rPush($credKey, $user);
-			$redis->rPush($credKey, $tuser);
-			$redis->rPush($credKey, $token);
-			$redis->rPush($credKey, $reg_tmp_num);
-			$redis->expire($credKey, $key_ttl_seconds);
-			# TODO: MUST unexpire this when rename()'ing to real num
-			# TODO: race detection: confirm $credKey list size == 4
-		}
-
-		if (substr($reg_tmp_num, 0, 4) != '+102') {
-			# only encountered if $credKey exists and is not tmp num
-			# TODO: hide user list by returning "code sent" instead?
 ?>
-JID (<?php echo htmlentities($_GET['jid']) ?>) already registered.  Please press
+JID (<?php echo htmlentities($jid) ?>) already registered.  Please press
 Back and choose a different JID or <a href="../">start again</a>.
 <?php
 		} else {
+			# send the verification message via Cheogram
 			$options = array('http' => array(
 			'header'   => "Content-type: application/json\r\n",
 			'method'   => 'POST',
-			'content'  => '{"direction":"in","eventType":"sms",'.
+			'content'  => '{"receiptRequested":"all",'.
+				'"tag":"verify'.$jcode.$jid.' jmp-register",'.
+				'"callbackUrl":"'.$sgx_url.'",'.
 				'"from":"'.$support_number.'",'.
-				'"to":"'.$reg_tmp_num.'",'.
+				'"to":"'.$cheogram_did.'",'.
 				# TODO: construct & add register4 URL to message
-				'"text":"Your JMP verification code is '.
-				$redis->get($jcodeKey).' - if you require '.
-				'assistance, either now or after registration '.
-				'completion, please message this number."}'
+				'"text":"/msg '.$jid.
+				' Your JMP verification code is '.
+				$redis->get($jcodeKey).' - if you need any '.
+				'help at all, reply to this message, or text '.
+				'1 (416) 993 8000 or 1 (312) 796 8000."}'
 			));
 
 			$context = stream_context_create($options);
-			$result = file_get_contents($sgx_url, false, $context);
+			$result = file_get_contents("https://$tuser:$token".
+				'@api.catapult.inetwork.com/v1/users/'.
+				"$user/messages", false, $context);
 			if ($result === FALSE) {
 ?>
 There was an error sending your confirmation code.  Please <a href=
@@ -150,7 +143,7 @@ There was an error sending your confirmation code.  Please <a href=
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;jid=<?php
-	echo urlencode($_GET['jid']);
+	echo urlencode($jid);
 ?>">click here</a> to try again or press Back to select a different JID to use.
 <?php
 		        } else {
@@ -161,7 +154,7 @@ There was an error sending your confirmation code.  Please <a href=
 
 <p>
 Please enter the verification code that was just sent to your JID (<?php
-	echo htmlentities($_GET['jid']);
+	echo htmlentities($jid);
 ?>):
 </p>
 
@@ -180,7 +173,7 @@ If you have not yet received the verification code, please <a href=
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;jid=<?php
-	echo urlencode($_GET['jid']);
+	echo urlencode($jid);
 ?>">click here</a> to try again or press Back to select a different JID to use.
 <?php
 			}
