@@ -27,12 +27,6 @@
 <title>JMP</title>
 </head>
 <body>
-<p>
-Please choose one of the following numbers (if applicable), or if none seem
-interesting enough or none were returned, try another area code (<a href=
-"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
->complete list</a>):
-</p>
 <form action="../register1/">
 <p>
 Area code: <input type="text" name="areacode" /> (ie. 613 for Ottawa area or 617
@@ -58,10 +52,17 @@ Please enter an area code above and press Submit to get a list of numbers.
 	if (empty($num_list)) {
 		echo htmlentities($_GET['areacode']);
 ?>
- does not have any numbers available.  Please try a different area code above.
+ does not have any numbers available.  Please try another area code (<a href=
+"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
+>complete list</a>).
+
 <?php
 	} else {
 ?>
+Please choose one of the following numbers, or if none seem interesting enough,
+try another area code (<a href=
+"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
+>complete list</a>):
 </p>
 <table>
 <tr><th>number</th><th>rate centre</th><th>city</th><th>province/state</th></tr>
@@ -85,7 +86,9 @@ Please enter an area code above and press Submit to get a list of numbers.
 } else {
 	echo htmlentities($_GET['areacode']);
 ?>
- is not a valid area code.  Please enter a different one above.
+ is not a valid area code.  Please enter a different one above (<a href=
+"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
+>complete list</a>).
 <?php
 }
 ?>
