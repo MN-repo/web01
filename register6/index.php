@@ -30,48 +30,52 @@
 <p>
 <?php
 
+include '../../../../settings-jmp.php';
+
+$redis = new Redis();
+$redis->pconnect($redis_host, $redis_port);
+if (!empty($redis_auth)) {
+	# TODO: check return value to confirm login succeeded
+	$redis->auth($redis_auth);
+}
+$jmpnum = $redis->get('reg-num_vjmp-'.$_GET['sid']);
+
 if (empty($_GET['pcode'])) {
 ?>
 Verification code not entered.  Please press Back and enter a verification code
-or <a href="../">start again</a>.
+or <a href="../#support">contact support</a>.
 <?php
-} elseif (empty($_GET['number']) || empty($_GET['sid'])) {
+} elseif (empty($_GET['sid'])) {
 ?>
-Session ID and/or number empty.  Please <a href="../">start again</a>.
+Session ID empty.  Please <a href="../#support">contact support</a>.
 <?php
 
-# TODO: update "== 12" for when we support non-NANPA numbers
-} elseif (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
-	is_numeric(substr($_GET['number'], 1))) {
+} elseif (!$jmpnum) {
+?>
+It looks like you haven't registered a JMP number yet or registered one a while
+ago.  To setup call forwarding options for a JMP number, please
+<a href="../">signup for one</a> or 
+<a href="../#support">contact support</a>.
+<?php
 
-	include '../../../../settings-jmp.php';
-
-	$redis = new Redis();
-	$redis->pconnect($redis_host, $redis_port);
-	if (!empty($redis_auth)) {
-		# TODO: check return value to confirm login succeeded
-		$redis->auth($redis_auth);
-	}
-
+} else {
 	$phoneMaybeKey = 'reg-phn_maybe-'.$_GET['sid'];
-	$phoneGoodKey = 'reg-phn_good-'.$_GET['sid'];
 
 	if ($_GET['pcode'] == 'nofwdnum') {
 		# TODO: make this a little prettier and/or check return values
 		$redis->set($phoneMaybeKey, '');
-		$redis->set($phoneGoodKey, '');
 	}
 
-	$maybePhone = $redis->get($phoneMaybeKey);
-	# TODO: check if $maybePhone is non-empty, etc.
+	$phone = $redis->get($phoneMaybeKey);
+	# TODO: check if $phone is non-empty, etc.
 
-	$hitsKey = 'reg-phn_hits-'.$maybePhone;
+	$hitsKey = 'reg-phn_hits-'.$phone;
 	$hitCount = 0;
 	if ($_GET['pcode'] != 'nofwdnum') {
 		$hitCount = $redis->incr($hitsKey);
 	}
 
-	$pcodeKey = 'reg-pcode-'.$maybePhone;
+	$pcodeKey = 'reg-pcode-'.$phone;
 
 	$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
 
@@ -84,7 +88,7 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 
 ?>
 Too many verification attempts.  Please refresh this page in about 10 minutes or
-<a href="../">start again</a>.
+<a href="../#support">contact support</a>.
 <?php
 	} elseif ($_GET['pcode'] != 'nofwdnum' &&
 		strtolower($_GET['pcode']) != $redis->get($pcodeKey)) {
@@ -92,7 +96,6 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 </p>
 <form action="../register6/">
 <p>
-<input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
 <input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
 Invalid verification code (<?php echo htmlentities($_GET['pcode']) ?>).  Please
 enter a new code to try again: <input type="text" name="pcode" />
@@ -102,85 +105,64 @@ enter a new code to try again: <input type="text" name="pcode" />
 <p>
 <?php
 	} else {
-		# we overwrite old value - if multiple phones verified, use last
-		if (!$redis->rename($phoneMaybeKey, $phoneGoodKey)) {
-			# TODO: provide some sort of error due to failed rename;
-			#  this most likely'd happen if they refreshed this page
-			#  (ie. due to _maybe already being moved to _good)
-		}
-
-		$phone = $redis->get($phoneGoodKey);
-
-		$jidGoodKey = 'reg-jid_good-'.$_GET['sid'];
-		$jid = $redis->get($jidGoodKey);
-
-		if (is_null($phone) || !$jid || empty($jid)) {
+		if (is_null($phone)) {
 ?>
-Could not find phone number (<?php echo $phone ?>) and/or JID (<?php
-	echo htmlentities($jid);
-?>) associated with this session ID (<?php echo $clean_sid ?>).  Please
-<a href="../">start again</a>.
+Could not find phone number (<?php echo $phone ?>)
+associated with this session ID (<?php echo $clean_sid ?>).  Please
+<a href="../#support">contact support</a>.
 <?php
 		} else {
+			# we overwrite old value - use last of verified phone #s
+			$redis->set('catapult_fwd-'.$jmpnum, $phone);
+			# TODO: confirm that SET worked correctly
 ?>
 </p>
 
-<h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
+<h2>Your JMP number is <?php echo $jmpnum ?></h2>
 
 <?php
 			if (!empty($phone)) {
 ?>
 <p>
-Your forwarding number (<?php echo $phone ?>) has been successfully verified.
+Your forwarding number (<?php echo $phone ?>) has been successfully verified!
 </p>
 <?php
 			}
 ?>
 
 <p>
-To confirm, you plan to use the Jabber ID <?php echo htmlentities($jid) ?> to
-send and receive text and pictures messages on your JMP number, and you intend
 <?php
 			if (empty($phone)) {
 ?>
-for callers to hear "This phone number does not receive voice calls; please send
-a text message instead".
+Callers will hear "This phone number does not receive voice calls; please send a
+text message instead".
 <?php
 			} else {
 ?>
-for all phone calls to your JMP number to be forwarded to <?php echo $phone ?>.
+All phone calls to your JMP number will to be forwarded to <?php echo $phone ?>.
 <?php
 			}
 ?>
 </p>
 
 <p>
-Is that correct?  If so, please press the Subscribe button below to finish the
-registration and start using your JMP number!
+If you'd like to change or setup your forwarding number, please press Back twice
+and enter the details you'd like to use.  Or
+<a href="../#support">contact support</a> at any time.
 </p>
-
-<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
-<p style="text-align:center;">
-<input name="return" value="<?php
-echo $register_base_url;
-?>/register7/?jmp-sid=<?php
-echo $clean_sid;
-?>&amp;jmp-number=<?php
-echo urlencode($_GET['number']);
-?>" type="hidden" />
-<?php echo $paypal_input_tags ?>
-</p>
-</form>
 
 <p>
+You're all set!  You can receive up to 30 total minutes of voice calls during
+the trial period and you may send up to 300 text or picture messages, or
+<a href="../upgrade1/">upgrade to a paid account</a> at any time during this
+period to receive unlimited text and picture messages for the duration of the
+JMP beta, and to keep your JMP number (it will be reclaimed after the trial if
+you don't upgrade to a paid account and don't
+<a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a>
+your JMP number to another provider).
 <?php
 		}
 	}
-} else {
-	echo htmlentities($_GET['number']);
-?>
- is not an E.164 NANP number.  Please <a href="../">start again</a>.
-<?php
 }
 ?>
 </p>

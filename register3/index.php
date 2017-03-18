@@ -144,7 +144,8 @@ There was an error sending your confirmation code.  Please <a href=
 	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($jid);
-?>">click here</a> to try again or press Back to select a different JID to use.
+?>">click here</a> or press Reload to try again or press Back to select a
+different JID to use.
 <?php
 		        } else {
 ?>
@@ -174,7 +175,20 @@ If you have not yet received the verification code, please <a href=
 	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($jid);
-?>">click here</a> to try again or press Back to select a different JID to use.
+?>">click here</a> or press Reload to try again or press Back to select a
+different JID to use.
+</p>
+
+<p class="warning"> <!-- FIXME: add css for this class -->
+<b>Note:</b> By continuing to the next step, you agree to JMP's Fair Usage
+Policy, which our carriers require us to make you aware of: You will not
+participate in or assist in any fraudulent usage, you acknowledge and agree that
+SMS messages to or from you may be blocked by carriers or other service
+providers for reasons known or unknown to JMP, your usage will be consistent
+with typical human operation, each SMS message will be initiated due to human
+interaction (as opposed to automated or timed messages), and you acknowledge
+that JMP reserves the right to take any action necessary for JMP to comply with
+any applicable CTIA and/or CRTC guidelines.
 <?php
 			}
 		}

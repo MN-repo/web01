@@ -19,10 +19,15 @@
 
 require 'blather/client/dsl'
 
+require 'json'
+require 'net/http'
+require 'uri'
+
 require 'redis/connection/hiredis'
 
 require 'sinatra/base'
 require 'tilt/erb'
+require 'webrick'
 
 require 'timeout'
 
@@ -65,28 +70,28 @@ class SApp < Sinatra::Application
 		# TODO: support Redis auth
 
 		jidMaybeKey = 'reg-jid_maybe-' + params['sid']
-		jidGoodKey = 'reg-jid_good-' + params['sid']
 
 		conn.write ["GET", jidMaybeKey]
-		maybeJid = conn.read
+		jid = conn.read
 
-		if maybeJid.nil?
+		if jid.nil?
 			@error_text = 'Could not find JID to verify; perhaps '\
 				'it has already been verified.  Feel free to '\
 				'<a href="../">start again</a> if not.'
+			conn.disconnect
 			return erb :error
 		end
 
-		hitsKey = 'reg-jid_hits-' + maybeJid;
+		hitsKey = 'reg-jid_hits-' + jid
 		conn.write ["INCR", hitsKey]
 		hitCount = conn.read
 
-		jcodeKey = 'reg-jcode-' + maybeJid;
+		jcodeKey = 'reg-jcode-' + jid
 
 		@cleanSid = params['sid'].gsub(/[^0-9a-f]/, "")
 
 
-	        # if > 10 hits, do NOT allow verification to occur (rate limit)
+		# if > 10 hits, do NOT allow verification to occur (rate limit)
 		if hitCount > 10
 			conn.write ["TTL", hitsKey]
 			if conn.read < 0
@@ -97,6 +102,7 @@ class SApp < Sinatra::Application
 			@error_text = 'Too many verification attempts.  Please'\
 				' refresh this page in about 10 minutes or '\
 				'<a href="../">start again</a>.'
+			conn.disconnect
 			return erb :error
 		end
 
@@ -113,15 +119,32 @@ enter a new code to try again: <input type="text" name="jcode" />
 </p>
 </form>
 <p>'
+			conn.disconnect
 			return erb :error
 		end
 
-		# we overwrite old value - if multiple JIDs verified, use last
-		conn.write ["RENAME", jidMaybeKey, jidGoodKey]
-		conn.read  # TODO: check value to confirm worked
 
-		conn.write ["GET", jidGoodKey]
-		jid = conn.read
+		# confirm that there haven't been too many requests from this IP
+		ipHitsKey = 'reg-ipa_hits-' + request.ip
+		conn.write ["INCR", ipHitsKey]
+		ipHitCount = conn.read
+
+		# key expires a day after first being set
+		conn.write ["TTL", ipHitsKey]
+		if conn.read < 0
+			conn.write ["EXPIRE", ipHitsKey, 86400]
+			conn.read  # TODO: check value to confirm worked
+		end
+
+		# if > 5 hits, do NOT allow verification to occur (rate limit)
+		if ipHitCount > 5
+			@error_text = 'There have been too many JMP signups '\
+				'from your location today.  Please try again '\
+				'tomorrow, or <a href="../#support">contact us'\
+				'</a> to register an account manually.'
+			conn.disconnect
+			return erb :error
+		end
 
 
 		# now that JID is verified, register it with Cheogram
@@ -134,12 +157,68 @@ enter a new code to try again: <input type="text" name="jcode" />
 			}
 		rescue Timeout::Error
 			# TODO: ensure user's creds deleted and add support link
+			$stderr.puts "tError when waiting for Cheogram register"
 			@error_text = 'Timeout while attempting to register '\
 				'JID; please contact support or feel free to '\
 				'<a href="../">start again</a>.'
+			conn.disconnect
 			return erb :error
 		end
 
+
+		# buy the number
+		uri = URI.parse('https://api.catapult.inetwork.com')
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = true
+		request = Net::HTTP::Post.new('/v1/users/' + $user +
+			'/phoneNumbers')
+		request.basic_auth $tuser, $token
+		request.add_field('Content-Type', 'application/json')
+		request.body = JSON.dump(
+			'number'		=> params['number']
+		)
+		response = http.request(request)
+
+		$stderr.puts 'bAPI response: ' + response.to_s + ' with code ' +
+			response.code + ', body "' + response.body + '"'
+
+		if response.code != '201'
+			$stderr.puts 'bError when trying to buy ' +
+				params['number']
+			@error_text = 'The JMP number you selected (' +
+				params['number'] + ') is no longer available. '\
+				' Please <a href="../">start again</a>.'
+			conn.disconnect
+			return erb :error
+		end
+
+		# TODO: check params['number'] works before using it
+
+
+		# set param['number'] to use JMP application
+		uri = URI.parse('https://api.catapult.inetwork.com')
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = true
+		request = Net::HTTP::Post.new('/v1/users/' + $user +
+			'/phoneNumbers/' +
+			WEBrick::HTTPUtils.escape(params['number']) )
+		request.basic_auth $tuser, $token
+		request.add_field('Content-Type', 'application/json')
+		request.body = JSON.dump(
+			'applicationId'		=> $catapult_application_id
+		)
+		response = http.request(request)
+
+		$stderr.puts 'aAPI response: ' + response.to_s + ' with code ' +
+			response.code + ', body "' + response.body + '"'
+
+		if response.code != '200'
+			# TODO: unlikely, but "contact support"
+			$stderr.puts "aError when trying to set application"
+		end
+
+
+		# do the actual sgx-catapult registration behind its back
 
 		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
 		cheo_jid = jid.
@@ -154,9 +233,50 @@ enter a new code to try again: <input type="text" name="jcode" />
 			gsub('>', "\\\\3e").
 			gsub('@', "\\\\40") + '@' + $cheogram_jid
 
-		# TODO: should set TTL as well, but this line of code won't last
-		conn.write ["SET", jidGoodKey, cheo_jid]
-		conn.read  # TODO: check value to confirm worked
+		credKey = 'catapult_cred-' + cheo_jid
+
+		conn.write ["EXISTS", credKey]
+		if conn.read == 1
+			# very unlikely due to check earlier in registration
+			$stderr.puts "cError"
+			# TODO: add "contact support"
+			@error_text = 'This JID is already registered.  Please'\
+				' contact support to use it with a new number.'
+			conn.disconnect
+			return erb :error
+		end
+
+		conn.write ["RPUSH", credKey, $user]
+		conn.write ["RPUSH", credKey, $tuser]
+		conn.write ["RPUSH", credKey, $token]
+		conn.write ["RPUSH", credKey, params['number'] ]
+
+		(1..4).each do |n|
+			# TODO: catch/relay RuntimeError
+			result = conn.read
+			if result != n
+				# TODO: add "contact support"
+				$stderr.puts "rError when checking RPUSH retval"
+				@error_text = 'An error occurred registering '\
+					'this JID into the system.  Please '\
+					'contact support about this issue.'
+				conn.disconnect
+				return erb :error
+			end
+		end
+
+		conn.write ["SET", 'catapult_jid-' + params['number'], cheo_jid]
+		conn.read  # TODO: check value to confirm it worked
+
+
+		# let register5 know about validated JID and bought JMP number
+		conn.write ["SETEX", 'reg-jid_good-' + params['sid'],
+			$key_ttl_seconds, cheo_jid]
+		conn.read  # TODO: check value to confirm it worked
+
+		conn.write ["SETEX", 'reg-num_vjmp-' + params['sid'],
+			$key_ttl_seconds, params['number'] ]
+		conn.read  # TODO: check value to confirm it worked
 
 
 		@jid = CGI.escapeHTML(jid)
@@ -164,6 +284,7 @@ enter a new code to try again: <input type="text" name="jcode" />
 
 		EM.stop
 
+		conn.disconnect
 		return erb :success
 	end
 end

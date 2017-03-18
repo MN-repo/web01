@@ -1,29 +1,51 @@
 </p>
 
-<h2>You've selected <%= @number %> as your JMP number</h2>
+<h2><%= @number %> is now your JMP number!</h2>
 
 <p>
-Your JID (<%= @jid %>) has been successfully verified.
+Success!  Your free 30-day trial has begun.  You may send up to 300 text or
+picture messages, or <a href="../upgrade1/">upgrade to a paid account</a> at any
+time during this period to receive unlimited text and picture messages for the
+duration of the JMP beta, and to keep your JMP number (it will be reclaimed
+after the trial if you don't upgrade to a paid account and don't
+<a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a>
+your JMP number to another provider).
 </p>
 
 <p>
-Please enter a phone number (including <a href="https://www.inum.net/">iNum</a>)
+Text messages to/from <%= @number %> can be
+received/sent from your Jabber ID (<%= @jid %>) while calls
+to <%= @number %> currently receive a pre-recorded message saying
+"This phone number does not receive voice calls; please send a text message
+instead" (more on that below).
+</p>
+
+<p>
+If you don't want to receive voice calls at your JMP number, then you're done!
+The easiest way to begin using JMP is by texting your JMP number
+(<%= @number %>) from another phone.  Alternatively, you can start sending text
+messages using <a href="../#sending">the instructions in the FAQ</a>.
+</p>
+
+<h3>OR</h3>
+
+<p>
+If you would like to receive calls to that number instead, then feel free to
+enter a phone number (including <a href="https://www.inum.net/">iNum</a>)
 or SIP address that will receive all voice calls delivered to your JMP number.
 This phone number or SIP address will receive a call when you press Submit; you
 will enter the verification code that it provides to you on the next page.
+You can receive up to 30 total minutes of voice calls during the trial period.
 </p>
 
 <p>
-<b>Note:</b> You may choose to leave the below box empty; in that case any calls
-to your JMP number will receive a pre-recorded message saying "This phone number
-does not receive voice calls; please send a text message instead" and the caller
-will not be able to leave a voicemail. Please just click Submit without entering
-anything in the box if that is your preference.
+Don't worry - if you're not ready to setup call forwarding yet, but feel you
+might want to in the future, you can always <a href="../#support">contact
+support</a>; we'll be happy to set it up for you!
 </p>
 
 <form action="../register5/">
 <p>
-<input type="hidden" name="number" value="<%= @number %>" />
 <input type="hidden" name="sid" value="<%= @cleanSid %>" />
 Number or SIP address that receives calls: <input type="text" name="fwdphone" />
 <input type="submit" value="Submit" />

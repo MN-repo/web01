@@ -15,7 +15,7 @@ must setup a separate JID for registering users with Cheogram (via <forwarded/>)
 and configure Cheogram to accept that JID.  If you don't want to use Cheogram,
 you will need to replace that code in register[34] before running jmp-register.
 
-A PayPal subscription button must be setup and the details configured below.
+Two PayPal subscription buttons must be setup and the details configured below.
 jmp-register is configured by default to use the PayPal Sandbox - in order to
 run jmp-register in production you must change "sandbox.paypal" to "paypal" (in
 register6/index.php and register7/index.php ).
@@ -37,10 +37,9 @@ variables:
 * $cheogram_register_jid (the JID that Cheogram trusts for registering users)
 * $cheogram_register_token (the password for $cheogram_register_jid)
 * $register_base_url (the "http://a.b/c" in "http://a.b/c/register3/index.php")
-* $paypal_receiver_email (where button delivers funds, ie. "user%40example.com")
-* $paypal_price_per_month (price that subscription button configured to charge)
 * $paypal_pdt_token (your PayPal "PDT identity token" - see settings pages)
-* $paypal_input_tags (the code for your PayPal button minus the <form>/</form>)
+* $paypal_tags_monthly (code for monthly PayPal button minus the <form>/</form>)
+* $paypal_tags_annual (code for annual PayPal button minus the <form>/</form>)
 * $redis_host (should match what sgx-catapult uses)
 * $redis_port (should match what sgx-catapult uses)
 * $redis_auth (should match what sgx-catapult uses; empty string if no auth)

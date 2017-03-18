@@ -30,12 +30,34 @@
 <p>
 <?php
 
-if (empty($_GET['fwdphone'])) {
+include '../../../../settings-jmp.php';
+
+$redis = new Redis();
+$redis->pconnect($redis_host, $redis_port);
+if (!empty($redis_auth)) {
+	# TODO: check return value to confirm login succeeded
+	$redis->auth($redis_auth);
+}
+$jmpnum = $redis->get('reg-num_vjmp-'.$_GET['sid']);
+
+if (empty($_GET['sid'])) {
+?>
+Session ID empty.  Please <a href="../#support">contact support</a> to change or
+setup your call forwarding options.
+<?php
+
+} elseif (!$jmpnum) {
+?>
+It looks like you haven't registered a JMP number yet or registered one a while
+ago.  To setup call forwarding options for a JMP number, please
+<a href="../">signup for one</a> or <a href="../#support">contact support</a>.
+<?php
+
+} elseif (empty($_GET['fwdphone'])) {
 ?>
 </p>
 
-<h2>You've selected <?php echo htmlentities($_GET['number']) ?> as your JMP
-number</h2>
+<h2>Your JMP number is <?php echo $jmpnum ?></h2>
 
 <p>
 No forwarding phone number was entered, which means that all calls to your JMP
@@ -47,22 +69,16 @@ not be able to leave a voicemail.
 <p>
 If you would prefer to enter a phone number that will be called when your JMP
 number is called instead, then please press Back and enter a phone number.
-Otherwise, please <a href="../register6/?number=<?php
-	echo urlencode($_GET['number']);
-?>&amp;sid=<?php
-	echo urlencode($_GET['sid']);
-?>&amp;pcode=nofwdnum">click here</a> to continue.
+</p>
+
+<p>
+Otherwise, you're done!  The easiest way to begin using JMP is by texting your
+JMP number (<?php echo $jmpnum ?>) from another phone.  Alternatively, you can
+start sending text messages using
+<a href="../#sending">the instructions in the FAQ</a>.
 <?php
 
-} elseif (empty($_GET['number']) || empty($_GET['sid'])) {
-?>
-Session ID and/or number empty.  Please <a href="../">start again</a>.
-<?php
-
-# TODO: update "== 12" for when we support non-NANPA numbers
-} elseif (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
-	is_numeric(substr($_GET['number'], 1))) {
-
+} else {
 	# first, normalize the fwdphone
 
 	$clean_fwdphone = '';
@@ -91,14 +107,6 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 	}
 
 	if (!empty($clean_fwdphone)) {
-		include '../../../../settings-jmp.php';
-
-		$redis = new Redis();
-		$redis->pconnect($redis_host, $redis_port);
-		if (!empty($redis_auth)) {
-			# TODO: check return value to confirm login succeeded
-			$redis->auth($redis_auth);
-		}
 		$hitsKey = 'reg-phn_hits-'.$clean_fwdphone;
 		$hitCount = $redis->incr($hitsKey);
 
@@ -111,7 +119,7 @@ Session ID and/or number empty.  Please <a href="../">start again</a>.
 
 ?>
 Too many verification attempts.  Please refresh this page in about 10 minutes or
-<a href="../">start again</a>.
+<a href="../#support">contact support</a>.
 <?php
 	# TODO: below should be indented by another tab, but leave as-is for now
 	} else {
@@ -137,17 +145,20 @@ Too many verification attempts.  Please refresh this page in about 10 minutes or
 		if (!$jid) {
 ?>
 No Jabber ID (JID) found for this session ID (sid).  Either find a sid that has
-an associated JID or (likely easier) <a href="../">start again</a>.
+an associated JID or (likely easier) <a href="../#support">contact support</a>.
 <?php
 		} else {
 			# call the fwdphone; jmp-fwdcalls will deliver the pcode
+			$callParams = array(
+				'tag'		=> $jid,  # for creds lookup
+				'from'		=> $support_number,
+				'to'		=> $clean_fwdphone,
+				'callbackUrl'	=> $fwdcalls_url
+			);
 			$options = array('http' => array(
 			'header'   => "Content-type: application/json\r\n",
 			'method'   => 'POST',
-			'content'  => '{"tag":"'.$jid.'",'.  # for creds lookup
-				'"from":"'.$support_number.'",'.
-				'"to":"'.$clean_fwdphone.'",'.
-				'"callbackUrl":"'.$fwdcalls_url.'"}'
+			'content'  => json_encode($callParams)
 			));
 
 			$context = stream_context_create($options);
@@ -157,19 +168,18 @@ an associated JID or (likely easier) <a href="../">start again</a>.
 			if ($result === FALSE) {
 ?>
 There was an error calling your number to deliver the code.  Please <a href=
-"../register5/?number=<?php
-	echo urlencode($_GET['number']);
-?>&amp;sid=<?php
+"../register5/?sid=<?php
 	echo $clean_sid;
 ?>&amp;fwdphone=<?php
 	echo urlencode($_GET['fwdphone']);
-?>">click here</a> to try again or press Back to change your forwarding number.
+?>">click here</a> or press Reload to try again or press Back to change your
+forwarding number.
 <?php
 		        } else {
 ?>
 </p>
 
-<h2>You've selected <?php echo $_GET['number'] ?> as your JMP number</h2>
+<h2>Your JMP number is <?php echo $jmpnum ?></h2>
 
 <p>
 Please enter the verification code that was just delivered via phone call to
@@ -178,7 +188,6 @@ your forwarding number (<?php echo $clean_fwdphone ?>):
 
 <form action="../register6/">
 <p>
-<input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
 <input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
 Code: <input type="text" name="pcode" /> <input type="submit" value="Submit" />
 </p>
@@ -186,13 +195,12 @@ Code: <input type="text" name="pcode" /> <input type="submit" value="Submit" />
 
 <p>
 If you have not yet received the verification code, please <a href=
-"../register5/?number=<?php
-	echo urlencode($_GET['number']);
-?>&amp;sid=<?php
+"../register5/?sid=<?php
 	echo $clean_sid;
 ?>&amp;fwdphone=<?php
 	echo urlencode($_GET['fwdphone']);
-?>">click here</a> to try again or press Back to change your forwarding number.
+?>">click here</a> or press Reload to try again or press Back to change your
+forwarding number.
 <?php
 			}
 		}
@@ -205,14 +213,9 @@ If you have not yet received the verification code, please <a href=
 >NANP</a> phone number (ie. +1 800 622 6232 or (800) 622-6232 - any format is
 acceptable), a SIP URI (ie. sip_user@example.com), or an iNum (ie. +883 510 000
 000 094).  Please press Back and try a different number or
-<a href="../">start again</a>.
+<a href="../#support">contact support</a>.
 <?php
 	}
-} else {
-	echo htmlentities($_GET['number']);
-?>
- is not an E.164 NANP number.  Please <a href="../">start again</a>.
-<?php
 }
 ?>
 </p>
