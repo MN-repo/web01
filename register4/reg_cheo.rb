@@ -147,6 +147,57 @@ enter a new code to try again: <input type="text" name="jcode" />
 		end
 
 
+		# do the actual sgx-catapult registration behind its back
+
+		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
+		cheo_jid = jid.
+			gsub("\\", "\\\\5c").
+			gsub(' ', "\\\\20").
+			gsub('"', "\\\\22").
+			gsub('&', "\\\\26").
+			gsub("'", "\\\\27").
+			gsub('/', "\\\\2f").
+			gsub(':', "\\\\3a").
+			gsub('<', "\\\\3c").
+			gsub('>', "\\\\3e").
+			gsub('@', "\\\\40") + '@' + $cheogram_jid
+
+		credKey = 'catapult_cred-' + cheo_jid
+
+		conn.write ["EXISTS", credKey]
+		if conn.read == 1
+			# very unlikely due to check earlier in registration
+			$stderr.puts "cError"
+			# TODO: add "contact support"
+			@error_text = 'This JID is already registered.  Please'\
+				' contact support to use it with a new number.'
+			conn.disconnect
+			return erb :error
+		end
+
+		conn.write ["RPUSH", credKey, $user]
+		conn.write ["RPUSH", credKey, $tuser]
+		conn.write ["RPUSH", credKey, $token]
+		conn.write ["RPUSH", credKey, params['number'] ]
+
+		(1..4).each do |n|
+			# TODO: catch/relay RuntimeError
+			result = conn.read
+			if result != n
+				# TODO: add "contact support"
+				$stderr.puts "rError when checking RPUSH retval"
+				@error_text = 'An error occurred registering '\
+					'this JID into the system.  Please '\
+					'contact support about this issue.'
+				conn.disconnect
+				return erb :error
+			end
+		end
+
+		conn.write ["SET", 'catapult_jid-' + params['number'], cheo_jid]
+		conn.read  # TODO: check value to confirm it worked
+
+
 		# now that JID is verified, register it with Cheogram
 		$q_send.push(jid)
 
@@ -216,57 +267,6 @@ enter a new code to try again: <input type="text" name="jcode" />
 			# TODO: unlikely, but "contact support"
 			$stderr.puts "aError when trying to set application"
 		end
-
-
-		# do the actual sgx-catapult registration behind its back
-
-		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
-		cheo_jid = jid.
-			gsub("\\", "\\\\5c").
-			gsub(' ', "\\\\20").
-			gsub('"', "\\\\22").
-			gsub('&', "\\\\26").
-			gsub("'", "\\\\27").
-			gsub('/', "\\\\2f").
-			gsub(':', "\\\\3a").
-			gsub('<', "\\\\3c").
-			gsub('>', "\\\\3e").
-			gsub('@', "\\\\40") + '@' + $cheogram_jid
-
-		credKey = 'catapult_cred-' + cheo_jid
-
-		conn.write ["EXISTS", credKey]
-		if conn.read == 1
-			# very unlikely due to check earlier in registration
-			$stderr.puts "cError"
-			# TODO: add "contact support"
-			@error_text = 'This JID is already registered.  Please'\
-				' contact support to use it with a new number.'
-			conn.disconnect
-			return erb :error
-		end
-
-		conn.write ["RPUSH", credKey, $user]
-		conn.write ["RPUSH", credKey, $tuser]
-		conn.write ["RPUSH", credKey, $token]
-		conn.write ["RPUSH", credKey, params['number'] ]
-
-		(1..4).each do |n|
-			# TODO: catch/relay RuntimeError
-			result = conn.read
-			if result != n
-				# TODO: add "contact support"
-				$stderr.puts "rError when checking RPUSH retval"
-				@error_text = 'An error occurred registering '\
-					'this JID into the system.  Please '\
-					'contact support about this issue.'
-				conn.disconnect
-				return erb :error
-			end
-		end
-
-		conn.write ["SET", 'catapult_jid-' + params['number'], cheo_jid]
-		conn.read  # TODO: check value to confirm it worked
 
 
 		# let register5 know about validated JID and bought JMP number
