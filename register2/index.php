@@ -62,7 +62,10 @@ A verification code will be sent to it that you will enter on the next page.
 
 <p>
 If you don't have a Jabber ID, you can get one with the <a href=
-"https://conversations.im/">Conversations app</a> (Android).
+"https://conversations.im/">Conversations app</a> (Android).  Or, you can get
+one from <a href="https://xmpp.net/directory.php">one of these servers</a> using
+<a href="https://xmpp.org/software/clients.html">one of these apps</a> for
+Debian, iOS, and most other OSes.
 </p>
 
 <form action="../register3/">
