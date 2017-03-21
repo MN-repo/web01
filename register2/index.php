@@ -87,7 +87,8 @@ JID: <input type="text" name="jid" /> <input type="submit" value="Submit" />
 </p>
 <hr />
 <p>
-Copyright &copy; 2017 Denver Gingerich.  jmp-register is licensed under AGPLv3+.
+Copyright &copy; 2017 <a href="https://ossguy.com/">Denver Gingerich</a> and
+others.  jmp-register is licensed under AGPLv3+.
 You can download the Complete Corresponding Source code <a
 href="https://gitlab.com/ossguy/jmp-register">here</a>.
 </p>
