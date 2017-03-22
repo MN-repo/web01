@@ -148,6 +148,14 @@ There was an error sending your confirmation code.  Please <a href=
 different JID to use.
 <?php
 		        } else {
+				# TODO: remove hack for register attempt notify
+				$time = microtime(true);
+				mail($notify_receiver_email,
+					'verifying JID for '.$_GET['number'],
+					'session ID: '.$clean_sid."\n".
+					'Jabber ID:  '.htmlentities($jid)."\n".
+					'cheo JID:   '.$cheo_jid.
+					"\nemail time: $time");
 ?>
 </p>
 
