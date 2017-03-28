@@ -195,7 +195,8 @@ if (empty($num_list)) {
 
 ?>
 <p>
-(temporarily unavailable; search <a href="/register1/">by area code</a> instead)
+(temporarily unavailable; search <a target="_top" href="../register1/">by area
+code</a> instead)
 </p>
 <?php
 
