@@ -41,12 +41,14 @@ $q_done = Queue.new
 class SApp < Sinatra::Application
 	get '/' do
 		if not params.key?('jcode')
+			$stderr.puts 'vError - no verification code'
 			@error_text = 'Verification code not entered.  Please '\
 				'press Back and enter a verification code or '\
 				'<a href="../">start again</a>.'
 			return erb :error
 
 		elsif not params.key?('number') or not params.key?('sid')
+			$stderr.puts 'sError - no sid or number'
 			@error_text = 'Session ID and/or number empty.  Please'\
 				' <a href="../">start again</a>.'
 			return erb :error
@@ -56,6 +58,8 @@ class SApp < Sinatra::Application
 			'+' or params['number'][1..-1].to_i.to_s !=
 			params['number'][1..-1]  # last part: is [1..-1] an int?
 
+			$stderr.puts 'nError when trying to buy ' +
+				CGI.escapeHTML(params['number'])
 			@error_text = CGI.escapeHTML(params['number']) +
 				' is not an E.164 NANP number.  Please '\
 				'<a href="../">start again</a>.'
@@ -75,6 +79,8 @@ class SApp < Sinatra::Application
 		jid = conn.read
 
 		if jid.nil?
+			$stderr.puts 'jError when trying to verify sid ' +
+				params['sid']
 			@error_text = 'Could not find JID to verify; perhaps '\
 				'it has already been verified.  Feel free to '\
 				'<a href="../">start again</a> if not.'
@@ -99,6 +105,8 @@ class SApp < Sinatra::Application
 				conn.read  # TODO: check value to confirm worked
 			end
 
+			$stderr.puts 'oError when trying to verify jid ' +
+				CGI.escapeHTML(jid)
 			@error_text = 'Too many verification attempts.  Please'\
 				' refresh this page in about 10 minutes or '\
 				'<a href="../">start again</a>.'
@@ -108,6 +116,9 @@ class SApp < Sinatra::Application
 
 		conn.write ["GET", jcodeKey]
 		if params['jcode'].downcase != conn.read
+			$stderr.puts 'iError when trying to verify jid ' +
+				CGI.escapeHTML(jid) + ' with ' +
+				CGI.escapeHTML(params['jcode'])
 			@error_text = '</p>
 <form action="../register4/">
 <p>
@@ -138,6 +149,8 @@ enter a new code to try again: <input type="text" name="jcode" />
 
 		# if > 5 hits, do NOT allow verification to occur (rate limit)
 		if ipHitCount > 5
+			$stderr.puts 'lError when trying to verify jid ' +
+				CGI.escapeHTML(jid)
 			@error_text = 'There have been too many JMP signups '\
 				'from your location today.  Please try again '\
 				'tomorrow, or <a href="../#support">contact us'\
