@@ -198,25 +198,6 @@ enter a new code to try again: <input type="text" name="jcode" />
 		conn.read  # TODO: check value to confirm it worked
 
 
-		# now that JID is verified, register it with Cheogram
-		$q_send.push(jid)
-
-		begin
-			status = Timeout::timeout(5) {
-				# TODO: return val (added/removed) was expected?
-				$q_done.pop
-			}
-		rescue Timeout::Error
-			# TODO: ensure user's creds deleted and add support link
-			$stderr.puts "tError when waiting for Cheogram register"
-			@error_text = 'Timeout while attempting to register '\
-				'JID; please contact support or feel free to '\
-				'<a href="../">start again</a>.'
-			conn.disconnect
-			return erb :error
-		end
-
-
 		# buy the number
 		uri = URI.parse('https://api.catapult.inetwork.com')
 		http = Net::HTTP.new(uri.host, uri.port)
@@ -266,6 +247,25 @@ enter a new code to try again: <input type="text" name="jcode" />
 		if response.code != '200'
 			# TODO: unlikely, but "contact support"
 			$stderr.puts "aError when trying to set application"
+		end
+
+
+		# now that JID is verified, register it with Cheogram
+		$q_send.push(jid)
+
+		begin
+			status = Timeout::timeout(5) {
+				# TODO: return val (added/removed) was expected?
+				$q_done.pop
+			}
+		rescue Timeout::Error
+			# TODO: ensure user's creds deleted and add support link
+			$stderr.puts "tError when waiting for Cheogram register"
+			@error_text = 'Timeout while attempting to register '\
+				'JID; please contact support or feel free to '\
+				'<a href="../">start again</a>.'
+			conn.disconnect
+			return erb :error
 		end
 
 
