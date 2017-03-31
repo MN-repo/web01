@@ -68,7 +68,7 @@ if (!empty($redis_auth)) {
 
 if (empty($_GET['jmpnum'])) {
 	# trim and strip the resourcepart - we only accept bare JIDs
-	$jid = explode('/', trim($_GET['jid']), 2)[0];
+	$jid = strtolower(explode('/', trim($_GET['jid']), 2)[0]);
 
 	if (strpos($jid, ' ') !== FALSE ||
 		strpos($jid, '"') !== FALSE) {

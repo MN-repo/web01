@@ -57,7 +57,7 @@ No session ID found.  Please <a href="../">start again</a>.
 	}
 
 	# trim and strip the resourcepart - we only accept bare JIDs
-	$jid = explode('/', trim($_GET['jid']), 2)[0];
+	$jid = strtolower(explode('/', trim($_GET['jid']), 2)[0]);
 
 	$hitsKey = 'reg-jid_hits-'.$jid;
 	$hitCount = $redis->incr($hitsKey);
