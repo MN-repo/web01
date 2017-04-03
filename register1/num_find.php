@@ -49,7 +49,14 @@ function get_num_list($url)
 	global $redis, $catHdrKey;
 
 	$num_list = file_get_contents($url);
+	while ($http_response_header[0] == 'HTTP/1.1 429 ') {
+		$redis->rPush($catHdrKey, json_encode($http_response_header));
+		error_log('rate limit hit; sleeping for 2s then retrying...');
+		sleep(2);
+		$num_list = file_get_contents($url);
+	}
 	$redis->rPush($catHdrKey, json_encode($http_response_header));
+
 	return json_decode($num_list, true);
 }
 
