@@ -43,6 +43,17 @@ $result = '';
 $resultKey = 'mmgp_result-'.$_SERVER['REMOTE_ADDR'];
 $catHdrKey = 'mmgp_ctplth-'.$_SERVER['REMOTE_ADDR'];
 
+
+function get_num_list($url)
+{
+	global $redis, $catHdrKey;
+
+	$num_list = file_get_contents($url);
+	$redis->rPush($catHdrKey, json_encode($http_response_header));
+	return json_decode($num_list, true);
+}
+
+
 if ($redis->exists($resultKey)) {
 	$result = $redis->get($resultKey);
 } else {
@@ -67,9 +78,7 @@ if (empty($num_list) &&
 	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
 		"Numbers/local?quantity=3000&areaCode=613";
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 if (empty($num_list) &&
@@ -79,9 +88,7 @@ if (empty($num_list) &&
 	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
 		"Numbers/local?quantity=3000&state=on";
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 # TODO: if not US/CA and still empty($num_list), find alternative (no ON nums?!)
@@ -94,9 +101,7 @@ if (empty($num_list) &&
 	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
 		"Numbers/local?quantity=3000&zip=".$result['postal']['code'];
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 # why, oh why did Catapult have to use "PQ" for Quebec? :P
@@ -124,9 +129,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&city=".urlencode($mm_city).
 		"&state=".$mm_region;
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 # TODO: add other city names as appropriate (test larger ones)
@@ -140,9 +143,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
 		$mm_region;
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 $npa_result = geoip_record_by_name($_SERVER['REMOTE_ADDR']);
@@ -168,9 +169,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&areaCode=".
 		$npa_result['area_code'];
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 if (empty($num_list) &&
@@ -181,9 +180,7 @@ if (empty($num_list) &&
 		"Numbers/local?quantity=3000&state=".
 		$result['subdivisions'][0]['iso_code'];
 
-	$num_list = file_get_contents($url);
-	$redis->rPush($catHdrKey, json_encode($http_response_header));
-	$num_list = json_decode($num_list, true);
+	$num_list = get_num_list($url);
 }
 
 # TODO: final fallback is area codes that usually have numbers in user's country
