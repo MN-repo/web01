@@ -207,7 +207,12 @@ code</a> instead)
 } else {
 	$redis->set($numberKey, $num_list[0]['number']);
 
-	$print_keys = array_rand($num_list, $_GET['count'] ? intval($_GET['count']) : 5);
+	$num_to_print = 5;
+	if (array_key_exists('count', $_GET)) {
+		$num_to_print = intval($_GET['count']);
+	}
+
+	$print_keys = array_rand($num_list, $num_to_print);
 ?>
 <table style="margin-left:auto;margin-right:auto;">
 <?php foreach ($print_keys as $key): ?>
