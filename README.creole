@@ -15,6 +15,10 @@ must setup a separate JID for registering users with Cheogram (via <forwarded/>)
 and configure Cheogram to accept that JID.  If you don't want to use Cheogram,
 you will need to replace that code in register[34] before running jmp-register.
 
+A SIP domain at Bandwidth AP must be configured before using jmp-register.  This
+is used by jmp-register through the $catapult_domain_* variables specified
+below.  The prefix/"Domain" is the "example" part of "example.bwapp.bwsip.io".
+
 Two PayPal subscription buttons must be setup and the details configured below.
 jmp-register is configured by default to use the PayPal Sandbox - in order to
 run jmp-register in production you must change "sandbox.paypal" to "paypal" (in
@@ -22,6 +26,10 @@ register6/index.php and register7/index.php ).
 
 As-written, jmp-register uses MaxMind's GeoIP2 Precision Web Services.  Please
 ensure you have an account configured below, or disable the code before running.
+
+jmp-register relies on https://github.com/singpolyma/mnemonicode for generating
+easy-to-remember passwords.  Please compile the "mnencode" binary and place it
+at register4/mnencode .
 
 Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
@@ -50,6 +58,8 @@ variables:
 * $tuser (the Bandwidth AP "Api Token" that sgx-catapult uses; starts with "t-")
 * $token (the Bandwidth AP "Api Secret" that sgx-catapult uses)
 * $catapult_application_id (sgx-catapult Bandwidth AP app ID; starts with "a-")
+* $catapult_domain_id (sgx-catapult Bandwidth AP domain ID; starts with "rd-")
+* $catapult_domain_prefix (sgx-catapult Bandwidth AP "Domain Name" of endpoints)
 
 
 Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>

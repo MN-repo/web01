@@ -154,7 +154,7 @@ if ($print_success) {
 ?>
 
 Once you've completed the payment process, you'll receive unlimited incoming and
-outgoing text and picture messages, and 60 minutes of incoming voice calls per
+outgoing text and picture messages, and 120 minutes of voice calls per
 month.  If you'd like to use a payment method other than PayPal, please <a
 href="../#payment">contact us</a>.  Otherwise please choose one of these payment
 options:

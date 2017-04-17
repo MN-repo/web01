@@ -12,31 +12,93 @@ after the trial if you don't upgrade to a paid account and don't
 your JMP number to another provider).
 </p>
 
-<p>
-Text messages to/from <%= @number %> can be
-received/sent from your Jabber ID (<%= @jid %>) while calls
-to <%= @number %> currently receive a pre-recorded message saying
-"This phone number does not receive voice calls; please send a text message
-instead" (more on that below).
-</p>
+<h3>Sending and receiving text and picture messages</h3>
 
 <p>
-If you don't want to receive voice calls at your JMP number, then you're done!
+Text messages to/from <%= @number %> can be
+received/sent from your Jabber ID (<%= @jid %>).
 The easiest way to begin using JMP is by texting your JMP number
 (<%= @number %>) from another phone.  Alternatively, you can start sending text
 messages using <a href="../#sending">the instructions in the FAQ</a>.
 </p>
 
-<h3>OR</h3>
+<h3>Making and receiving phone calls</h3>
 
 <p>
-If you would like to receive calls to that number instead, then feel free to
-enter a phone number (including <a href="https://www.inum.net/">iNum</a>)
-or SIP address that will receive all voice calls delivered to your JMP number.
-This phone number or SIP address will receive a call when you press Submit; you
-will enter the verification code that it provides to you on the next page.
-You can receive up to 30 total minutes of voice calls during the trial period.
+During the trial period you may use up to 30 minutes of incoming and outgoing
+voice calls.  You can <a href="../upgrade1/">upgrade to a paid account</a> at
+any time during this period to receive 120 minutes of incoming and outgoing
+calls per month.
 </p>
+
+<h4>Making phone calls</h4>
+
+<p>
+If you want to make a phone call using your JMP number, you can login to your
+JMP SIP account with any SIP client (such as
+<a href="https://code.google.com/archive/p/csipsimple/">CSipSimple</a> - we
+recommend using its TCP option) with the following credentials and then start
+placing calls (this works regardless of the "Receiving" option you choose
+below):
+</p>
+
+<table style="margin-left:auto;margin-right:auto;">
+<tr><td>server:</td><td><code><%= @prefix %>.bwapp.bwsip.io</code></td></tr>
+<tr><td>user ID:</td><td><code><%= @sip_user %></code></td></tr>
+<tr><td style="padding-right:1.5rem;">password:</td>
+<td><code><%= @sip_pass %></code></td></tr>
+</table>
+
+<p>
+If you need to retrieve the above SIP login information later, you can always
+<a href="../#support">contact support</a>; we're happy to send you your user ID
+or reset your password.
+</p>
+
+<h4>Receiving phone calls</h4>
+
+<form action="../#sending">
+<p>
+If you don't want to receive voice calls at your JMP number, then you're done!
+Calls to <%= @number %> currently receive a pre-recorded message saying
+"This phone number does not receive voice calls; please send a text message
+instead".  <input type="submit" value="Use JMP without calls" />
+</p>
+</form>
+
+<p>
+Otherwise please choose one of the following options for receiving calls to your
+JMP number (the selected number or SIP address will receive a call; enter the
+verification code it provides to you on the next page):
+</p>
+
+<ul>
+<li style="margin-bottom:10px;">
+<form action="../register5/">
+<input type="hidden" name="sid" value="<%= @cleanSid %>" />
+<input type="hidden" name="fwdphone"
+value="<%= @sip_user %>@<%= @prefix %>.bwapp.bwsip.io" />
+
+Deliver calls to <input type="submit"
+value="<%= @sip_user %>@<%= @prefix %>.bwapp.bwsip.io" /> (the same SIP account
+you use to make calls, described above) - if you are not logged in to the
+account, users will receive a busy signal.  There is no voicemail available with
+this option (<a href="../notify_signup/">yet</a>).
+</form>
+</li>
+
+<li>
+Forward calls to a phone number (including
+<a href="https://www.inum.net/">iNum</a>) or SIP address.  If you have your own
+voicemail configured for that number or SIP address, unanswered calls go there.
+<br style="margin-bottom:5px;" />
+<form action="../register5/">
+<input type="hidden" name="sid" value="<%= @cleanSid %>" />
+Number or SIP address that receives calls: <input type="text" name="fwdphone" />
+<input type="submit" value="Submit" />
+</form>
+</li>
+</ul>
 
 <p>
 Don't worry - if you're not ready to setup call forwarding yet, but feel you
@@ -44,11 +106,4 @@ might want to in the future, you can always <a href="../#support">contact
 support</a>; we'll be happy to set it up for you!
 </p>
 
-<form action="../register5/">
-<p>
-<input type="hidden" name="sid" value="<%= @cleanSid %>" />
-Number or SIP address that receives calls: <input type="text" name="fwdphone" />
-<input type="submit" value="Submit" />
-</p>
-</form>
 <p>

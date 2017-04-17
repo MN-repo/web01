@@ -25,6 +25,9 @@ require 'uri'
 
 require 'redis/connection/hiredis'
 
+require 'open3'
+require 'securerandom'
+
 require 'sinatra/base'
 require 'tilt/erb'
 require 'webrick'
@@ -282,6 +285,45 @@ enter a new code to try again: <input type="text" name="jcode" />
 		end
 
 
+		# Catapult supports alphanum and [-!=_*+.~]; tilde is escape sym
+		@sip_user = URI.escape(jid, /[^0-9a-zA-Z!\-=_*+.]/).
+			gsub('%', '~')
+
+		# create password with https://github.com/singpolyma/mnemonicode
+		stdin, stdout, stderr = Open3.popen3('./mnencode')
+		# note that Catapult only allows passwords up to 25 chars so...
+		stdin.print(SecureRandom.random_bytes(4))
+		stdin.close
+		@sip_pass = stdout.gets.strip
+
+		# create the SIP endpoint and tell the user about it
+		uri = URI.parse('https://api.catapult.inetwork.com')
+		http = Net::HTTP.new(uri.host, uri.port)
+		http.use_ssl = true
+		request = Net::HTTP::Post.new('/v1/users/' + $user +
+			'/domains/' + $catapult_domain_id + '/endpoints')
+		request.basic_auth $tuser, $token
+		request.add_field('Content-Type', 'application/json')
+		request.body = JSON.dump(
+			'name'		=> @sip_user,
+			'applicationId'	=> $catapult_application_id,
+			'credentials'	=> {'password' => @sip_pass}
+		)
+		response = http.request(request)
+
+		$stderr.puts 'eAPI response: ' + response.to_s + ' with code ' +
+			response.code + ', body "' + response.body + '"'
+
+		if response.code != '201'
+			$stderr.puts 'eError when trying to add SIP endpoint ' +
+				@sip_user
+			@error_text = 'Error creating SIP endpoint.  Please '\
+				'<a href="../#support">contact support</a>.'
+			conn.disconnect
+			return erb :error
+		end
+
+
 		# let register5 know about validated JID and bought JMP number
 		conn.write ["SETEX", 'reg-jid_good-' + params['sid'],
 			$key_ttl_seconds, cheo_jid]
@@ -294,6 +336,7 @@ enter a new code to try again: <input type="text" name="jcode" />
 
 		@jid = CGI.escapeHTML(jid)
 		@number = params['number']
+		@prefix = $catapult_domain_prefix
 
 		EM.stop
 
