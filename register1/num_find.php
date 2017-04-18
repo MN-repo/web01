@@ -212,10 +212,39 @@ code</a> instead)
 		$num_to_print = intval($_GET['count']);
 	}
 
-	$print_keys = array_rand($num_list, $num_to_print);
+	function preferred($num)
+	{
+		return $num['number'][3] == 1 || $num['number'][3] == 0;
+	}
+	$pref_list = array_filter($num_list, "preferred");
+
+	# use at most half the list 4 pref nums & show at most half of pref list
+	$pref_to_print = min(round(count($pref_list) / 2),
+		round($num_to_print / 2));
+
+	$pref_keys = array_rand($pref_list, $pref_to_print);
+	if (1 == count($pref_keys)) {
+		# needed since array_rand() returns non-array if only one result
+		$pref_keys = array($pref_keys);
+	}
+
+	$other_keys = array_rand($num_list, $num_to_print - $pref_to_print);
+	if (1 == count($other_keys)) {
+		# needed since array_rand() returns non-array if only one result
+		$other_keys = array($other_keys);
+	}
 ?>
 <table style="margin-left:auto;margin-right:auto;">
-<?php foreach ($print_keys as $key): ?>
+<?php foreach ($pref_keys as $key): ?>
+<tr><td style="font-size:1.5rem;"><a style="text-decoration:none;" target="_top"
+href="../register2/?number=<?php
+		echo urlencode($pref_list[$key]["number"]).'&city='.urlencode(
+			str_replace(' - ', '-', ucwords(strtolower(str_replace(
+				'-', ' - ', $pref_list[$key]["city"])))).
+			', '.$pref_list[$key]["state"]);
+	?>"><?php echo '+1 '.$pref_list[$key]["nationalNumber"] ?></a></td></tr>
+<?php endforeach; ?>
+<?php foreach ($other_keys as $key): ?>
 <tr><td style="font-size:1.5rem;"><a style="text-decoration:none;" target="_top"
 href="../register2/?number=<?php
 		echo urlencode($num_list[$key]["number"]).'&city='.urlencode(
