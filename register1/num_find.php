@@ -153,6 +153,19 @@ if (empty($num_list) &&
 	$num_list = get_num_list($url);
 }
 
+if (empty($num_list) &&
+	('south durham' == $mm_city && 'me' == $mm_region) ||
+	('west durham' == $mm_city && 'me' == $mm_region)) {
+
+	$mm_city = 'durham';
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
+		$mm_region;
+
+	$num_list = get_num_list($url);
+}
+
 $npa_result = geoip_record_by_name($_SERVER['REMOTE_ADDR']);
 
 # resulting $npa_result dictionary is like this:
