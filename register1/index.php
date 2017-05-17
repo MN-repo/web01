@@ -29,8 +29,8 @@
 <body>
 <form action="../register1/">
 <p>
-Area code: <input type="text" name="areacode" /> (ie. 613 for Ottawa area or 617
-for Boston area) <input type="submit" value="Submit" />
+Area code: <input type="text" name="areacode" /> (ie. 613 for Ottawa area or 314
+for St. Louis area) <input type="submit" value="Submit" />
 </p>
 </form>
 <p>
