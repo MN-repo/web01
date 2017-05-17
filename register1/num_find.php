@@ -203,6 +203,26 @@ if (empty($num_list) &&
 	$num_list = get_num_list($url);
 }
 
+# if there are no numbers in user's state, then try finding Massachusetts number
+if (empty($num_list) &&
+	$result['country']['iso_code'] == 'US') {
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&state=ma";
+
+	$num_list = get_num_list($url);
+}
+
+# if there are no numbers in user's province, then try finding Ontario number
+if (empty($num_list) &&
+	$result['country']['iso_code'] == 'CA') {
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&state=on";
+
+	$num_list = get_num_list($url);
+}
+
 # TODO: final fallback is area codes that usually have numbers in user's country
 
 $numberKey = 'mmgp_number-'.$_SERVER['REMOTE_ADDR'];
