@@ -126,8 +126,8 @@ Back and choose a different JID or <a href="../">start again</a>.
 				# TODO: construct & add register4 URL to message
 				'"text":"/msg '.$jid.
 				' Your JMP verification code is '.
-				$redis->get($jcodeKey).' - if you need any '.
-				'help at all, reply to this message, or text '.
+				$redis->get($jcodeKey).' - for help, '.
+				'reply to this message, or text '.
 				'1 (416) 993 8000 or 1 (312) 796 8000."}'
 			));
 
