@@ -66,25 +66,22 @@ To get low-volume notifications of our progress,
 <h3 id="signup" style="text-align:center;">Signup (30-day free trial!)</h3>
 <p>
 To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
-you can change it later, but you need one to start with. There are <a href="suggested_servers.html">many</a>
-free and open servers available which you can use with any client; one of the smoothest options is to install the
+you can change it later, but you need one to start with. There are <a href="suggested_servers.html">many
+free and open servers</a> available which you can use with any client; one of the smoothest options is to install the
 <a href="https://conversations.im/">Conversations</a> Android app and follow the prompts to sign up on their server.
 </p>
 
 <p>
-Once you have that, you can then decide if you'd like to use JMP's built-in
-calling features or bring your own.  JMP provides a
+By default, calls are delivered to a JMP-provided
 <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
 account that you can use with your preferred SIP client (we find that
 <a href="https://code.google.com/archive/p/csipsimple/">CSipSimple</a> works
-well on Android).  You may also receive calls using a different SIP address
-or an existing Canadian or US phone number (can be voice-only, no Touch-Tone
-needed) or <a href="https://www.inum.net/">iNum</a> if you prefer.  Voicemail
-right in your chat history is <a href="notify_signup/">in the works</a>.
+well on Android).  <a href="#voicemail">Voicemail</a> is delivered to your XMPP
+client as an audio file along with a text transcription.
 </p>
 
 <p>
-Next, pick a JMP number.  Here are a few we found for you:
+The next step is to pick a JMP number.  Here are a few we found for you:
 <div style="text-align:center;">
 
 <!-- TODO: add text but "Text not allowed in element iframe in this context" -->
@@ -132,7 +129,10 @@ client, and to make and receive phone calls using your
 <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
 client (a SIP account is provided, or you can forward to an existing SIP
 account, Canadian or US phone number, or
-<a href="https://www.inum.net/">iNum</a>).
+<a href="https://www.inum.net/">iNum</a>).  Calls will be delivered to voicemail
+if your SIP client is not logged in (or if you <a href="#voicemail">configure a
+voicemail timeout</a>), which are then converted to text and sent to your XMPP
+account along with an audio file of the voicemail.
 </p><p>
 
 </p>
@@ -288,8 +288,37 @@ Currently JMP supports calling to Canada and the US.
 </p>
 </dd>
 
+<dt id="voicemail">Q10. How does voicemail work?</dt>
+<dd>
+<p>
+Calls will be delivered to voicemail if your SIP account (or forwarding number)
+is busy or not logged in.  You can also configure calls to be sent to voicemail
+after a certain number of rings by using an XMPP ad-hoc command, which is done
+(ie. through <a href="https://gajim.org/">Gajim</a>) by adding cheogram.com to
+your roster, right-clicking it, and choosing "Execute Command...".  You can then
+choose to either "Configure Calls" (set the seconds until voicemail - a ring is
+about 5 seconds and "-1" means unlimited rings) or "Record Voicemail Greeting"
+(see below).
+</p><p>
+The default voicemail greeting is: "You have reached the voicemail of a user of
+<a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave
+a message after the tone."  If your XMPP user <a
+href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or
+NICKNAME specified, then JMP will use that instead of "a user of <a
+href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also
+set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc
+command (see above), which will call your SIP account (or forwarding number) to
+record the greeting.
+</p><p>
+Note that voicemails will be delivered as messages to your XMPP client, both as
+an audio file as soon as the voicemail is left, and also as transcribed text
+once our transcription engine has finished converting the audio to text for you
+(normally this takes just a few seconds).
+</p>
+</dd>
+
 <!-- FIXME: merge into #pricing? -->
-<dt id="payment">Q10. Do I have to use PayPal to signup for JMP?</dt>
+<dt id="payment">Q11. Do I have to use PayPal to signup for JMP?</dt>
 <dd>
 <p>
 No.  Other payment methods are available.  For details, please contact our
@@ -302,7 +331,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 .
 </p>
 </dd>
-<dt id="existing">Q11. Can I port my existing number into JMP?</dt>
+<dt id="existing">Q12. Can I port my existing number into JMP?</dt>
 <dd>
 <p>
 Yes!  We support most regions in Canada and the US.  The process normally takes
@@ -317,7 +346,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 </p>
 </dd>
 
-<dt id="clients">Q12. Which XMPP clients are supported?</dt>
+<dt id="clients">Q13. Which XMPP clients are supported?</dt>
 <dd>
 <p>
 You can use any XMPP client you like.  If a client doesn't work for some reason,

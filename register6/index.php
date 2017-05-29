@@ -134,8 +134,10 @@ Your forwarding number (<?php echo $phone ?>) has been successfully verified!
 <?php
 			if (empty($phone)) {
 ?>
-Callers will hear "This phone number does not receive voice calls; please send a
-text message instead".
+Callers will hear "You have reached the voicemail of a user of <a
+href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a
+message after the tone."  If they leave a voicemail, you will receive it via
+text message, both as an audio file, and as transcribed text.
 <?php
 			} else {
 ?>

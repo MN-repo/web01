@@ -57,52 +57,42 @@ or reset your password.
 
 <h4>Receiving phone calls</h4>
 
-<form action="../#sending">
 <p>
-If you don't want to receive voice calls at your JMP number, then you're done!
-Calls to <%= @number %> currently receive a pre-recorded message saying
-"This phone number does not receive voice calls; please send a text message
-instead".  <input type="submit" value="Use JMP without calls" />
-</p>
-</form>
-
-<p>
-Otherwise please choose one of the following options for receiving calls to your
-JMP number (the selected number or SIP address will receive a call; enter the
-verification code it provides to you on the next page):
+Currently incoming calls to <%= @number %> will be delivered to your JMP SIP
+account (see above).  If you have not logged into your JMP SIP account, then
+calls will be sent to voicemail.  In particular, callers will hear "You have
+reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.
+Please send a text message, or leave a message after the tone."  If they leave a
+voicemail, you will receive it in your XMPP client, both as an audio file, and
+as transcribed text.
 </p>
 
-<ul>
-<li style="margin-bottom:10px;">
-<form action="../register5/">
-<input type="hidden" name="sid" value="<%= @cleanSid %>" />
-<input type="hidden" name="fwdphone"
-value="<%= @sip_user %>@<%= @prefix %>.bwapp.bwsip.io" />
+<p>
+If you're logged into your JMP SIP account and would still like users to reach
+voicemail (ie. after a certain number of rings), and/or if you would like to
+record a custom voicemail greeting message, you can <a
+href="../#voicemail">configure voicemail using these steps</a>.
+</p>
 
-Deliver calls to <input type="submit"
-value="<%= @sip_user %>@<%= @prefix %>.bwapp.bwsip.io" /> (the same SIP account
-you use to make calls, described above) - if you are not logged in to the
-account, users will receive a busy signal.  There is no voicemail available with
-this option (<a href="../notify_signup/">yet</a>).
-</form>
-</li>
+<p>
+(<em>optional</em>) If you'd like to receive calls to <%= @number %> at your
+existing (non-JMP) phone number or at a different SIP address instead, then
+please enter your phone number (including <a
+href="https://www.inum.net/">iNum</a>) or SIP address below.  The selected
+number or SIP address will receive a call when you hit Submit; enter the
+verification code it provides to you on the next page.
+</p>
 
-<li>
-Forward calls to a phone number (including
-<a href="https://www.inum.net/">iNum</a>) or SIP address.  If you have your own
-voicemail configured for that number or SIP address, unanswered calls go there.
-<br style="margin-bottom:5px;" />
-<form action="../register5/">
+<form action="../register5/" style="text-align:center;">
 <input type="hidden" name="sid" value="<%= @cleanSid %>" />
-Number or SIP address that receives calls: <input type="text" name="fwdphone" />
+use different SIP address or number to receive calls:
+<input type="text" name="fwdphone" />
 <input type="submit" value="Submit" />
 </form>
-</li>
-</ul>
 
 <p>
-Don't worry - if you're not ready to setup call forwarding yet, but feel you
-might want to in the future, you can always <a href="../#support">contact
+Don't worry - if you want to change how calls to your JMP number are handled at
+some point in the future, you can always <a href="../#support">contact
 support</a>; we'll be happy to set it up for you!
 </p>
 

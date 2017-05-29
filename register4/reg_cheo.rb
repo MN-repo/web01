@@ -323,6 +323,11 @@ enter a new code to try again: <input type="text" name="jcode" />
 			return erb :error
 		end
 
+		# TODO: bad indentation, but it's really really convenient
+		conn.write ["SET", 'catapult_fwd-' + params['number'],
+		  "sip:#{@sip_user}@#{$catapult_domain_prefix}.bwapp.bwsip.io"]
+		conn.read  # TODO: check value to confirm it worked
+
 
 		# let register5 know about validated JID and bought JMP number
 		conn.write ["SETEX", 'reg-jid_good-' + params['sid'],

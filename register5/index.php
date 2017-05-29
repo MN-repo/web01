@@ -61,9 +61,12 @@ ago.  To setup call forwarding options for a JMP number, please
 
 <p>
 No forwarding phone number was entered, which means that all calls to your JMP
-number would receive a pre-recorded message saying "This phone number does not
-receive voice calls; please send a text message instead" and the caller would
-not be able to leave a voicemail.
+number will be sent to voicemail unless you've signed into your JMP SIP account
+(press Back for the login details).  In particular, callers will hear "You have
+reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.
+Please send a text message, or leave a message after the tone."  If they leave a
+voicemail, you will receive it via text message, both as an audio file, and as
+transcribed text.
 </p>
 
 <p>
