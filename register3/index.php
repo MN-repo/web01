@@ -120,7 +120,7 @@ Back and choose a different JID or <a href="../">start again</a>.
 			'method'   => 'POST',
 			'content'  => '{"receiptRequested":"all",'.
 				'"tag":"verify'.$jcode.$jid.' jmp-register",'.
-				'"callbackUrl":"'.$sgx_url.'",'.
+				'"callbackUrl":"'.$fwdcalls_url.'",'.
 				'"from":"'.$support_number.'",'.
 				'"to":"'.$cheogram_did.'",'.
 				# TODO: construct & add register4 URL to message
