@@ -241,7 +241,7 @@ code</a> instead)
 	$redis->set($numberKey, $num_list[0]['number']);
 
 	$num_to_print = 5;
-	if (array_key_exists('count', $_GET)) {
+	if (array_key_exists('count', $_GET) && intval($_GET['count']) > 0) {
 		$num_to_print = intval($_GET['count']);
 	}
 
