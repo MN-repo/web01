@@ -154,6 +154,18 @@ if (empty($num_list) &&
 }
 
 if (empty($num_list) &&
+	('new york' == $mm_city && 'ny' == $mm_region)) {
+
+	$mm_city = 'new+york+city';
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
+		$mm_region;
+
+	$num_list = get_num_list($url);
+}
+
+if (empty($num_list) &&
 	('south durham' == $mm_city && 'me' == $mm_region) ||
 	('west durham' == $mm_city && 'me' == $mm_region)) {
 
