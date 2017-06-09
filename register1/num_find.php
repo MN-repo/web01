@@ -31,6 +31,7 @@
 $start_time = microtime(true);
 
 include '../../../../settings-jmp.php';
+include '../../../../fancynum-jmp.php';
 
 $redis = new Redis();
 $redis->pconnect($redis_host, $redis_port);
@@ -278,6 +279,50 @@ code</a> instead)
 	if (1 == $other_count) {
 		# needed since array_rand() returns non-array if only one result
 		$other_keys = array($other_keys);
+	}
+
+	# TODO: eventually we need to return a set of (hopefully just one) index
+	function is_fancy_neighbour($num)
+	{
+		global $fancy_area_code_neighbours;
+
+		return array_key_exists(substr($num['number'], 2, 3),
+			$fancy_area_code_neighbours);
+	}
+	$fancyish = array_filter($num_list, "is_fancy_neighbour");
+
+	# TODO: use index from above instead of hard-coding [0] (see above TODO)
+	if ($other_count > 0 && !empty($fancyish) && count($fancynums[0]) > 0) {
+		$max_tries = 3;
+		$tries = 0;
+		$fancy_key = 0;
+		$params = array();
+
+		do {
+			$fancy_key = array_rand($fancynums[0], 1);
+
+			$ur = "https://$tuser:$token@api.catapult.inetwork.com".
+				"/v1/users/$user/phoneNumbers/".
+				$fancynums[0][$fancy_key];
+
+			$num_result = file_get_contents($ur);
+			$params = json_decode($num_result, true);
+
+			++$tries;
+
+		} while ($catapult_application_id == $params["applicationId"] &&
+			$tries < $max_tries);
+
+		if ($catapult_application_id != $params["applicationId"]) {
+			$num_list[$other_keys[$other_count-1]]["number"] =
+				$fancynums[0][$fancy_key];
+			$num_list[$other_keys[$other_count-1]]["city" ] =
+				'Manhattan';
+			$num_list[$other_keys[$other_count-1]]["state"] = 'NY';
+			$num_list[$other_keys[$other_count-1]]["nationalNumber"
+				] = preg_replace('/^\+1(...)(...)(....)$/',
+				'($1) $2-$3', $fancynums[0][$fancy_key]);
+		}
 	}
 ?>
 <table style="margin-left:auto;margin-right:auto;">

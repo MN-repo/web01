@@ -40,6 +40,46 @@ if (empty($_GET['areacode'])) {
 ?>
 Please enter an area code above and press Submit to get a list of numbers.
 <?php
+} elseif ('212' == $_GET['areacode']) {
+	include '../../../../settings-jmp.php';
+	include '../../../../fancynum-jmp.php';
+
+	$fancy_keys = array_rand($fancynums[0], $fancy_max);
+
+	foreach ($fancy_keys as $index => $fancy_key) {
+		$ur = "https://$tuser:$token@api.catapult.inetwork.com".
+			"/v1/users/$user/phoneNumbers/".
+			$fancynums[0][$fancy_key];
+
+		$num_result = file_get_contents($ur);
+		$params = json_decode($num_result, true);
+
+		if ($catapult_application_id == $params["applicationId"]) {
+			unset($fancy_keys[$index]);
+		}
+	}
+?>
+Please choose one of the following numbers, or if none seem interesting enough,
+try another area code (<a href=
+"https://en.wikipedia.org/wiki/List_of_North_American_Numbering_Plan_area_codes"
+>complete list</a>):
+</p>
+<table>
+<tr><th>number</th><th>city</th><th>state</th></tr>
+<?php foreach ($fancy_keys as $key): ?>
+<tr>
+	<td><a href="../register2/?number=<?php
+		echo urlencode($fancynums[0][$key]).'&city=Manhattan%2C+NY';
+	?>"><?php echo preg_replace('/^\+1(...)(...)(....)$/', '($1) $2-$3',
+		$fancynums[0][$key]); ?></a></td>
+	<td><?php echo 'Manhattan' ?></td>
+	<td><?php echo 'NY' ?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+<p>
+<?php
+
 } elseif (strlen($_GET['areacode']) == 3 && is_numeric($_GET['areacode'])) {
 	include '../../../../settings-jmp.php';
 

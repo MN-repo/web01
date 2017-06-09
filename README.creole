@@ -31,6 +31,19 @@ jmp-register relies on https://github.com/singpolyma/mnemonicode for generating
 easy-to-remember passwords.  Please compile the "mnencode" binary and place it
 at register4/mnencode .
 
+There are two settings files for jmp-register, named fancynum-jmp.php and
+settings-jmp.php - the first is used only for specifying special/fancy numbers
+to show users through the number suggester, but must be present even if unused.
+The fancynum-jmp.php file must be placed at ../../../../fancynum-jmp.php
+(relative to register3/index.php for example) and it must contain at least the
+following (the default values below effectively disable special number feature):
+
+<?php
+$fancy_max = 10;			# amount to display for area code search
+$fancy_area_code_neighbours = array();	# area codes to show number by (all =>0)
+$fancynums = array(array());		# inner array lists nums in acct to show
+?>
+
 Note that a settings file must be placed at ../../../../settings-jmp.php
 (relative to register3/index.php for example).  The file must define these
 variables:
