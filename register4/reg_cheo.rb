@@ -230,7 +230,46 @@ enter a new code to try again: <input type="text" name="jcode" />
 		$stderr.puts 'bAPI response: ' + response.to_s + ' with code ' +
 			response.code + ', body "' + response.body + '"'
 
-		if response.code != '201'
+		num_was_bought = false
+		if response.code == '201'
+			num_was_bought = true
+
+			# TODO: check params['number'] works before using it
+		end
+
+
+		# check param['number'] to see if already in use by a JMP user
+		if not num_was_bought
+			uri = URI.parse('https://api.catapult.inetwork.com')
+			http = Net::HTTP.new(uri.host, uri.port)
+			http.use_ssl = true
+			request = Net::HTTP::Get.new('/v1/users/' + $user +
+				'/phoneNumbers/' +
+				WEBrick::HTTPUtils.escape(params['number']) )
+			request.basic_auth $tuser, $token
+			response = http.request(request)
+		end
+
+		# control flow could be prettier but hacked for less indentation
+		if not num_was_bought and response.code == '200'
+			pnParams = JSON.parse(response.body)
+
+			if pnParams['applicationId'] == $catapult_application_id
+				$stderr.puts 'pError when trying to buy ' +
+					params['number']
+				@error_text = 'The JMP number you chose (' +
+					params['number'] + ') is not available'\
+					' anymore.  Please <a href="../">start'\
+					' again</a>.'
+				conn.disconnect
+				return erb :error
+			end
+
+			# TODO: add locking of number - race exists until ID set
+		elsif not num_was_bought  # and response.code != '200'
+			# either couldn't get number info or number DNE; in both
+			#  cases we should error out and not let user set an app
+
 			$stderr.puts 'bError when trying to buy ' +
 				params['number']
 			@error_text = 'The JMP number you selected (' +
@@ -240,7 +279,7 @@ enter a new code to try again: <input type="text" name="jcode" />
 			return erb :error
 		end
 
-		# TODO: check params['number'] works before using it
+		# ASSERT: had # already and its app != Catapult or # just bought
 
 
 		# set param['number'] to use JMP application
@@ -260,9 +299,19 @@ enter a new code to try again: <input type="text" name="jcode" />
 		$stderr.puts 'aAPI response: ' + response.to_s + ' with code ' +
 			response.code + ', body "' + response.body + '"'
 
-		if response.code != '200'
+		if response.code != '200' and num_was_bought
 			# TODO: unlikely, but "contact support"
 			$stderr.puts "aError when trying to set application"
+		elsif response.code != '200'  # and not num_was_bought
+			# very unlikely (since above applicationId GET worked)
+			$stderr.puts 'dError when trying to buy ' +
+				params['number']
+			@error_text = 'The JMP number you selected (' +
+				params['number'] + ') is not available'\
+				' anymore.  Please <a href="../">start'\
+				' again</a>.'
+			conn.disconnect
+			return erb :error
 		end
 
 
