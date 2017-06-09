@@ -274,7 +274,8 @@ code</a> instead)
 	}
 
 	$other_keys = array_rand($num_list, $num_to_print - $pref_to_print);
-	if (1 == count($other_keys)) {
+	$other_count = count($other_keys);
+	if (1 == $other_count) {
 		# needed since array_rand() returns non-array if only one result
 		$other_keys = array($other_keys);
 	}
