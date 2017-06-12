@@ -176,14 +176,15 @@ Code: <input type="text" name="jcode" /> <input type="submit" value="Submit" />
 </form>
 
 <p>
-If you have not yet received the verification code, please <a href=
+If you have not yet received the verification code, please add the contact
+"+14169938000@cheogram.com" to your roster and then <a href=
 "../register3/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($jid);
-?>">click here</a> or press Reload to try again or press Back to select a
+?>">click here</a> or press Reload to try again, or press Back to select a
 different JID to use.
 </p>
 
