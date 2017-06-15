@@ -155,6 +155,19 @@ if (empty($num_list) &&
 }
 
 if (empty($num_list) &&
+	('ajax' == $mm_city && 'on' == $mm_region) ||
+	('pickering' == $mm_city && 'on' == $mm_region)) {
+
+	$mm_city = 'ajax+pickering';
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
+		$mm_region;
+
+	$num_list = get_num_list($url);
+}
+
+if (empty($num_list) &&
 	('new york' == $mm_city && 'ny' == $mm_region)) {
 
 	$mm_city = 'new+york+city';
