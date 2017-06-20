@@ -43,45 +43,39 @@
 <img src="static/jmp_beta.png" alt="JMP - beta" />
 <h3>JIDs for Messaging with Phones</h3>
 </div>
-<p>
+<p style="text-align:center;">
 JMP gives you a real phone number for sending picture and text messages right
-from a <a href="https://xmpp.org/software/clients.html">Jabber</a> account.
+from a <a href="#jabber">Jabber</a> account.
 </p>
 
-<p>
-Text with friends cross-border without paying international texting
-fees, chat with friends over SMS even if you don't have a cell phone,
-or add an extra number for business or privacy.
+<p style="text-align:center;">
+Join our <a href="notify_signup/">low-volume notification list</a> for updates.
 </p>
 
-
-<p>
-
-We are busy squirreling code away on new features including an easy JMP app!
-To get low-volume notifications of our progress,
-<a href="notify_signup/">add your email address to our list</a>.
-</p>
 <hr />
 
-<h3 id="signup" style="text-align:center;">Signup (30-day free trial!)</h3>
+<div style="text-align:center;">
+<h3 id="signup">Signup (30-day free trial!)</h3>
 <p>
-To register for JMP, begin by choosing a <i>federated</i> JID (Jabber ID) to link to your new number --
-you can change it later, but you need one to start with. There are <a href="suggested_servers.html">many
-free and open servers</a> available which you can use with any client; one of the smoothest options is to install the
-<a href="https://conversations.im/">Conversations</a> Android app and follow the prompts to sign up on their server.
+<b>Step 1:</b> Get a <a href="#jabber">Jabber</a> ID (JID)<br />
+<a target="_blank" href="https://jabjab.de/registrieren.php?lang=gb">
+<img src="static/button_jabj.png" alt="Jabber ID from jabjab.de" height="80" /></a>
 </p>
 
 <p>
-By default, calls are delivered to a JMP-provided
-<a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
-account that you can use with your preferred SIP client (we find that
-<a href="https://code.google.com/archive/p/csipsimple/">CSipSimple</a> works
-well on Android).  <a href="#voicemail">Voicemail</a> is delivered to you
-as an audio file along with a text transcription.
+<b>Step 2:</b> Get a <a href="#jabber">Jabber</a> client<br />
+<a target="_blank"
+href="https://play.google.com/store/apps/details?id=eu.siacs.conversations">
+<img src="static/google_play.png" alt="Conversations from Google Play"
+height="80" /></a>
+<a target="_blank" href="https://f-droid.org/app/eu.siacs.conversations">
+<img src="static/fdroid.png" alt="Conversations from F-Droid" height="80" /></a>
+<a target="_blank" href="https://itunes.apple.com/us/app/chatsecure/id464200063">
+<img src="static/appstore.png" alt="ChatSecure from App Store" height="80" /></a>
 </p>
 
 <p>
-The next step is to pick a JMP number.  Here are a few we found for you:
+<b>Step 3:</b> Get a JMP number
 <div style="text-align:center;">
 
 <!-- TODO: add text but "Text not allowed in element iframe in this context" -->
@@ -95,6 +89,8 @@ Or search <a href="register1/">by area code</a> to find even more numbers.
 <p style="text-align:center;">
 You can also <a href="#existing">bring your own number</a> to JMP if you like.
 </p>
+
+</div>
 
 <p class="warning"> <!-- FIXME: add css for this class -->
 <b>Note:</b> While JMP does provide phone numbers and voice/SMS features, JMP is
@@ -124,17 +120,19 @@ currently available for US$2.99 per month or US$34.99 per year.
 <dd>
 <p>
 JMP gives you a Canadian or US phone number that is yours to keep.  JMP allows
-you to send and receive text messages and picture messages using your XMPP
-client, and to make and receive phone calls using your
-<a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
-client (a SIP account is provided, or you can forward to an existing SIP
-account, Canadian or US phone number, or
-<a href="https://www.inum.net/">iNum</a>).  Calls will be delivered to voicemail
-if your SIP client is not logged in (or if you <a href="#voicemail">configure a
-voicemail timeout</a>), which are then converted to text and sent to your XMPP
-account along with an audio file of the voicemail.
-</p><p>
+you to send and receive text messages and picture messages using your
+<a href="#jabber_client">Jabber client</a>, with calls <a href="#voicemail">
+delivered to voicemail</a> (including a text transcription) by default.
+</p>
 
+<p>
+If you like, you can <a href="#calling">make and receive phone calls</a> using
+your
+<a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a>
+client (or receive with an existing Canadian or US phone number, or
+<a href="https://www.inum.net/">iNum</a>).  You can <a href="#voicemail">
+configure a voicemail timeout</a> if you'd like JMP to automatically handle any
+calls that ring for too long.
 </p>
 </dd>
 
@@ -142,24 +140,37 @@ account along with an audio file of the voicemail.
 <dd>
 <p>
 Jabber, or XMPP, is a
-<!-- FIXME: add links around each of the services here -->
-<a href="https://xmpp.org/about/history.html">long-standing</a>,
-widely-used, privacy-focused and open chat protocol. If you have ever used
+<a href="https://en.wikipedia.org/wiki/Federation_%28information_technology%29">
+federated protocol</a> and
+<a href="https://singpolyma.net/2009/01/beasts-of-the-standards-world/">open
+standard</a> for messaging.  It uses Jabber IDs (JIDs) to communicate, which are
+similar to email addresses.  As with email, you can get a Jabber ID from one of
+<a href="suggested_servers.html">many free and open servers</a>.
+</p>
+
+<p id="jabber_client">
+And just like email, there are many different <a
+href="https://xmpp.org/software/clients.html">Jabber clients</a> available, so
+you can use Jabber from your phone (<a
+href="https://conversations.im/">Conversations</a> and <a
+href="https://chatsecure.org/">ChatSecure</a> are our recommended apps), <a
+href="https://fr.movim.eu/">the web</a>, and <a
+href="https://gajim.org/">your computer</a>.
+</p>
+
+<p>
+Jabber is <a href="https://xmpp.org/about/history.html">long-standing</a>,
+widely-used, and privacy-focused.  If you have ever used
 <a href="https://developers.google.com/talk/open_communications">Google Chat</a>,
 HipChat, the pre-2016 Facebook Messenger, WhatsApp, Kik,
 <a href="https://movim.eu">Movim</a>,
 <a href="https://blog.process-one.net/google-cloud-messaging-update-boosted-by-xmpp/">Android Push Notifications</a>,
-or a private company chat server, then you have used XMPP.
+or a private company chat server, then you have used
+<a href="https://xmpp.org/">XMPP</a>.
 </p>
 
 <p>
-Unlike the private servers, the <a href="https://xmpp.org/">public XMPP network</a>
-is and always will be a federated system, which means that like email or the web,
-anyone on any server can communicate with anyone else without artificial
-limitations.
-</p>
-<p>
-JMP extends the freedom of the XMPP network to cell phone texting.
+JMP extends the freedom of Jabber and the XMPP network to cell phone texting.
 </p>
 </dd>
 
@@ -280,8 +291,11 @@ given contact, they must be in your contact list (roster).</li>
 <dd>
 <p>
 Login to the SIP account that was provided during the signup process using a SIP
-client (<a href="https://code.google.com/archive/p/csipsimple/">CSipSimple</a>
-works fairly well in our experience).  Then enter the 10-digit phone number that
+client (we recommend <a
+href="https://play.google.com/store/apps/details?id=com.csipsimple"
+>CSipSimple</a> for Android and <a
+href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for
+iOS).  Then enter the 10-digit phone number that
 you'd like to call.  If you don't have your SIP account information, please <a
 href="#support">contact support</a> and we'll be happy to provide it to you.
 Currently JMP supports calling to Canada and the US.
@@ -292,10 +306,15 @@ Currently JMP supports calling to Canada and the US.
 <dd>
 <p>
 Calls will be delivered to voicemail if your SIP account (or forwarding number)
-is busy or not logged in.  You can also configure calls to be sent to voicemail
+is busy or not logged in.  Voicemails will be sent as messages to your XMPP
+client, both as an audio file as soon as the voicemail is left, and also as
+transcribed text once our transcription engine has finished converting the audio
+to text for you (normally this takes just a few seconds).
+</p><p>
+If SIP or forwarding is setup, you can configure calls to be sent to voicemail
 after a certain number of rings by using an XMPP ad-hoc command, which is done
-(ie. through <a href="https://gajim.org/">Gajim</a>) by adding cheogram.com to
-your roster, right-clicking it, and choosing "Execute Command...".  You can then
+(ie. on a computer, using your JID in <a href="https://fr.movim.eu/">Movim</a>)
+by clicking on cheogram.com in your contacts.  Under Actions, you can then
 choose to either "Configure Calls" (set the seconds until voicemail - a ring is
 about 5 seconds and "-1" means unlimited rings) or "Record Voicemail Greeting"
 (see below).
@@ -309,11 +328,6 @@ href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also
 set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc
 command (see above), which will call your SIP account (or forwarding number) to
 record the greeting.
-</p><p>
-Note that voicemails will be delivered as messages to your XMPP client, both as
-an audio file as soon as the voicemail is left, and also as transcribed text
-once our transcription engine has finished converting the audio to text for you
-(normally this takes just a few seconds).
 </p>
 </dd>
 
