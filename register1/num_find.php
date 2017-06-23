@@ -84,7 +84,7 @@ if (empty($num_list) &&
 	$result['country']['iso_code'] != 'CA') {
 
 	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
-		"Numbers/local?quantity=3000&areaCode=613";
+		"Numbers/local?quantity=3000&areaCode=604";
 
 	$num_list = get_num_list($url);
 }
