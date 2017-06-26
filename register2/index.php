@@ -39,7 +39,7 @@ No phone number entered.  Please <a href="../">choose one</a>.
 } elseif (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
 	is_numeric(substr($_GET['number'], 1))) {
 
-	$sid = $_GET['sid'];
+	$sid = isset($_GET['sid']) ? $_GET['sid'] : '';
 	if (empty($sid)) {
 		# TODO: check $crypto_strong param - our system ok so can defer
 		$sidBytes = openssl_random_pseudo_bytes(16);
