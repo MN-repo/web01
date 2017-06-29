@@ -249,13 +249,18 @@ if (empty($num_list) &&
 	$num_list = get_num_list($url);
 }
 
-# TODO: final fallback is area codes that usually have numbers in user's country
-
 $numberKey = 'mmgp_number-'.$_SERVER['REMOTE_ADDR'];
 
 if (empty($num_list)) {
 	$redis->set($numberKey, '');
 
+	# TODO: remove hack for notification of no numbers (use different email)
+	$time = microtime(true);
+	mail($notify_receiver_email,
+		'no numbers for '.$_SERVER['REMOTE_ADDR'],
+		'country:    '.$result['country']['iso_code']."\n".
+		'area code:  '.$npa_result['area_code']."\n".
+		"\nemail time: $time");
 ?>
 <p>
 (temporarily unavailable; search <a target="_top" href="../register1/">by area
