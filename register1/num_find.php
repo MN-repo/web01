@@ -142,6 +142,18 @@ if (empty($num_list) &&
 
 # TODO: add other city names as appropriate (test larger ones)
 if (empty($num_list) &&
+	('township of langley' == $mm_city && 'bc' == $mm_region)) {
+
+	$mm_city = 'langley';
+
+	$url = "https://$tuser:$token@api.catapult.inetwork.com/v1/available".
+		"Numbers/local?quantity=3000&city=".$mm_city."&state=".
+		$mm_region;
+
+	$num_list = get_num_list($url);
+}
+
+if (empty($num_list) &&
 	('waterloo' == $mm_city && 'on' == $mm_region) ||
 	('kitchener' == $mm_city && 'on' == $mm_region)) {
 
