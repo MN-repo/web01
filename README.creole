@@ -57,6 +57,7 @@ variables:
 * $cheogram_register_jid (the JID that Cheogram trusts for registering users)
 * $cheogram_register_token (the password for $cheogram_register_jid)
 * $register_base_url (the "http://a.b/c" in "http://a.b/c/register3/index.php")
+* $porting_form_url (URL that creates a porting form using porting3 parameters)
 * $paypal_pdt_token (your PayPal "PDT identity token" - see settings pages)
 * $paypal_tags_monthly (code for monthly PayPal button minus the <form>/</form>)
 * $paypal_tags_annual (code for annual PayPal button minus the <form>/</form>)
