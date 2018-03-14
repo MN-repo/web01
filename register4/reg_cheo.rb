@@ -282,6 +282,12 @@ enter a new code to try again: <input type="text" name="jcode" />
 		# ASSERT: had # already and its app != Catapult or # just bought
 
 
+		# set the start day so we now how far back usage stats are valid
+		conn.write ["SET", 'usage_start_day-' + params['number'],
+			Date.today.strftime('%Y%m%d')]
+		conn.read  # TODO: check value to confirm it worked
+
+
 		# set param['number'] to use JMP application
 		uri = URI.parse('https://api.catapult.inetwork.com')
 		http = Net::HTTP.new(uri.host, uri.port)
