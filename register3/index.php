@@ -176,16 +176,20 @@ Code: <input type="text" name="jcode" /> <input type="submit" value="Submit" />
 </form>
 
 <p>
-If you have not yet received the verification code, please add the contact
-"+14169938000@cheogram.com" to your roster and then <a href=
-"../register3/?number=<?php
+If you have not yet received the verification code, then your XMPP server (or
+client) may be preventing you from receiving text messages from phone numbers
+that are new to you.  For details, see <a href="../#blocking">the FAQ section on
+message blocking</a>.  You may switch to a different XMPP server (perhaps from
+<a href="../suggested_servers.html">our suggested servers list</a>) by creating
+an account at one, then pressing Back and using your new JID instead.  Or, <a
+href="../register3/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
 	echo $clean_sid;
 ?>&amp;jid=<?php
 	echo urlencode($jid);
-?>">click here</a> or press Reload to try again, or press Back to select a
-different JID to use.
+?>">click here</a> or press Reload to try sending the code to the same JID
+again.
 </p>
 
 <p class="warning"> <!-- FIXME: add css for this class -->
