@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
+# Copyright (C) 2017-2018  Denver Gingerich <denver@ossguy.com>
 #
 # This file is part of jmp-register.
 #
