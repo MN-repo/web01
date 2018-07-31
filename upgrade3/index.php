@@ -198,7 +198,7 @@ picture messages!
 <p>
 Note that unlimited text and picture messages will last for the duration of your
 current payment period.  After that, if JMP is still in beta (as it will be
-until at least August 2018), your account will auto-renew with unlimited text and
+until at least November 2018), your account will auto-renew with unlimited text and
 picture messages.  If JMP is no longer in beta, then your account will be
 automatically updated to a new account type with limited outgoing text and
 picture messages, but will keep unlimited incoming text and picture messages.
