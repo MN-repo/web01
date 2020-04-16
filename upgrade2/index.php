@@ -165,11 +165,6 @@ options:
 >
 <tr><td style="vertical-align:top;">
 <p>
-monthly subscription<br />
-US$2.99/month
-</p>
-</td><td>
-<p>
 annual subscription<br />
 US$34.99/year<br />
 (2.5% savings)
@@ -186,11 +181,23 @@ echo urlencode($clean_jmpnum);
 ?>&amp;jmp-jid=<?php
 echo urlencode($jid);
 ?>" type="hidden" />
-<?php echo $paypal_tags_monthly ?>
+<?php echo $paypal_tags_annual ?>
 </p>
 </form>
 
-</td><td>
+</td></tr>
+</table>
+
+<table style=
+"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
+>
+<tr><td style="vertical-align:top;">
+<p>
+monthly subscription<br />
+US$2.99/month
+</p>
+</td></tr>
+<tr><td>
 
 <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
 <p style="text-align:center;">
@@ -201,7 +208,7 @@ echo urlencode($clean_jmpnum);
 ?>&amp;jmp-jid=<?php
 echo urlencode($jid);
 ?>" type="hidden" />
-<?php echo $paypal_tags_annual ?>
+<?php echo $paypal_tags_monthly ?>
 </p>
 </form>
 
