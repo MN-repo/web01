@@ -78,7 +78,9 @@ No session ID found.  Please <a href="../">start again</a>.
 			'"to":"'.$cheogram_did.'",'.
 			# TODO NOW: update this to add link/reply code 2 approve
 			'"text":"/msg '.$notify_pending_signup_jid.
-			' At '.gmdate("Y-m-d H:i:s").'Z user with JID '.$jid.
+			' At '.gmdate("Y-m-d H:i:s").'Z user asking for JMP # '.
+			urlencode($_GET['number']).' from location '.
+			$_SERVER['REMOTE_ADDR'].' with JID '.$jid.
 			' requested registration - informational for now, but '.
 			'a reply will be needed in the future."}'
 	));
