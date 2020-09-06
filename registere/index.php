@@ -3,7 +3,7 @@
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
 <!--
-  Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
+  Copyright (C) 2017, 2020  Denver Gingerich <denver@ossguy.com>
 
   This file is part of jmp-register.
 
@@ -25,24 +25,110 @@
 	xml:lang="en" >
 <head>
 <title>JMP</title>
+<?php
+
+if (empty($_GET['jcode'])) {
+?>
 </head>
 <body>
 <p>
-<?php
-
-if (empty($_GET['jid'])) {
-?>
-Jabber ID (JID) not entered.  Please press Back and enter a JID or
-<a href="../">start again</a>.
+Verification code not entered.  Please press Back and enter a verification code
+or <a href="../">start again</a>.
 <?php
 } elseif (empty($_GET['number'])) {
 ?>
+</head>
+<body>
+<p>
 Number not entered.  Please <a href="../">start again</a>.
 <?php
 } elseif (empty($_GET['sid'])) {
 ?>
+</head>
+<body>
+<p>
 No session ID found.  Please <a href="../">start again</a>.
 <?php
+} else {
+	include '../../../../settings-jmp.php';
+
+	$redis = new Redis();
+	$redis->pconnect($redis_host, $redis_port);
+	if (!empty($redis_auth)) {
+		# TODO: check return value to confirm login succeeded
+		$redis->auth($redis_auth);
+	}
+
+	$jidMaybeKey = 'reg-jid_maybe-'.$_GET['sid'];
+	$jid = $redis->get($jidMaybeKey);
+
+	# TODO NOW: check for empty/null $jid
+
+	$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
+	$jcode = preg_replace('/[^0-9a-f]/', '', $_GET['jcode']);
+
+	# send the registration request message: informational, not yet blocking
+	$options = array('http' => array(
+		'header'   => "Content-type: application/json\r\n",
+		'method'   => 'POST',
+		'content'  => '{"receiptRequested":"all",'.
+			'"tag":"signup'.$jcode.$jid.' jmp-register",'.
+			'"callbackUrl":"'.$fwdcalls_url.'",'.
+			'"from":"'.$support_number.'",'.
+			'"to":"'.$cheogram_did.'",'.
+			# TODO NOW: update this to add link/reply code 2 approve
+			'"text":"/msg '.$notify_pending_signup_jid.
+			' At '.gmdate("Y-m-d H:i:s").'Z user with JID '.$jid.
+			' requested registration - informational for now, but '.
+			'a reply will be needed in the future."}'
+	));
+
+	$context = stream_context_create($options);
+	$result = file_get_contents("https://$tuser:$token".
+		'@api.catapult.inetwork.com/v1/users/'.
+		"$user/messages", false, $context);
+	if ($result === FALSE) {
+?>
+</head>
+<body>
+<p>
+There was an error sending your registration request.  Please <a href=
+"../registere/?number=<?php
+	echo urlencode($_GET['number']);
+?>&amp;sid=<?php
+	echo $clean_sid;
+?>&amp;jcode=<?php
+	echo $jcode;
+?>">click here</a> or press Reload to try again.
+<?php
+        } else {
+?>
+<meta http-equiv="refresh" content="3;url=../register4/?number=<?php
+	echo urlencode($_GET['number']);
+?>&sid=<?php
+	echo $clean_sid;
+?>&jcode=<?php
+	echo $jcode;
+?>" />
+</head>
+<body>
+
+<h2>Processing registration...</h2>
+
+<p>
+If this page has been displayed for more than 5 seconds please <a href=
+"../register4/?number=<?php
+	echo urlencode($_GET['number']);
+?>&amp;sid=<?php
+	echo $clean_sid;
+?>&amp;jcode=<?php
+	echo $jcode;
+?>">click here</a> to proceed.
+
+<?php
+	}
+}
+/*
 # TODO: update "== 12" for when we support non-NANPA numbers
 } elseif (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
 	is_numeric(substr($_GET['number'], 1))) {
@@ -56,8 +142,10 @@ No session ID found.  Please <a href="../">start again</a>.
 		$redis->auth($redis_auth);
 	}
 
-	# trim and strip the resourcepart - we only accept bare JIDs
-	$jid = strtolower(explode('/', trim($_GET['jid']), 2)[0]);
+	$jidMaybeKey = 'reg-jid_maybe-'.$_GET['sid'];
+	$jid = $redis->get($jidMaybeKey);
+
+	# TODO NOW: check for empty/null $jid
 
 	$hitsKey = 'reg-jid_hits-'.$jid;
 	$hitCount = $redis->incr($hitsKey);
@@ -73,14 +161,46 @@ No session ID found.  Please <a href="../">start again</a>.
 Too many verification attempts.  Please refresh this page in about 10 minutes or
 <a href="../">start again</a>.
 <?php
-	} elseif (strpos($jid, ' ') !== FALSE ||
-		strpos($jid, '"') !== FALSE) {
-?>
-The JID that was entered (<?php echo htmlentities($jid)?>) contains at least one
-space or quotation mark (").  Spaces and quotation marks are not allowed in bare
-JIDs - please press Back and enter a valid JID or <a href="../">start again</a>.
-<?php
 	} else {
+		# TODO NOW: confirm $_GET['jcode'] is correct: 'reg-jcode-'.$jid
+		#  actually strtolower($_GET['jcode'])
+
+		# omit the IP-based blocking here; can add back if bad situation
+
+		# TODO NOW: decide how to deal with these types of codes (below)
+		# 1. credit card payment token/code
+		# 2. prepaid credit code
+		# 3. referral code (from user, deleted after use, may expire(?))
+		#  - MUST include lots of logging in account bot so can find 'em
+		# 4. referral code (from admin, unlimited use, but expires)
+		# 5. signup code: sent to user with /msg <JID> so they can enter
+
+		# TODO NOW: note on invite challenge page that you can always
+		#  run your own JMP instance if you prefer none of the above
+
+		# TODO NOW: note on invite challenge page the support avenues if
+		#  people have any questions about the above (directly?)
+
+		# TODO NOW: for 3 above, give 10 refer codes per cal month, with
+		#  30-day expiry - only to people having account for 90+ days
+		#  (above is implemented in JMP account bot)
+		#  (note account will be frozen if bad referrals/spammers)
+
+		# TODO NOW: print the list of options here:
+		# * start paid account with credit card: more minutes! outgoing!
+		# * start paid account using prepaid credit code
+		# * buy prepaid credit code using Bitcoin, wire transfer, etc.
+		# * start trial account using referral code
+		# * start trial account without referral code (wait for confirm)
+
+		# TODO NOW: referral code should include one I can set for a day
+		#  i.e. for at conferences where lots of people may wanna signup
+
+		# TODO NOW: test multiple refreshes of registere; should be fine
+		# TODO NOW: test what happens when user tries registering DNE #
+		# TODO NOW: test what happens when trying to reg already-reg'd #
+
+
 		# 4 bytes is based on Gmail verification code - 9 base-10 digits
 		# might have to throw this away, but easier/safer than not doing
 		# TODO: check $crypto_strong param - our system ok so can defer
@@ -123,7 +243,7 @@ Back and choose a different JID or <a href="../">start again</a>.
 				'"callbackUrl":"'.$fwdcalls_url.'",'.
 				'"from":"'.$support_number.'",'.
 				'"to":"'.$cheogram_did.'",'.
-				# TODO: construct & add registere URL to message
+				# TODO: construct & add register4 URL to message
 				'"text":"/msg '.$jid.
 				' Your JMP verification code is '.
 				$redis->get($jcodeKey).' - for help, '.
@@ -167,7 +287,7 @@ Please enter the verification code that was just sent to your JID (<?php
 ?>):
 </p>
 
-<form action="../registere/">
+<form action="../register4/">
 <p>
 <input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
 <input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
@@ -212,11 +332,12 @@ any applicable CTIA and/or CRTC guidelines.
  is not an E.164 NANP number.  Please <a href="../">start again</a>.
 <?php
 }
+*/
 ?>
 </p>
 <hr />
 <p>
-Copyright &copy; 2017 <a href="https://ossguy.com/">Denver Gingerich</a> and
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a> and
 others.  jmp-register is licensed under AGPLv3+.
 You can download the Complete Corresponding Source code <a
 href="https://gitlab.com/ossguy/jmp-register">here</a>.

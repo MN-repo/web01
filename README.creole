@@ -74,6 +74,7 @@ variables:
 * $catapult_application_id (sgx-catapult Bandwidth AP app ID; starts with "a-")
 * $catapult_domain_id (sgx-catapult Bandwidth AP domain ID; starts with "rd-")
 * $catapult_domain_prefix (sgx-catapult Bandwidth AP "Domain Name" of endpoints)
+* $notify_pending_signup_jid (JID where signup requests sent for admin approval)
 
 
 Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
