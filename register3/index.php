@@ -123,7 +123,7 @@ Back and choose a different JID or <a href="../">start again</a>.
 				'"callbackUrl":"'.$fwdcalls_url.'",'.
 				'"from":"'.$support_number.'",'.
 				'"to":"'.$cheogram_did.'",'.
-				# TODO: construct & add registere URL to message
+				# TODO: construct & add options1 URL to message
 				'"text":"/msg '.$jid.
 				' Your JMP verification code is '.
 				$redis->get($jcodeKey).' - for help, '.
@@ -167,7 +167,7 @@ Please enter the verification code that was just sent to your JID (<?php
 ?>):
 </p>
 
-<form action="../registere/">
+<form action="../options1/">
 <p>
 <input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
 <input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
