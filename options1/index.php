@@ -27,15 +27,9 @@
 <title>JMP</title>
 <?php
 
-if (empty($_GET['jcode'])) {
-?>
-</head>
-<body>
-<p>
-Verification code not entered.  Please press Back and enter a verification code
-or <a href="../">start again</a>.
-<?php
-} elseif (empty($_GET['number'])) {
+# TODO: remove this after options1 handles more cases (some don't need number)
+if (empty($_GET['number'])) {
+	error_log('sError - no JMP number');
 ?>
 </head>
 <body>
@@ -43,6 +37,7 @@ or <a href="../">start again</a>.
 Number not entered.  Please <a href="../">start again</a>.
 <?php
 } elseif (empty($_GET['sid'])) {
+	error_log('sError - no session ID (sid) provided');
 ?>
 </head>
 <body>
@@ -59,76 +54,173 @@ No session ID found.  Please <a href="../">start again</a>.
 		$redis->auth($redis_auth);
 	}
 
-	$jidMaybeKey = 'reg-jid_maybe-'.$_GET['sid'];
-	$jid = $redis->get($jidMaybeKey);
-
-	# TODO NOW: check for empty/null $jid
+	$jidDefinitelyKey = 'reg-jid_definitely-'.$_GET['sid'];
+	$jid = $redis->get($jidDefinitelyKey);
 
 	$clean_sid = preg_replace('/[^0-9a-f]/', '', $_GET['sid']);
-	$jcode = preg_replace('/[^0-9a-f]/', '', $_GET['jcode']);
 
-	# send the registration request message: informational, not yet blocking
-	$options = array('http' => array(
-		'header'   => "Content-type: application/json\r\n",
-		'method'   => 'POST',
-		'content'  => '{"receiptRequested":"all",'.
-			'"tag":"signup'.$jcode.$jid.' jmp-register",'.
-			'"callbackUrl":"'.$fwdcalls_url.'",'.
-			'"from":"'.$support_number.'",'.
-			'"to":"'.$cheogram_did.'",'.
-			# TODO NOW: update this to add link/reply code 2 approve
-			'"text":"/msg '.$notify_pending_signup_jid.
-			' At '.gmdate("Y-m-d H:i:s").'Z user asking for JMP # '.
-			urlencode($_GET['number']).' from location '.
-			$_SERVER['REMOTE_ADDR'].' with JID '.$jid.
-			' requested registration - informational for now, but '.
-			'a reply will be needed in the future."}'
-	));
+	if (!$jid) {
+		$jidMaybeKey = 'reg-jid_maybe-'.$_GET['sid'];
+		$jid = $redis->get($jidMaybeKey);
 
-	$context = stream_context_create($options);
-	$result = file_get_contents("https://$tuser:$token".
-		'@api.catapult.inetwork.com/v1/users/'.
-		"$user/messages", false, $context);
-	if ($result === FALSE) {
+		if (!$jid) {
+			error_log('jError when verifying sid '.$_GET['sid']);
 ?>
 </head>
 <body>
 <p>
-There was an error sending your registration request.  Please <a href=
-"../registere/?number=<?php
-	echo urlencode($_GET['number']);
-?>&amp;sid=<?php
-	echo $clean_sid;
-?>&amp;jcode=<?php
-	echo $jcode;
-?>">click here</a> or press Reload to try again.
+Could not find JID to verify; perhaps it has already been verified.  Feel free
+to <a href="../">start again</a> if not.
+</p>
+<hr />
+<p>
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a>
+and others.  jmp-register is licensed under AGPLv3+.  You can download the
+Complete Corresponding Source code <a
+href="https://gitlab.com/ossguy/jmp-register">here</a>.
+</p>
+</body>
+</html>
 <?php
-        } else {
+			exit;
+		}
+
+		$hitsKey = 'reg-jid_hits-'.$jid;
+		$hitCount = $redis->incr($hitsKey);
+
+		# if > 10 hits, do NOT allow verification to occur (rate limit)
+		if ($hitCount > 10) {
+			$ttl = $redis->ttl($hitsKey);
+			if ($ttl < 0) {
+				$redis->expire($hitsKey, 600);
+				# TODO: check return value
+			}
+
+			error_log('oError when trying to verify jid '.$jid);
 ?>
-<meta http-equiv="refresh" content="3;url=../register4/?number=<?php
+</head>
+<body>
+<p>
+Too many verification attempts.  Please refresh this page in about 10 minutes or
+<a href="../">start again</a>.
+</p>
+<hr />
+<p>
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a>
+and others.  jmp-register is licensed under AGPLv3+.  You can download the
+Complete Corresponding Source code <a
+href="https://gitlab.com/ossguy/jmp-register">here</a>.
+</p>
+</body>
+</html>
+<?php
+			exit;
+		}
+
+		if (empty($_GET['jcode'])) {
+			error_log('vError for JID "'.$jid.'" - no verify code');
+?>
+</head>
+<body>
+<p>
+Verification code not entered.  Please press Back and enter a verification code
+or <a href="../">start again</a>.
+</p>
+<hr />
+<p>
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a>
+and others.  jmp-register is licensed under AGPLv3+.  You can download the
+Complete Corresponding Source code <a
+href="https://gitlab.com/ossguy/jmp-register">here</a>.
+</p>
+</body>
+</html>
+<?php
+			exit;
+		}
+
+		$jcodeKey = 'reg-jcode-'.$jid;
+		$correct_jcode = $redis->get($jcodeKey);
+
+		$user_jcode = preg_replace('/[^0-9a-f]/', '', $_GET['jcode']);
+
+		if (strtolower($user_jcode) != $correct_jcode) {
+
+			if (strlen($_GET['number']) == 12 &&
+				$_GET['number'][0] == '+' &&
+				is_numeric(substr($_GET['number'], 1))) {
+
+				error_log('iError when trying to verify jid "'.
+					$jid.'" with jcode "'.$_GET['jcode'].
+					'" - should be "'.$correct_jcode.'"');
+?>
+</head>
+<body>
+<form action="../options1/">
+<p>
+<input type="hidden" name="number" value="<?php echo $_GET['number'] ?>" />
+<input type="hidden" name="sid" value="<?php echo $clean_sid ?>" />
+Invalid verification code (<?php echo $user_jcode ?>).  Please
+enter a new code to try again: <input type="text" name="jcode" />
+<input type="submit" value="Submit" />
+</p>
+</form>
+<?php
+			} else {
+				error_log('nError when trying to get number "'.
+					$_GET['number'].'" with JID "'.$jid.
+					'" and jcode "'.$_GET['jcode'].'"');
+?>
+</head>
+<body>
+<p>
+<?php
+				echo htmlentities($_GET['number']);
+?>
+ is not an E.164 NANP number.  Please <a href="../">start again</a>.
+</p>
+<?php
+			}
+?>
+<hr />
+<p>
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a>
+and others.  jmp-register is licensed under AGPLv3+.  You can download the
+Complete Corresponding Source code <a
+href="https://gitlab.com/ossguy/jmp-register">here</a>.
+</p>
+</body>
+</html>
+<?php
+			exit;
+		}
+
+		# user jcode matches correct jcode, so we have verified the JID
+		$redis->setEx($jidDefinitelyKey, $key_ttl_seconds, $jid);
+		# TODO: check return value
+	}
+
+	# TODO NOW: give wait_for_approval1 as one option (not only) plus paymnt
+?>
+<meta http-equiv="refresh" content="3;url=../wait_for_approval1/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&sid=<?php
 	echo $clean_sid;
-?>&jcode=<?php
-	echo $jcode;
 ?>" />
 </head>
 <body>
 
-<h2>Processing registration...</h2>
+<h2>Processing registration (part 1 of 2)...</h2>
 
 <p>
 If this page has been displayed for more than 5 seconds please <a href=
-"../register4/?number=<?php
+"../wait_for_approval1/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
 	echo $clean_sid;
-?>&amp;jcode=<?php
-	echo $jcode;
 ?>">click here</a> to proceed.
 
 <?php
-	}
 }
 /*
 # TODO: update "== 12" for when we support non-NANPA numbers

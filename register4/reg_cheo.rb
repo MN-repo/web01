@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2017-2018  Denver Gingerich <denver@ossguy.com>
+# Copyright (C) 2017-2018, 2020  Denver Gingerich <denver@ossguy.com>
 #
 # This file is part of jmp-register.
 #
@@ -43,14 +43,10 @@ $q_done = Queue.new
 
 class SApp < Sinatra::Application
 	get '/' do
-		if not params.key?('jcode')
-			$stderr.puts 'vError - no verification code'
-			@error_text = 'Verification code not entered.  Please '\
-				'press Back and enter a verification code or '\
-				'<a href="../">start again</a>.'
-			return erb :error
+		# TODO NOW: MUST confirm that reg attempt for DNE number fails
+		#  spec'ly must fail gracefully - user can retry, no partial reg
 
-		elsif not params.key?('number') or not params.key?('sid')
+		if not params.key?('number') or not params.key?('sid')
 			$stderr.puts 'sError - no sid or number'
 			@error_text = 'Session ID and/or number empty.  Please'\
 				' <a href="../">start again</a>.'
@@ -76,14 +72,15 @@ class SApp < Sinatra::Application
 
 		# TODO: support Redis auth
 
-		jidMaybeKey = 'reg-jid_maybe-' + params['sid']
+		jidDefinitelyKey = 'reg-jid_definitely-' + params['sid']
 
-		conn.write ["GET", jidMaybeKey]
+		conn.write ["GET", jidDefinitelyKey]
 		jid = conn.read
 
 		if jid.nil?
 			$stderr.puts 'jError when trying to verify sid ' +
 				params['sid']
+			# TODO: confirm this text is correct
 			@error_text = 'Could not find JID to verify; perhaps '\
 				'it has already been verified.  Feel free to '\
 				'<a href="../">start again</a> if not.'
@@ -91,53 +88,8 @@ class SApp < Sinatra::Application
 			return erb :error
 		end
 
-		hitsKey = 'reg-jid_hits-' + jid
-		conn.write ["INCR", hitsKey]
-		hitCount = conn.read
 
-		jcodeKey = 'reg-jcode-' + jid
-
-		@cleanSid = params['sid'].gsub(/[^0-9a-f]/, "")
-
-
-		# if > 10 hits, do NOT allow verification to occur (rate limit)
-		if hitCount > 10
-			conn.write ["TTL", hitsKey]
-			if conn.read < 0
-				conn.write ["EXPIRE", hitsKey, 600]
-				conn.read  # TODO: check value to confirm worked
-			end
-
-			$stderr.puts 'oError when trying to verify jid ' +
-				CGI.escapeHTML(jid)
-			@error_text = 'Too many verification attempts.  Please'\
-				' refresh this page in about 10 minutes or '\
-				'<a href="../">start again</a>.'
-			conn.disconnect
-			return erb :error
-		end
-
-		conn.write ["GET", jcodeKey]
-		if params['jcode'].downcase != conn.read
-			$stderr.puts 'iError when trying to verify jid ' +
-				CGI.escapeHTML(jid) + ' with ' +
-				CGI.escapeHTML(params['jcode'])
-			@error_text = '</p>
-<form action="../register4/">
-<p>
-<input type="hidden" name="number" value="' + params['number'] + '" />
-<input type="hidden" name="sid" value="' + @cleanSid + '" />
-Invalid verification code (' + CGI.escapeHTML(params['jcode']) + ').  Please
-enter a new code to try again: <input type="text" name="jcode" />
-<input type="submit" value="Submit" />
-</p>
-</form>
-<p>'
-			conn.disconnect
-			return erb :error
-		end
-
-
+		# TODO NOW: delete below IP check (should be fine with new flow)
 		# confirm that there haven't been too many requests from this IP
 		ipHitsKey = 'reg-ipa_hits-' + request.ip
 		conn.write ["INCR", ipHitsKey]
@@ -178,15 +130,39 @@ enter a new code to try again: <input type="text" name="jcode" />
 			gsub('>', "\\\\3e").
 			gsub('@', "\\\\40") + '@' + $cheogram_jid
 
+
+		paymentPlanKey = 'payment-plan_as_of_' +
+			Date.today.strftime('%Y%m') + '-' + cheo_jid
+
+		conn.write ["GET", paymentPlanKey]
+		payPlan = conn.read
+
+		# TODO: don't hard-code expected payment plan name
+		if payPlan.nil? or payPlan != 'xxx_stable_trial-v20200913'
+			$stderr.puts 'yError when trying to verify plan for ' +
+				jid + ' with plan name "' + payPlan.to_s + '"'
+			# TODO: confirm this text is correct
+			@error_text = 'Trial account has not been approved or '\
+				'other issue with payment plan for this JID.  '\
+				'<a href="../#support">Contact support</a> to '\
+				'fix or <a href="../">start again</a>.'
+			conn.disconnect
+			return erb :error
+		end
+
+
 		credKey = 'catapult_cred-' + cheo_jid
 
+		# TODO: figure out better error message here; think of each case
 		conn.write ["EXISTS", credKey]
 		if conn.read == 1
-			# very unlikely due to check earlier in registration
-			$stderr.puts "cError"
-			# TODO: add "contact support"
-			@error_text = 'This JID is already registered.  Please'\
-				' contact support to use it with a new number.'
+			$stderr.puts 'cError when trying to register JID "' +
+				CGI.escapeHTML(jid) + '" with number ' +
+				params['number'] + ' and sid ' + params['sid']
+			@error_text = 'This JID (' + CGI.escapeHTML(jid) +
+				') is already registered.  Please '\
+				'<a href="../#support">contact support</a> to '\
+				'use it with a new number.'
 			conn.disconnect
 			return erb :error
 		end
