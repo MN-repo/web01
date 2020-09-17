@@ -80,10 +80,15 @@ class SApp < Sinatra::Application
 		if jid.nil?
 			$stderr.puts 'jError when trying to verify sid ' +
 				params['sid']
-			# TODO: confirm this text is correct
-			@error_text = 'Could not find JID to verify; perhaps '\
-				'it has already been verified.  Feel free to '\
-				'<a href="../">start again</a> if not.'
+			@error_text = 'It looks like your session has expired;'\
+				' usually this means that you registered more '\
+				'than 24 hours ago.  It seems you requested '\
+				'JMP number ' + params['number'] + ' - if that'\
+				' is what you were looking for, we\'re glad we'\
+				' could help.  If you need your SIP acct info '\
+				'see <a href="../#calling">this FAQ</a> (2nd '\
+				'paragraph).  If you have any other questions '\
+				'<a href="../#support">contact support</a>.'
 			conn.disconnect
 			return erb :error
 		end
