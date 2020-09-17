@@ -156,13 +156,22 @@ class SApp < Sinatra::Application
 		# TODO: figure out better error message here; think of each case
 		conn.write ["EXISTS", credKey]
 		if conn.read == 1
+			conn.write ["LINDEX", 'catapult_cred-' + cheo_jid, 3]
+			existing = conn.read
+
 			$stderr.puts 'cError when trying to register JID "' +
 				CGI.escapeHTML(jid) + '" with number ' +
-				params['number'] + ' and sid ' + params['sid']
+				params['number'] + ' and sid ' + params['sid'] +
+				' and existing JMP number "' + existing + '"'
 			@error_text = 'This JID (' + CGI.escapeHTML(jid) +
-				') is already registered.  Please '\
+				') is/has already registered with JMP number ' +
+				existing + '.  If you need your SIP acct info '\
+				'see <a href="../#calling">this FAQ</a> (2nd '\
+				'paragraph).  If you want to use the requested'\
+				' number (' + params['number'] + ') with a new'\
+				' JID, then <a href="../">start again</a>. Or '\
 				'<a href="../#support">contact support</a> to '\
-				'use it with a new number.'
+				'use this JID with a new number.'
 			conn.disconnect
 			return erb :error
 		end
