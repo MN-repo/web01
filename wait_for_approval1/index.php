@@ -84,6 +84,40 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 	if (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
 		is_numeric(substr($_GET['number'], 1))) {
 
+		$details = 'no info';
+
+		$infoKey = 'mmgp_result-'.$_SERVER['REMOTE_ADDR'];
+		$infoJSON = $redis->get($infoKey);
+
+		if ($infoJSON) {
+			$info = json_decode($infoJSON, true);
+
+			$details = $info['traits']['isp'];
+
+			if (array_key_exists('is_anonymous_proxy',
+				$info['traits']) &&
+				$info['traits']['is_anonymous_proxy']) {
+
+				$details .= ', anonymous proxy';
+			} else {
+				$details .= ' in '.$info['city']['names']['en'];
+			}
+
+			if (array_key_exists('subdivisions', $info) &&
+				array_key_exists(0, $info['subdivisions'])) {
+
+				$details .= ', '.$info[
+					'subdivisions'][0]['names']['en'];
+			}
+
+			$details .= ', ';
+			$details .= $info['registered_country']['names']['en'];
+			$details .= ' - ';
+
+			$details .= $info['maxmind']['queries_remaining'];
+			$details .= ' left';
+		}
+
 		# send the registration request message: informational, no block
 		$options = array('http' => array(
 			'header'   => "Content-type: application/json\r\n",
@@ -97,8 +131,8 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 				'"text":"/msg '.$notify_pending_signup_jid.
 				' At '.gmdate("Y-m-d H:i:s").'Z wanting JMP # '.
 				htmlentities($_GET['number']).' from location '.
-				$_SERVER['REMOTE_ADDR'].' with JID '.$jid.
-				' - informational for now, but '.
+				$_SERVER['REMOTE_ADDR'].' ('.$details.'); JID '.
+				$jid.' - informational for now, but '.
 				'a reply will be needed in the future."}'
 		));
 
