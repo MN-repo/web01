@@ -167,28 +167,6 @@ class SApp < Sinatra::Application
 			return erb :error
 		end
 
-		conn.write ["RPUSH", credKey, $user]
-		conn.write ["RPUSH", credKey, $tuser]
-		conn.write ["RPUSH", credKey, $token]
-		conn.write ["RPUSH", credKey, params['number'] ]
-
-		(1..4).each do |n|
-			# TODO: catch/relay RuntimeError
-			result = conn.read
-			if result != n
-				# TODO: add "contact support"
-				$stderr.puts "rError when checking RPUSH retval"
-				@error_text = 'An error occurred registering '\
-					'this JID into the system.  Please '\
-					'contact support about this issue.'
-				conn.disconnect
-				return erb :error
-			end
-		end
-
-		conn.write ["SET", 'catapult_jid-' + params['number'], cheo_jid]
-		conn.read  # TODO: check value to confirm it worked
-
 
 		# buy the number
 		uri = URI.parse('https://api.catapult.inetwork.com')
@@ -295,6 +273,30 @@ class SApp < Sinatra::Application
 			conn.disconnect
 			return erb :error
 		end
+
+
+		# now that number setup the below can't result in getting wedged
+		conn.write ["RPUSH", credKey, $user]
+		conn.write ["RPUSH", credKey, $tuser]
+		conn.write ["RPUSH", credKey, $token]
+		conn.write ["RPUSH", credKey, params['number'] ]
+
+		(1..4).each do |n|
+			# TODO: catch/relay RuntimeError
+			result = conn.read
+			if result != n
+				# TODO: add "contact support"
+				$stderr.puts "rError when checking RPUSH retval"
+				@error_text = 'An error occurred registering '\
+					'this JID into the system.  Please '\
+					'contact support about this issue.'
+				conn.disconnect
+				return erb :error
+			end
+		end
+
+		conn.write ["SET", 'catapult_jid-' + params['number'], cheo_jid]
+		conn.read  # TODO: check value to confirm it worked
 
 
 		# now that JID is verified, register it with Cheogram
