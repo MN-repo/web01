@@ -89,6 +89,9 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 		$redis->setEx('reg-pending_approval_session-'.$sessNum,
 			$key_ttl_seconds * 2, $_GET['sid']);
 
+		# make an ASCII character representing this session: 'a' to 'z'
+		$sessionChar = chr(97 + ($sessNum % 26));
+
 
 		$details = 'no info';
 
@@ -135,6 +138,7 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 				'"to":"'.$cheogram_did.'",'.
 				# TODO NOW: add link/reply code for approving
 				'"text":"/msg '.$notify_pending_signup_jid.
+				' ('.$sessionChar.')'.
 				' At '.gmdate("Y-m-d H:i:s").'Z wanting JMP # '.
 				htmlentities($_GET['number']).' from location '.
 				$_SERVER['REMOTE_ADDR'].' ('.$details.'); JID '.
