@@ -84,6 +84,12 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 	if (strlen($_GET['number']) == 12 && $_GET['number'][0] == '+' &&
 		is_numeric(substr($_GET['number'], 1))) {
 
+		# TODO: at least check return values of below two calls
+		$sessNum = $redis->incr('reg-pending_approval_session-total');
+		$redis->setEx('reg-pending_approval_session-'.$sessNum,
+			$key_ttl_seconds * 2, $_GET['sid']);
+
+
 		$details = 'no info';
 
 		$infoKey = 'mmgp_result-'.$_SERVER['REMOTE_ADDR'];
