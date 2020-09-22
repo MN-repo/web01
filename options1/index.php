@@ -213,7 +213,7 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 <h2>Processing registration (part 1 of 2)...</h2>
 
 <p>
-If this page has been displayed for more than 5 seconds please <a href=
+If this page has been displayed for more than 30 seconds please <a href=
 "../wait_for_approval1/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php

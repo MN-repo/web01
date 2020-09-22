@@ -218,7 +218,7 @@ There was an error sending your registration request.  Please <a href=
 <h2>Processing registration (part 2 of 2)...</h2>
 
 <p>
-If this page has been displayed for more than 5 seconds please <a href=
+If this page has been displayed for more than 30 seconds please <a href=
 "../register4/?number=<?php
 	echo urlencode($_GET['number']);
 ?>&amp;sid=<?php
