@@ -138,9 +138,9 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 				'"to":"'.$cheogram_did.'",'.
 				# TODO NOW: add link/reply code for approving
 				'"text":"/msg '.$notify_pending_signup_jid.
-				' ('.$sessionChar.')'.
+				' '.$sessionChar.'.'.
 				' At '.gmdate("Y-m-d H:i:s").'Z wanting JMP # '.
-				htmlentities($_GET['number']).' from location '.
+				htmlentities($_GET['number']).' from '.
 				$_SERVER['REMOTE_ADDR'].' ('.$details.'); JID '.
 				$jid.' - informational for now, but '.
 				'a reply will be needed in the future."}'
