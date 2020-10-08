@@ -94,32 +94,6 @@ class SApp < Sinatra::Application
 		end
 
 
-		# TODO NOW: delete below IP check (should be fine with new flow)
-		# confirm that there haven't been too many requests from this IP
-		ipHitsKey = 'reg-ipa_hits-' + request.ip
-		conn.write ["INCR", ipHitsKey]
-		ipHitCount = conn.read
-
-		# key expires a day after first being set
-		conn.write ["TTL", ipHitsKey]
-		if conn.read < 0
-			conn.write ["EXPIRE", ipHitsKey, 86400]
-			conn.read  # TODO: check value to confirm worked
-		end
-
-		# if > 5 hits, do NOT allow verification to occur (rate limit)
-		if ipHitCount > 5
-			$stderr.puts 'lError when trying to verify jid ' +
-				CGI.escapeHTML(jid)
-			@error_text = 'There have been too many JMP signups '\
-				'from your location today.  Please try again '\
-				'tomorrow, or <a href="../#support">contact us'\
-				'</a> to register an account manually.'
-			conn.disconnect
-			return erb :error
-		end
-
-
 		# do the actual sgx-catapult registration behind its back
 
 		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
@@ -177,6 +151,32 @@ class SApp < Sinatra::Application
 				' JID, then <a href="../">start again</a>. Or '\
 				'<a href="../#support">contact support</a> to '\
 				'use this JID with a new number.'
+			conn.disconnect
+			return erb :error
+		end
+
+
+		# TODO NOW: delete below IP check (should be fine with new flow)
+		# confirm that there haven't been too many requests from this IP
+		ipHitsKey = 'reg-ipa_hits-' + request.ip
+		conn.write ["INCR", ipHitsKey]
+		ipHitCount = conn.read
+
+		# key expires a day after first being set
+		conn.write ["TTL", ipHitsKey]
+		if conn.read < 0
+			conn.write ["EXPIRE", ipHitsKey, 86400]
+			conn.read  # TODO: check value to confirm worked
+		end
+
+		# if > 5 hits, do NOT allow verification to occur (rate limit)
+		if ipHitCount > 5
+			$stderr.puts 'lError when trying to verify jid ' +
+				CGI.escapeHTML(jid)
+			@error_text = 'There have been too many JMP signups '\
+				'from your location today.  Please try again '\
+				'tomorrow, or <a href="../#support">contact us'\
+				'</a> to register an account manually.'
 			conn.disconnect
 			return erb :error
 		end
