@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-  Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
+  Copyright (C) 2017, 2020  Denver Gingerich <denver@ossguy.com>
 
   This file is part of jmp-register.
 
@@ -66,6 +66,8 @@ if (!empty($redis_auth)) {
 	$redis->auth($redis_auth);
 }
 
+$bc_id = '';
+
 if (empty($_GET['jmpnum'])) {
 	# trim and strip the resourcepart - we only accept bare JIDs
 	$jid = strtolower(explode('/', trim($_GET['jid']), 2)[0]);
@@ -78,6 +80,8 @@ space or quotation mark (").  Spaces and quotation marks are not allowed in bare
 JIDs - please press Back and enter a valid JID or use your JMP number instead.
 <?php
 	} else {
+		$bc_id = urlencode($jid);
+
 		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
 		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",   '/',
 			':',   '<',   '>',   '@');
@@ -121,6 +125,7 @@ phone number (ie. +1 800 622 6232 or (800) 622-6232).  Please press Back and
 enter a JMP number or use your Jabber ID (JID) instead.
 <?php
 	} else {
+		$bc_id = '1'.$clean_jmpnum;
 		$clean_jmpnum = '+1'.$clean_jmpnum;
 
 		if ($redis->exists('catapult_jid-'.$clean_jmpnum)) {
@@ -155,7 +160,8 @@ if ($print_success) {
 
 Once you've completed the payment process, you'll receive unlimited incoming and
 outgoing text and picture messages, and 120 minutes of voice calls per
-month.  If you'd like to use a payment method other than PayPal, please <a
+month.  If you'd like to use a payment method other than PayPal or
+cryptocurrency, please <a
 href="../#payment">contact us</a>.  Otherwise please choose one of these payment
 options:
 </p>
@@ -216,6 +222,50 @@ echo urlencode($jid);
 </table>
 
 <p>
+The below links allow you to pay for your JMP account in Bitcoin.  If you'd
+prefer to pay with an anonymous cryptocurrency like Monero or most other
+cryptocurrencies, you can use the following links along with a service like <a
+href="https://simpleswap.io/">SimpleSwap</a>, <a
+href="https://xmr.to/">XMR.to</a>, or <a
+href="https://classic.shapeshift.com/">ShapeShift</a>.
+</p>
+
+<p>
+Once you've started the payment process below, you have 3 hours to make your
+payment.  If you're not able to make your payment within that time, you can
+return here to try again.
+</p>
+
+<table style=
+"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
+>
+<tr><td style="vertical-align:top;">
+<p>
+3 years of JMP service<br />
+<abbr title="0.00999 Bitcoin">9.99 mBTC</abbr><br />
+(5% savings)
+</p>
+</td></tr>
+<tr><td>
+<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=999000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
+</td></tr>
+</table>
+
+<table style=
+"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
+>
+<tr><td style="vertical-align:top;">
+<p>
+1 year of JMP service<br />
+<abbr title="0.00349 Bitcoin">3.49 mBTC</abbr>
+</p>
+</td></tr>
+<tr><td>
+<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=349000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
+</td></tr>
+</table>
+
+<p>
 <?php
 }
 ?>
@@ -224,7 +274,7 @@ echo urlencode($jid);
 <hr />
 
 <p>
-Copyright &copy; 2017 <a href="https://ossguy.com/">Denver Gingerich</a> and
+Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a> and
 others.  jmp-register is licensed under AGPLv3+.
 You can download the Complete Corresponding Source code <a
 href="https://gitlab.com/ossguy/jmp-register">here</a>.

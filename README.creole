@@ -75,9 +75,14 @@ variables:
 * $catapult_domain_id (sgx-catapult Bandwidth AP domain ID; starts with "rd-")
 * $catapult_domain_prefix (sgx-catapult Bandwidth AP "Domain Name" of endpoints)
 * $notify_pending_signup_jid (JID where signup requests sent for admin approval)
+* $electrum_id_prefix (prefix to use for IDs of JSON RPC requests to Electrum)
+* $electrum_rpc_username (username for Electrum JSON RPC endpoint)
+* $electrum_rpc_password (password for Electrum JSON RPC endpoint)
+* $electrum_rpc_port (TCP port that Electrum listens on for JSON RPC @localhost)
+* $electrum_url_prefix (https://github.com/spesmilo/electrum-merchant runs here)
 
 
-Copyright (C) 2017  Denver Gingerich <denver@ossguy.com>
+Copyright (C) 2017, 2020  Denver Gingerich <denver@ossguy.com>
 
 Copying and distribution of this README.creole file, with or without
 modification, are permitted in any medium without royalty provided the copyright
