@@ -389,6 +389,7 @@ class SApp < Sinatra::Application
 		@jid = CGI.escapeHTML(jid)
 		@number = params['number']
 		@prefix = $catapult_domain_prefix
+		@cleanSid = params['sid'].gsub(/[^0-9a-f]/, "")
 
 		EM.stop
 
