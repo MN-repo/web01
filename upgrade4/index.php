@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -25,70 +26,70 @@
 	xml:lang="en" >
 <head>
 <title>JMP</title>
+</head>
+<body>
 <?php
 
 if (empty($_GET['bc_id'])) {
 	error_log('mError - no payment ID');
 ?>
-</head>
-<body>
 <p>
 ID not entered.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } elseif (empty($_GET['amount_sat'])) {
 	error_log('mError - no payment amount');
 ?>
-</head>
-<body>
 <p>
 Amount not entered.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } elseif (intval($_GET['amount_sat']) < 150000) {
 	error_log('mError - amount ('.$_GET['amount_sat'].') too low');
 ?>
-</head>
-<body>
 <p>
 The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } else {
 	include '../../../../settings-jmp.php';
 
-	# create the payment request
-	$request_details = array(
-		'jsonrpc'	=> '2.0',
-		'id'		=> $electrum_id_prefix.'-'.microtime(TRUE),
-		'method'	=> 'add_request',
-		'params'	=> array(
-			'expiration'	=> 10800,
-			'amount'	=> strval(intval($_GET['amount_sat'])
-						/ 100000000),
-			'memo'		=> 'payment_for_'.$_GET['bc_id']
-		)
-	);
+	function electrum_rpc($method, $params) {
+		global $electrum_id_prefix, $electrum_rpc_username,
+			$electrum_rpc_password, $electrum_rpc_port;
 
-	$options = array('http' => array(
-		'header'   => "Content-type: application/json\r\n",
-		'method'   => 'POST',
-		'content'  => json_encode($request_details)
+		$rpc_id = $electrum_id_prefix.'-'.microtime(TRUE);
+		$context = stream_context_create(array('http' => array(
+			'header' => "Content-type: application/json\r\n",
+			'method' => 'POST',
+			'content' => json_encode(array(
+				'jsonrpc' => '2.0',
+				'id'      => $rpc_id,
+				'method'  => $method,
+				'params'  => $params
+			))
+		)));
+
+		$auth = $electrum_rpc_username.':'.$electrum_rpc_password;
+		$url = 'http://'.$auth.'@127.0.0.1:'.$electrum_rpc_port;
+		$result = file_get_contents($url, false, $context);
+
+		if ($result === FALSE) return $result;
+		return json_decode($result, true);
+	}
+
+	$amount = intval($_GET['amount_sat']) / 100000000;
+	$details = electrum_rpc('add_request', array(
+		'expiration' => 10800,
+		'amount'     => strval($amount),
+		'memo'       => 'payment_for_'.$_GET['bc_id']
 	));
 
-	$context = stream_context_create($options);
-	$result = file_get_contents('http://'.$electrum_rpc_username.':'.
-				$electrum_rpc_password.'@127.0.0.1:'.
-				$electrum_rpc_port, false, $context);
-
-	if ($result === FALSE) {
+	if ($details === FALSE) {
 		error_log('pError - could not create payment request');
 ?>
-</head>
-<body>
 <p>
 There was an error creating your payment request.  Please press Reload to try
 again or <a href="../upgrade1/">start from the beginning</a>.
 <?php
         } else {
-		$details = json_decode($result, true);
 		# TODO: remove hack for payment attempt notify
 		$time = microtime(TRUE);
 		mail($notify_receiver_email,
@@ -98,21 +99,20 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			'JSON: '.$result
 		);
 
-?>
-<meta http-equiv="refresh" content="1;url=<?php
-	echo $electrum_url_prefix.$details['result']['address'];
-?>" />
-</head>
-<body>
+		$address = $details['result']['address'];
 
-<h2>Loading payment page...</h2>
+		// TODO: no need to use a public URL here
+		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
+		$notify .= '?address=' . urlencode($address);
+		$notify .= '&bc_id=' . urlencode($_GET['bc_id']);
+		electrum_rpc('notify', array(
+			'address' => $address,
+			'URL'     => $notify
+		));
 
-<p>
-If this page has been displayed for more than 30 seconds please <a href=
-"<?php echo $electrum_url_prefix.$details['result']['address']; ?>">click
-here</a> to proceed.
-
-<?php
+		header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
+		ob_end_clean();
+		exit;
 	}
 }
 ?>
