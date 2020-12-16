@@ -51,31 +51,38 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 } else {
 	include '../../../../settings-jmp.php';
 
-	# create the payment request
-	$request_details = array(
-		'jsonrpc'	=> '2.0',
-		'id'		=> $electrum_id_prefix.'-'.microtime(TRUE),
-		'method'	=> 'add_request',
-		'params'	=> array(
-			'expiration'	=> 10800,
-			'amount'	=> strval(intval($_GET['amount_sat'])
-						/ 100000000),
-			'memo'		=> 'payment_for_'.$_GET['bc_id']
-		)
-	);
+	function electrum_rpc($method, $params) {
+		global $electrum_id_prefix, $electrum_rpc_username,
+			$electrum_rpc_password, $electrum_rpc_port;
 
-	$options = array('http' => array(
-		'header'   => "Content-type: application/json\r\n",
-		'method'   => 'POST',
-		'content'  => json_encode($request_details)
+		$rpc_id = $electrum_id_prefix.'-'.microtime(TRUE);
+		$context = stream_context_create(array('http' => array(
+			'header' => "Content-type: application/json\r\n",
+			'method' => 'POST',
+			'content' => json_encode(array(
+				'jsonrpc' => '2.0',
+				'id'      => $rpc_id,
+				'method'  => $method,
+				'params'  => $params
+			))
+		)));
+
+		$auth = $electrum_rpc_username.':'.$electrum_rpc_password;
+		$url = 'http://'.$auth.'@127.0.0.1:'.$electrum_rpc_port;
+		$result = file_get_contents($url, false, $context);
+
+		if ($result === FALSE) return $result;
+		return json_decode($result, true);
+	}
+
+	$amount = intval($_GET['amount_sat']) / 100000000;
+	$details = electrum_rpc('add_request', array(
+		'expiration' => 10800,
+		'amount'     => strval($amount),
+		'memo'       => 'payment_for_'.$_GET['bc_id']
 	));
 
-	$context = stream_context_create($options);
-	$result = file_get_contents('http://'.$electrum_rpc_username.':'.
-				$electrum_rpc_password.'@127.0.0.1:'.
-				$electrum_rpc_port, false, $context);
-
-	if ($result === FALSE) {
+	if ($details === FALSE) {
 		error_log('pError - could not create payment request');
 ?>
 <p>
@@ -83,7 +90,6 @@ There was an error creating your payment request.  Please press Reload to try
 again or <a href="../upgrade1/">start from the beginning</a>.
 <?php
         } else {
-		$details = json_decode($result, true);
 		# TODO: remove hack for payment attempt notify
 		$time = microtime(TRUE);
 		mail($notify_receiver_email,
