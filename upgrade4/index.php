@@ -101,6 +101,14 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 
 		$address = $details['result']['address'];
 
+		// TODO: no need to use a public URL here
+		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
+		$notify .= '?address=' . urlencode($address);
+		$notify .= '&bc_id=' . urlencode($_GET['bc_id']);
+		electrum_rpc('notify', array(
+			'address' => $address,
+			'URL'     => $notify
+		));
 
 		header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
 		ob_end_clean();
