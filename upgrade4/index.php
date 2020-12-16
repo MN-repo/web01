@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -25,29 +26,25 @@
 	xml:lang="en" >
 <head>
 <title>JMP</title>
+</head>
+<body>
 <?php
 
 if (empty($_GET['bc_id'])) {
 	error_log('mError - no payment ID');
 ?>
-</head>
-<body>
 <p>
 ID not entered.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } elseif (empty($_GET['amount_sat'])) {
 	error_log('mError - no payment amount');
 ?>
-</head>
-<body>
 <p>
 Amount not entered.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } elseif (intval($_GET['amount_sat']) < 150000) {
 	error_log('mError - amount ('.$_GET['amount_sat'].') too low');
 ?>
-</head>
-<body>
 <p>
 The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 <?php
@@ -81,8 +78,6 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	if ($result === FALSE) {
 		error_log('pError - could not create payment request');
 ?>
-</head>
-<body>
 <p>
 There was an error creating your payment request.  Please press Reload to try
 again or <a href="../upgrade1/">start from the beginning</a>.
@@ -98,21 +93,12 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			'JSON: '.$result
 		);
 
-?>
-<meta http-equiv="refresh" content="1;url=<?php
-	echo $electrum_url_prefix.$details['result']['address'];
-?>" />
-</head>
-<body>
+		$address = $details['result']['address'];
 
-<h2>Loading payment page...</h2>
 
-<p>
-If this page has been displayed for more than 30 seconds please <a href=
-"<?php echo $electrum_url_prefix.$details['result']['address']; ?>">click
-here</a> to proceed.
-
-<?php
+		header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
+		ob_end_clean();
+		exit;
 	}
 }
 ?>
