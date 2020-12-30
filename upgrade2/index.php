@@ -243,7 +243,7 @@ return here to try again.
 <p>
 3 years of JMP service<br />
 <abbr title="0.00379 Bitcoin">3.79 mBTC</abbr><br />
-(3% savings)
+(5% savings)
 </p>
 </td></tr>
 <tr><td>
