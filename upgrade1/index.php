@@ -24,9 +24,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>JMP - JIDs for Messaging with Phones - Upgrade</title>
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <style type="text/css">
-	dt { font-weight: bold }
-	dd { margin-top: 5px; margin-bottom: 10px }
 	#signup_bottom {
 		display: inline-block;
 		border-radius: 0.5rem;
@@ -38,10 +37,9 @@
 </style>
 </head>
 <body style="padding: 0 5%;">
-<div style="text-align:center;">
-<a href="../"><img src="../static/jmp_beta.png" alt="JMP - beta" /></a>
-<h3>Upgrade to a paid JMP account</h3>
-</div>
+<h1><a href="../"><img src="../static/jmp_beta.png" alt="JMP - beta" /></a></h1>
+<h1>Upgrade to a paid JMP account</h1>
+
 <p>
 If you're happy with your <a href="../">JMP</a> free trial so far, you can
 upgrade to a paid account at any time within the first 30 days.  There are
@@ -94,6 +92,8 @@ Jabber ID (JID) below:
 </td></tr>
 </table>
 
+<?php require dirname(__FILE__).'/../nav.php'; ?>
+
 <hr />
 
 <p>
@@ -102,5 +102,6 @@ others.  jmp-register is licensed under AGPLv3+.
 You can download the Complete Corresponding Source code <a
 href="https://gitlab.com/ossguy/jmp-register">here</a>.
 </p>
+
 </body>
 </html>

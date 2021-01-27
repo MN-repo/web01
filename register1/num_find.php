@@ -370,7 +370,7 @@ code</a> instead)
 <table style="margin-left:auto;margin-right:auto;">
 <?php foreach ($pref_keys as $key): ?>
 <tr><td style="font-size:1.5rem;"><a style="text-decoration:none;" target="_top"
-href="../register2/?number=<?php
+href="../register/?number=<?php
 		echo urlencode($pref_list[$key]["number"]).'&city='.urlencode(
 			str_replace(' - ', '-', ucwords(strtolower(str_replace(
 				'-', ' - ', $pref_list[$key]["city"])))).
@@ -379,7 +379,7 @@ href="../register2/?number=<?php
 <?php endforeach; ?>
 <?php foreach ($other_keys as $key): ?>
 <tr><td style="font-size:1.5rem;"><a style="text-decoration:none;" target="_top"
-href="../register2/?number=<?php
+href="../register/?number=<?php
 		echo urlencode($num_list[$key]["number"]).'&city='.urlencode(
 			str_replace(' - ', '-', ucwords(strtolower(str_replace(
 				'-', ' - ', $num_list[$key]["city"])))).

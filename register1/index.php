@@ -24,9 +24,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xml:lang="en" >
 <head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>JMP</title>
+<link rel="stylesheet" type="text/css" href="../style.css" />
 </head>
 <body>
+<h1><a href="../"><img src="../static/jmp_beta.png" alt="JMP" /></a></h1>
 <form action="../register1/">
 <p>
 Area code: <input type="text" name="areacode" /> (ie. 604 for <a
@@ -135,6 +139,7 @@ try another area code (<a href=
 }
 ?>
 </p>
+<?php require dirname(__FILE__).'/../nav.php'; ?>
 <hr />
 <p>
 Copyright &copy; 2017 <a href="https://ossguy.com/">Denver Gingerich</a> and
