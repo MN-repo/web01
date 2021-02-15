@@ -226,8 +226,9 @@ The below links allow you to pay for your JMP account in Bitcoin.  If you'd
 prefer to pay with an anonymous cryptocurrency like Monero or most other
 cryptocurrencies, you can use the following links along with a service like <a
 href="https://simpleswap.io/">SimpleSwap</a>, <a
-href="https://xmr.to/">XMR.to</a>, or <a
-href="https://classic.shapeshift.com/">ShapeShift</a>.
+href="https://www.morphtoken.com/">MorphToken</a>, <a
+href="https://changenow.io/">ChangeNOW</a>, or <a
+href="https://godex.io/">Godex</a>.
 </p>
 
 <p>
