@@ -42,7 +42,7 @@ ID not entered.  Please <a href="../upgrade1/">start again</a>.
 <p>
 Amount not entered.  Please <a href="../upgrade1/">start again</a>.
 <?php
-} elseif (intval($_GET['amount_sat']) < 50000) {
+} elseif (intval($_GET['amount_sat']) < 20000) {
 	error_log('mError - amount ('.$_GET['amount_sat'].') too low');
 ?>
 <p>

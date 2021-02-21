@@ -243,12 +243,12 @@ return here to try again.
 <tr><td style="vertical-align:top;">
 <p>
 3 years of JMP service<br />
-<abbr title="0.00229 Bitcoin">2.29 mBTC</abbr><br />
-(3% savings)
+<abbr title="0.00155 Bitcoin">1.55 mBTC</abbr><br />
+(6% savings)
 </p>
 </td></tr>
 <tr><td>
-<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=229000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
+<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=155000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
 </td></tr>
 </table>
 
@@ -258,11 +258,11 @@ return here to try again.
 <tr><td style="vertical-align:top;">
 <p>
 1 year of JMP service<br />
-<abbr title="0.00079 Bitcoin">0.79 mBTC</abbr>
+<abbr title="0.00055 Bitcoin">0.55 mBTC</abbr>
 </p>
 </td></tr>
 <tr><td>
-<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=79000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
+<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=55000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
 </td></tr>
 </table>
 
