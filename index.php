@@ -81,6 +81,15 @@
 				height: 14rem;
 			}
 		</style>
+
+		<script type="text/javascript">
+			if(
+				window.location.hash &&
+				!document.querySelector(window.location.hash)
+			) {
+				window.location = "/faq" + window.location.hash;
+			}
+		</script>
 	</head>
 
 	<body>
