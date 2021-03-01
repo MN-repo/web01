@@ -4,6 +4,11 @@ $rcv_time = microtime(TRUE);
 
 include '../../../settings-jmp.php';
 
+$hmac = hash_hmac("sha256", $_GET['address'].$_GET['customer_id'], $hmac_key);
+if ($_GET['hmac'] !== $hmac) {
+	die('Bad signature');
+}
+
 $redis = new Redis();
 $redis->pconnect($redis_host, $redis_port);
 if (!empty($redis_auth)) {
@@ -11,20 +16,7 @@ if (!empty($redis_auth)) {
 	$redis->auth($redis_auth);
 }
 
-$jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
-if ($jid === FALSE) {
-	if ($redis->exists('catapult_cred-'.$_GET['bc_id']) > 0) {
-		$jid = $_GET['bc_id'];
-	} else {
-		# TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
-		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
-			'/',   ':',   '<',   '>',   '@');
-		$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
-			'\2f', '\3a', '\3c', '\3e', '\40');
-		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
-			'@'.$cheogram_jid;
-	}
-}
+$jid = $redis->get('jmp_customer_jid-' . $_GET['customer_id']);
 
 function electrum_rpc($method, $params) {
 	global $electrum_id_prefix, $electrum_rpc_username,
@@ -60,7 +52,7 @@ if ($request['result']['status_str'] != 'Paid') {
 	die('The request for '.$_GET['address'].' is not paid.');
 }
 
-if (!strstr($request['result']['message'], $_GET['bc_id'])) {
+if (!strstr($request['result']['message'], $_GET['customer_id'])) {
 	die('The request for '.$_GET['address'].' is not for '.$jid);
 }
 

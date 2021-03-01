@@ -50,6 +50,54 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } else {
 	include '../../../../settings-jmp.php';
+	require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
+	$braintree = new Braintree\Gateway($braintree_config); // settings-jmp.php
+
+	$redis = new Redis();
+	$redis->pconnect($redis_host, $redis_port);
+	if (!empty($redis_auth)) {
+		# TODO: check return value to confirm login succeeded
+		$redis->auth($redis_auth);
+	}
+
+	$jid = $redis->get('catapult_jid-+1'.$_GET['bc_id']);
+	if ($jid === FALSE) {
+		if ($redis->exists('catapult_cred-'.$_GET['bc_id']) > 0) {
+			$jid = $_GET['bc_id'];
+		} else {
+			// TODO: we shouldn't have to know about cheogram.com
+			// TODO: XEP-0106 Sec 4.3 compliance
+			$jid = str_replace("\\", "\\\\5c",
+				str_replace(' ', "\\\\20",
+				str_replace('"', "\\\\22",
+				str_replace('&', "\\\\26",
+				str_replace("'", "\\\\27",
+				str_replace('/', "\\\\2f",
+				str_replace(':', "\\\\3a",
+				str_replace('<', "\\\\3c",
+				str_replace('>', "\\\\3e",
+				str_replace('@', "\\\\40",
+				$_GET['bc_id']
+			)))))))))).'@cheogram.com';
+
+			if ($redis->exists('catapult_cred-'.$jid) < 1) {
+				die('No account found for: '.$_GET['bc_id']);
+			}
+		}
+	}
+
+	$customer_id = $redis->get('jmp_customer_id-' . $jid);
+	if (!$customer_id) {
+		$result = $braintree->customer()->create();
+		if (!$result->success) {
+			die('Could not create customer');
+		}
+
+		$customer_id = $result->customer->id;
+
+		$redis->setNx('jmp_customer_id-' . $jid, $customer_id);
+		$redis->setNx('jmp_customer_jid-' . $customer_id, $jid);
+	}
 
 	function electrum_rpc($method, $params) {
 		global $electrum_id_prefix, $electrum_rpc_username,
@@ -79,7 +127,7 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	$details = electrum_rpc('add_request', array(
 		'expiration' => 10800,
 		'amount'     => strval($amount),
-		'memo'       => 'payment_for_'.$_GET['bc_id']
+		'memo'       => 'payment_for_'.$customer_id
 	));
 
 	if ($details === FALSE) {
@@ -104,7 +152,15 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 		// TODO: no need to use a public URL here
 		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
 		$notify .= '?address=' . urlencode($address);
-		$notify .= '&bc_id=' . urlencode($_GET['bc_id']);
+		$notify .= '&customer_id=' . urlencode($customer_id);
+
+		// Auth with hmac so we can trust the address+customer_id pair
+		// Not needed for requests, but for deposit addresses we will
+		$notify .= '&hmac=' . urlencode(hash_hmac(
+			"sha256",
+			$address.$customer_id,
+			$hmac_key // jmp-settings.php
+		));
 		electrum_rpc('notify', array(
 			'address' => $address,
 			'URL'     => $notify

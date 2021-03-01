@@ -1,0 +1,3 @@
+[submodule "lib/braintree_php"]
+	path = lib/braintree_php
+	url = https://github.com/braintree/braintree_php.git
