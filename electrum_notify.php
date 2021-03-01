@@ -4,16 +4,15 @@ $rcv_time = microtime(TRUE);
 
 include '../../../settings-jmp.php';
 
-$hmac = hash_hmac("sha256", $_GET['address'].$_GET['customer_id'], $hmac_key);
-if ($_GET['hmac'] !== $hmac) {
-	die('Bad signature');
-}
-
 $redis = new Redis();
 $redis->pconnect($redis_host, $redis_port);
 if (!empty($redis_auth)) {
 	# TODO: check return value to confirm login succeeded
 	$redis->auth($redis_auth);
+}
+
+if(!$redis->sismember('jmp_customer_btc_addresses-' . $_GET['customer_id'], $_GET['address'])) {
+	die('Address and customer_id do not match');
 }
 
 $jid = $redis->get('jmp_customer_jid-' . $_GET['customer_id']);
@@ -66,12 +65,11 @@ $rv2 = $redis->setNx($ppaoKeyNextMo, 'xxx_stable_trial-v20200913');
 
 $time = microtime(TRUE);
 mail($notify_receiver_email,
-	'electrum PAID for '.htmlentities($_GET['bc_id']),
+	'electrum PAID for '.htmlentities($jid),
 	'rcved time: '.$rcv_time."\n".
 	'email time: '.$time."\n".
 	'msg:  '.$request['result']['message']."\n".
 	'addr: '.htmlentities($_GET['address'])."\n".
-	'bc_id: '.$_GET['bc_id']."\n".
 	'cheo: '.$jid."\n".
 	'rv1:  '.$rv1."\n".
 	'rv2:  '.$rv2."\n".

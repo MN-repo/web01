@@ -149,18 +149,12 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 
 		$address = $details['result']['address'];
 
+		$redis->sadd('jmp_customer_btc_addresses-'.$customer_id, $address);
+
 		// TODO: no need to use a public URL here
 		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
 		$notify .= '?address=' . urlencode($address);
 		$notify .= '&customer_id=' . urlencode($customer_id);
-
-		// Auth with hmac so we can trust the address+customer_id pair
-		// Not needed for requests, but for deposit addresses we will
-		$notify .= '&hmac=' . urlencode(hash_hmac(
-			"sha256",
-			$address.$customer_id,
-			$hmac_key // jmp-settings.php
-		));
 		electrum_rpc('notify', array(
 			'address' => $address,
 			'URL'     => $notify
