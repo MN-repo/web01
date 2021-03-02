@@ -317,7 +317,7 @@ class SApp < Sinatra::Application
 		$q_send.push(jid)
 
 		begin
-			status = Timeout::timeout(5) {
+			status = Timeout::timeout(30) {
 				# TODO: return val (added/removed) was expected?
 				$q_done.pop
 			}
