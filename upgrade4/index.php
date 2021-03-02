@@ -110,7 +110,13 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			'URL'     => $notify
 		));
 
-		header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
+		if (empty($_GET['number']) or empty($_GET['sid'])) {
+			header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
+		} else {
+			header('Location: '.$electrum_url_prefix.$address.
+				'&number='.urlencode($_GET['number']).'&sid='.
+				urlencode($_GET['sid']), TRUE, 303);
+		}
 		ob_end_clean();
 		exit;
 	}
