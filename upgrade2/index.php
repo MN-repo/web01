@@ -35,6 +35,20 @@
 		padding: 1em;
 		text-decoration-line: none;
 	}
+
+	#upgrade4 {
+		text-align: center;
+		max-width: 25em;
+		margin: auto;
+	}
+
+	#upgrade4 fieldset {
+		margin-bottom: 1em;
+	}
+
+	#upgrade4 label {
+		display: block;
+	}
 </style>
 </head>
 <body style="padding: 0 5%;">
@@ -128,7 +142,7 @@ enter a JMP number or use your Jabber ID (JID) instead.
 		$bc_id = '1'.$clean_jmpnum;
 		$clean_jmpnum = '+1'.$clean_jmpnum;
 
-		if ($redis->exists('catapult_jid-'.$clean_jmpnum)) {
+		if ($jid = $redis->get('catapult_jid-'.$clean_jmpnum)) {
 			$print_success = TRUE;
 ?>
 To confirm, you'd like to upgrade the JMP account with JMP number
@@ -222,14 +236,36 @@ echo urlencode($jid);
 </table>
 
 <p>
-The below links allow you to pay for your JMP account in Bitcoin.  If you'd
+You can also pay for your JMP account in Bitcoin.  If you'd
 prefer to pay with an anonymous cryptocurrency like Monero or most other
-cryptocurrencies, you can use the following links along with a service like <a
+cryptocurrencies, you can use a service like <a
 href="https://simpleswap.io/">SimpleSwap</a>, <a
 href="https://www.morphtoken.com/">MorphToken</a>, <a
 href="https://changenow.io/">ChangeNOW</a>, or <a
 href="https://godex.io/">Godex</a>.
 </p>
+
+<?php
+$customer_id = $redis->get('jmp_customer_id-' . $jid);
+if ($customer_id) {
+	$addresses = $redis->smembers('jmp_customer_btc_addresses-' . $customer_id);
+}
+if(!empty($addresses)) :
+?>
+<p>You may buy account credit by sending any amount of BTC to any of these
+addresses
+(note that conversions are done using the Sell price of
+<a href="https://www.canadianbitcoins.com/">Canadian Bitcoins</a>,
+with any applicable CAD-to-USD conversion applied, within 5 minutes of your
+transaction receiving at least 3 confirmations):</p>
+<ul>
+<?php foreach($addresses as $address): ?>
+<li><?php echo $address; ?></li>
+<?php endforeach; ?>
+</ul>
+<?php
+else :
+?>
 
 <p>
 Once you've started the payment process below, you have 3 hours to make your
@@ -241,30 +277,34 @@ return here to try again.
 "margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
 >
 <tr><td style="vertical-align:top;">
-<p>
-3 years of JMP service<br />
-<abbr title="0.00155 Bitcoin">1.55 mBTC</abbr><br />
-(6% savings)
-</p>
+<p>JMP account credit (0.55 mBTC or more)</p>
 </td></tr>
 <tr><td>
-<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=155000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
-</td></tr>
-</table>
+<form method="get" action="../upgrade4/" id="upgrade4">
+	<input type="hidden" name="bc_id" value="<?php echo $bc_id ?>" />
+	<input type="hidden" name="amount_sat" value="55000" />
 
-<table style=
-"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
->
-<tr><td style="vertical-align:top;">
-<p>
-1 year of JMP service<br />
-<abbr title="0.00055 Bitcoin">0.55 mBTC</abbr>
-</p>
-</td></tr>
-<tr><td>
-<a href="../upgrade4/?bc_id=<?php echo $bc_id; ?>&amp;amount_sat=55000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a>
+	<fieldset>
+		<legend>Choose a currency for your account balance</legend>
+		<label>
+			<input type="radio" name="currency" value="CAD" />
+			Canadian Dollars
+		</label>
+		<label>
+			<input type="radio" name="currency" value="USD" />
+			US Dollars
+		</label>
+	</fieldset>
+
+	<button type="submit" style="border: 0px none transparent;">
+		<img
+			src="../static/pay_with_bitcoin-lukasz_adam.png"
+			alt="Pay with Bitcoin icon, by Lukasz Adam" />
+	</button>
+</form>
 </td></tr>
 </table>
+<?php endif; ?>
 
 <p>
 <?php

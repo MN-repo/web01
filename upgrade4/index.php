@@ -137,8 +137,22 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 
 		$redis->sadd('jmp_customer_btc_addresses-'.$customer_id, $address);
 
+		if ($_GET['currency'] == 'CAD') {
+			$redis->set(
+				'pending_plan_for-'.$customer_id,
+				'cad_beta_unlimited-v20210223'
+			);
+		}
+
+		if ($_GET['currency'] == 'USD') {
+			$redis->set(
+				'pending_plan_for-'.$customer_id,
+				'usd_beta_unlimited-v20210223'
+			);
+		}
+
 		// TODO: no need to use a public URL here
-		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
+		$notify = 'https://pay.jmp.chat/electrum_notify';
 		$notify .= '?address=' . urlencode($address);
 		$notify .= '&customer_id=' . urlencode($customer_id);
 		electrum_rpc('notify', array(

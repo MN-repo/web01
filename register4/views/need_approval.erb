@@ -1,7 +1,8 @@
 Currently registration requires either manual approval, or payment.</p>
 
 <p>If you would like to activate immediately, you can do so by paying for
-5 months of JMP service (which costs $14.95 USD, $17.95 CAD, or 0.25 mBTC):</p>
+5 months of JMP service (which costs $14.95 USD, $17.95 CAD, or
+at least 0.25 mBTC, any extra BTC will extend your service proportionally):</p>
 
 <form method="get" action="https://pay.jmp.chat/<%= u @cheo_jid %>/activate">
 	<% if @customer_id %>
@@ -12,11 +13,23 @@ Currently registration requires either manual approval, or payment.</p>
 	<button type="submit">Pay with Credit Card</button>
 </form>
 
-<form method="get" action="../upgrade4/">
+<form method="get" action="../upgrade4/" id="upgrade4">
 	<input type="hidden" name="bc_id" value="<%= @jid %>" />
 	<input type="hidden" name="number" value="<%= @number %>" />
 	<input type="hidden" name="sid" value="<%= @sid %>" />
 	<input type="hidden" name="amount_sat" value="25000" />
+
+	<fieldset>
+		<legend>Choose a currency for your account balance</legend>
+		<label>
+			<input type="radio" name="currency" value="CAD" />
+			Canadian Dollars
+		</label>
+		<label>
+			<input type="radio" name="currency" value="USD" />
+			US Dollars
+		</label>
+	</fieldset>
 
 	<button type="submit" style="border: 0px none transparent;">
 		<img
@@ -38,4 +51,4 @@ contact support per below for other (manual) cryptocurrency options.)</p>
 support by replying to your verification code message, or by texting
 <a href="sms:+14169938000">+1 416 993 8000</a> or messaging
 <a href="xmpp:+14169938000@cheogram.com">+14169938000@cheogram.com</a>
-with your XMPP client.</p>
+with your XMPP client.
