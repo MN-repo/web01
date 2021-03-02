@@ -121,10 +121,27 @@ class SApp < Sinatra::Application
 			$stderr.puts 'yError when trying to verify plan for ' +
 				jid + ' with plan name "' + payPlan.to_s + '"'
 			# TODO: confirm this text is correct
-			@error_text = 'Trial account has not been approved or '\
-				'other issue with payment plan for this JID.  '\
-				'<a href="../#support">Contact support</a> to '\
-				'fix or <a href="../">start again</a>.'
+			@error_text = 'Currently registration requires either '\
+				'manual approval, or payment via Bitcoin.  If '\
+				'you would like to ask for approval, you can '\
+				'contact support by replying to your '\
+				'verification code message, or by texting '\
+				'+1 416 993 8000 or messaging <a '\
+				'href="xmpp:+14169938000@cheogram.com">+14169938000@cheogram.com</a>'\
+				' with your XMPP client.  We reply within 9 '\
+				'hours to trial account inquiries.</p><p>'\
+				'If you prefer to activate immediately, you '\
+				'can do so by paying for 4 months of JMP '\
+				'service in Bitcoin (which costs 0.599 mBTC):'\
+				'</p><p style="text-align:center;"><a href="../upgrade4/?bc_id=' +
+				CGI.escape(jid) + '&amp;number=' +
+				CGI.escape(params['number']) + '&amp;sid=' +
+				CGI.escape(params['sid']) +
+				'&amp;amount_sat=59900"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a></p>'\
+				'<p>Otherwise you can ask support for manual '\
+				'approval (for a trial account) per above and '\
+				'upgrade to a paid account later, using PayPal'\
+				', credit card, cryptocurrencies, etc.'
 			conn.disconnect
 			return erb :error
 		end

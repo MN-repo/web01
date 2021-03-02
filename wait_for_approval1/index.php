@@ -163,49 +163,6 @@ There was an error sending your registration request.  Please <a href=
 ?>">click here</a> or press Reload to try again.
 <?php
 	        } else {
-			# TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
-			$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
-				'/',   ':',   '<',   '>',   '@');
-			$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
-				'\2f', '\3a', '\3c', '\3e', '\40');
-			$cheo_jid = str_replace($ej_search, $ej_replace, $jid).
-				'@'.$cheogram_jid;
-
-			$now = time();
-
-			$ppaoKeyThisMo = 'payment-plan_as_of_'.
-				date('Ym', $now).
-				'-'.$cheo_jid;
-			$ppaoKeyNextMo = 'payment-plan_as_of_'.
-				date('Ym', strtotime('+1 month', $now)).
-				'-'.$cheo_jid;
-
-			# examples of valid values for payment-plan_as_of_.. key
-			#  cad_beta_unlimited-v20180430
-			#  xxx_stable_trial-v20200913
-			#   (XXX is '"transaction" involving no currency.' code)
-
-			# TODO: don't set until get approval (approval key TBD)
-
-			# TODO: don't hard-code expected payment plan name
-			if (!$redis->setnx($ppaoKeyThisMo,
-				'xxx_stable_trial-v20200913')) {
-
-				# note that register4 will deal with conflicts
-				$val = $redis->get($ppaoKeyThisMo);
-				error_log('zErrorPlan already set for this to '.
-					$val.' for JID '.$jid);
-			}
-
- 			# TODO: don't hard-code expected payment plan name
-			if (!$redis->setnx($ppaoKeyNextMo,
-				'xxx_stable_trial-v20200913')) {
-
-				# note that register4 will deal with conflicts
-				$val = $redis->get($ppaoKeyNextMo);
-				error_log('zErrorPlan already set for next to '.
-					$val.' for JID '.$jid);
-			}
 ?>
 <meta http-equiv="refresh" content="3;url=../register4/?number=<?php
 	echo urlencode($_GET['number']);
