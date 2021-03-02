@@ -131,13 +131,13 @@ class SApp < Sinatra::Application
 				' with your XMPP client.  We reply within 9 '\
 				'hours to trial account inquiries.</p><p>'\
 				'If you prefer to activate immediately, you '\
-				'can do so by paying for 4 months of JMP '\
-				'service in Bitcoin (which costs 0.599 mBTC):'\
+				'can do so by paying for 5 months of JMP '\
+				'service in Bitcoin (which costs 0.25 mBTC):'\
 				'</p><p style="text-align:center;"><a href="../upgrade4/?bc_id=' +
 				CGI.escape(jid) + '&amp;number=' +
 				CGI.escape(params['number']) + '&amp;sid=' +
 				CGI.escape(params['sid']) +
-				'&amp;amount_sat=59900"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a></p>'\
+				'&amp;amount_sat=25000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a></p>'\
 				'<p>Otherwise you can ask support for manual '\
 				'approval (for a trial account) per above and '\
 				'upgrade to a paid account later, using PayPal'\
