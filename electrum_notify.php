@@ -1,6 +1,8 @@
 <?php
 
-require_once dirname(__FILE__).'../../../../settings-jmp.php';
+$rcv_time = microtime(TRUE);
+
+include '../../../settings-jmp.php';
 
 $redis = new Redis();
 $redis->pconnect($redis_host, $redis_port);
@@ -9,28 +11,24 @@ if (!empty($redis_auth)) {
 	$redis->auth($redis_auth);
 }
 
-$jid = $redis->get('catapult_jid-+1'.$_GET['bc_id']);
+$cheo_jid = '';
+$jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
 if ($jid === FALSE) {
 	if ($redis->exists('catapult_cred-'.$_GET['bc_id']) > 0) {
 		$jid = $_GET['bc_id'];
 	} else {
-		// TODO: we shouldn't have to know about cheogram.com
-		// TODO: XEP-0106 Sec 4.3 compliance
-		$jid = str_replace("\\", "\\\\5c",
-			str_replace(' ', "\\\\20",
-			str_replace('"', "\\\\22",
-			str_replace('&', "\\\\26",
-			str_replace("'", "\\\\27",
-			str_replace('/', "\\\\2f",
-			str_replace(':', "\\\\3a",
-			str_replace('<', "\\\\3c",
-			str_replace('>', "\\\\3e",
-			str_replace('@', "\\\\40",
-			$_GET['bc_id']
-		)))))))))).'@cheogram.com';
+		# TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
+		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
+			'/',   ':',   '<',   '>',   '@');
+		$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
+			'\2f', '\3a', '\3c', '\3e', '\40');
+		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
+			'@'.$cheogram_jid;
 
 		if ($redis->exists('catapult_cred-'.$jid) < 1) {
-			die('No account found for: '.$_GET['bc_id']);
+			# not signed up yet, so bc_id will be JID from reg4
+			$cheo_jid = $jid;
+			$jid = $_GET['bc_id'];
 		}
 	}
 }
@@ -73,7 +71,27 @@ if (!strstr($request['result']['message'], $_GET['bc_id'])) {
 	die('The request for '.$_GET['address'].' is not for '.$jid);
 }
 
-$month = date('Ym');
-$redis->setNx("payment-plan_as_of_$month-$jid", 'xxx_stable_trial-v20200913');
+$now = time();
+$ppaoKeyThisMo = 'payment-plan_as_of_'.date('Ym', $now).'-'.$cheo_jid;
+$ppaoKeyNextMo = 'payment-plan_as_of_'.date('Ym', strtotime('+1 month', $now)).
+	'-'.$cheo_jid;
+
+$rv1 = $redis->setNx($ppaoKeyThisMo, 'xxx_stable_trial-v20200913');
+$rv2 = $redis->setNx($ppaoKeyNextMo, 'xxx_stable_trial-v20200913');
+
+$time = microtime(TRUE);
+mail($notify_receiver_email,
+	'electrum PAID for '.htmlentities($_GET['bc_id']),
+	'rcved time: '.$rcv_time."\n".
+	'email time: '.$time."\n".
+	'msg:  '.$request['result']['message']."\n".
+	'addr: '.htmlentities($_GET['address'])."\n".
+	'JID:  '.$jid."\n".
+	'cheo: '.$cheo_jid."\n".
+	'rv1:  '.$rv1."\n".
+	'rv2:  '.$rv2."\n".
+	'JSON: '.$request['result']['status_str']
+);
 
 echo 'DONE';
+?>
