@@ -96,7 +96,7 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			'paying for '.htmlentities($_GET['bc_id']),
 			'amount: '.$_GET['amount_sat']."\n".
 			'email time: '.$time."\n".
-			'JSON: '.$result
+			'JSON: '.json_encode($details)
 		);
 
 		$address = $details['result']['address'];
