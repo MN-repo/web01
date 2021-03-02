@@ -11,7 +11,6 @@ if (!empty($redis_auth)) {
 	$redis->auth($redis_auth);
 }
 
-$cheo_jid = '';
 $jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
 if ($jid === FALSE) {
 	if ($redis->exists('catapult_cred-'.$_GET['bc_id']) > 0) {
@@ -24,12 +23,6 @@ if ($jid === FALSE) {
 			'\2f', '\3a', '\3c', '\3e', '\40');
 		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
 			'@'.$cheogram_jid;
-
-		if ($redis->exists('catapult_cred-'.$jid) < 1) {
-			# not signed up yet, so bc_id will be JID from reg4
-			$cheo_jid = $jid;
-			$jid = $_GET['bc_id'];
-		}
 	}
 }
 
@@ -72,9 +65,9 @@ if (!strstr($request['result']['message'], $_GET['bc_id'])) {
 }
 
 $now = time();
-$ppaoKeyThisMo = 'payment-plan_as_of_'.date('Ym', $now).'-'.$cheo_jid;
+$ppaoKeyThisMo = 'payment-plan_as_of_'.date('Ym', $now).'-'.$jid;
 $ppaoKeyNextMo = 'payment-plan_as_of_'.date('Ym', strtotime('+1 month', $now)).
-	'-'.$cheo_jid;
+	'-'.$jid;
 
 $rv1 = $redis->setNx($ppaoKeyThisMo, 'xxx_stable_trial-v20200913');
 $rv2 = $redis->setNx($ppaoKeyNextMo, 'xxx_stable_trial-v20200913');
@@ -86,8 +79,8 @@ mail($notify_receiver_email,
 	'email time: '.$time."\n".
 	'msg:  '.$request['result']['message']."\n".
 	'addr: '.htmlentities($_GET['address'])."\n".
-	'JID:  '.$jid."\n".
-	'cheo: '.$cheo_jid."\n".
+	'bc_id: '.$_GET['bc_id']."\n".
+	'cheo: '.$jid."\n".
 	'rv1:  '.$rv1."\n".
 	'rv2:  '.$rv2."\n".
 	'JSON: '.$request['result']['status_str']
