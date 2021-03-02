@@ -79,10 +79,6 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 				str_replace('@', "\\\\40",
 				$_GET['bc_id']
 			)))))))))).'@cheogram.com';
-
-			if ($redis->exists('catapult_cred-'.$jid) < 1) {
-				die('No account found for: '.$_GET['bc_id']);
-			}
 		}
 	}
 
