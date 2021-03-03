@@ -6,6 +6,7 @@ gem 'eventmachine'
 
 gem 'hiredis'
 gem 'redis'
+gem 'pg'
 
 gem 'rack'
 gem 'sinatra'
