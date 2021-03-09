@@ -63,19 +63,13 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	$jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
 	if ($jid === FALSE) {
 		// TODO: we shouldn't have to know about cheogram.com
-		// TODO: XEP-0106 Sec 4.3 compliance
-		$jid = str_replace("\\", "\\\\5c",
-			str_replace(' ', "\\\\20",
-			str_replace('"', "\\\\22",
-			str_replace('&', "\\\\26",
-			str_replace("'", "\\\\27",
-			str_replace('/', "\\\\2f",
-			str_replace(':', "\\\\3a",
-			str_replace('<', "\\\\3c",
-			str_replace('>', "\\\\3e",
-			str_replace('@', "\\\\40",
-			$_GET['bc_id']
-		)))))))))).'@cheogram.com';
+		// TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
+		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
+			'/',   ':',   '<',   '>',   '@');
+		$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
+			'\2f', '\3a', '\3c', '\3e', '\40');
+		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
+			'@'.$cheogram_jid;
 	}
 
 	$customer_id = $redis->get('jmp_customer_id-' . $jid);
