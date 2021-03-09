@@ -155,6 +155,11 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 		if (empty($_GET['number']) or empty($_GET['sid'])) {
 			header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
 		} else {
+			$redis->setEx(
+				'reg-sid_for-'.$customer_id,
+				$key_ttl_seconds,
+				$_GET['sid']
+			);
 			header('Location: '.$electrum_url_prefix.$address.
 				'&number='.urlencode($_GET['number']).'&sid='.
 				urlencode($_GET['sid']), TRUE, 303);
