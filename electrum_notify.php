@@ -71,6 +71,7 @@ mail($notify_receiver_email,
 	'msg:  '.$request['result']['message']."\n".
 	'addr: '.htmlentities($_GET['address'])."\n".
 	'cheo: '.$jid."\n".
+	'cust: '.$_GET['customer_id']."\n".
 	'rv1:  '.$rv1."\n".
 	'rv2:  '.$rv2."\n".
 	'JSON: '.$request['result']['status_str']
