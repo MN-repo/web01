@@ -154,6 +154,11 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 				$key_ttl_seconds,
 				$_GET['sid']
 			);
+
+			// Store the tel we're working with, for possible later use
+			$sessionTel = 'reg-session_tel-'.$_GET['sid'];
+			$redis->setEx($sessionTel, $key_ttl_seconds, $_GET['number']);
+
 			header('Location: '.$electrum_url_prefix.$address.
 				'&number='.urlencode($_GET['number']).'&sid='.
 				urlencode($_GET['sid']), TRUE, 303);

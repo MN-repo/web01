@@ -89,6 +89,10 @@ href="https://gitlab.com/ossguy/jmp-register">here</a>.
 		$redis->setEx('reg-pending_approval_session-'.$sessNum,
 			$key_ttl_seconds * 2, $_GET['sid']);
 
+		// Store the tel we're working with, for possible later use
+		$sessionTel = 'reg-session_tel-'.$_GET['sid'];
+		$redis->setEx($sessionTel, $key_ttl_seconds, $_GET['number']);
+
 		# make an ASCII character representing this session: 'a' to 'z'
 		$sessionChar = chr(97 + ($sessNum % 26));
 
