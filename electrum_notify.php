@@ -11,27 +11,11 @@ if (!empty($redis_auth)) {
 	$redis->auth($redis_auth);
 }
 
-$cheo_jid = '';
-$jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
-if ($jid === FALSE) {
-	if ($redis->exists('catapult_cred-'.$_GET['bc_id']) > 0) {
-		$jid = $_GET['bc_id'];
-	} else {
-		# TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
-		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
-			'/',   ':',   '<',   '>',   '@');
-		$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
-			'\2f', '\3a', '\3c', '\3e', '\40');
-		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
-			'@'.$cheogram_jid;
-
-		if ($redis->exists('catapult_cred-'.$jid) < 1) {
-			# not signed up yet, so bc_id will be JID from reg4
-			$cheo_jid = $jid;
-			$jid = $_GET['bc_id'];
-		}
-	}
+if(!$redis->sismember('jmp_customer_btc_addresses-' . $_GET['customer_id'], $_GET['address'])) {
+	die('Address and customer_id do not match');
 }
+
+$jid = $redis->get('jmp_customer_jid-' . $_GET['customer_id']);
 
 function electrum_rpc($method, $params) {
 	global $electrum_id_prefix, $electrum_rpc_username,
@@ -67,27 +51,27 @@ if ($request['result']['status_str'] != 'Paid') {
 	die('The request for '.$_GET['address'].' is not paid.');
 }
 
-if (!strstr($request['result']['message'], $_GET['bc_id'])) {
+if (!strstr($request['result']['message'], $_GET['customer_id'])) {
 	die('The request for '.$_GET['address'].' is not for '.$jid);
 }
 
 $now = time();
-$ppaoKeyThisMo = 'payment-plan_as_of_'.date('Ym', $now).'-'.$cheo_jid;
+$ppaoKeyThisMo = 'payment-plan_as_of_'.date('Ym', $now).'-'.$jid;
 $ppaoKeyNextMo = 'payment-plan_as_of_'.date('Ym', strtotime('+1 month', $now)).
-	'-'.$cheo_jid;
+	'-'.$jid;
 
 $rv1 = $redis->setNx($ppaoKeyThisMo, 'xxx_stable_trial-v20200913');
 $rv2 = $redis->setNx($ppaoKeyNextMo, 'xxx_stable_trial-v20200913');
 
 $time = microtime(TRUE);
 mail($notify_receiver_email,
-	'electrum PAID for '.htmlentities($_GET['bc_id']),
+	'electrum PAID for '.htmlentities($jid),
 	'rcved time: '.$rcv_time."\n".
 	'email time: '.$time."\n".
 	'msg:  '.$request['result']['message']."\n".
 	'addr: '.htmlentities($_GET['address'])."\n".
-	'JID:  '.$jid."\n".
-	'cheo: '.$cheo_jid."\n".
+	'cheo: '.$jid."\n".
+	'cust: '.$_GET['customer_id']."\n".
 	'rv1:  '.$rv1."\n".
 	'rv2:  '.$rv2."\n".
 	'JSON: '.$request['result']['status_str']

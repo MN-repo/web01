@@ -50,6 +50,40 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 <?php
 } else {
 	include '../../../../settings-jmp.php';
+	require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
+	$braintree = new Braintree\Gateway($braintree_config); // settings-jmp.php
+
+	$redis = new Redis();
+	$redis->pconnect($redis_host, $redis_port);
+	if (!empty($redis_auth)) {
+		# TODO: check return value to confirm login succeeded
+		$redis->auth($redis_auth);
+	}
+
+	$jid = $redis->get('catapult_jid-+'.$_GET['bc_id']);
+	if ($jid === FALSE) {
+		// TODO: we shouldn't have to know about cheogram.com
+		// TODO: XEP-0106 Sec 4.3 compliance; pre-escaped'll fail
+		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",
+			'/',   ':',   '<',   '>',   '@');
+		$ej_replace = array('\5c', '\20', '\22', '\26', '\27',
+			'\2f', '\3a', '\3c', '\3e', '\40');
+		$jid = str_replace($ej_search, $ej_replace, $_GET['bc_id']).
+			'@'.$cheogram_jid;
+	}
+
+	$customer_id = $redis->get('jmp_customer_id-' . $jid);
+	if (!$customer_id) {
+		$result = $braintree->customer()->create();
+		if (!$result->success) {
+			die('Could not create customer');
+		}
+
+		$customer_id = $result->customer->id;
+
+		$redis->setNx('jmp_customer_id-' . $jid, $customer_id);
+		$redis->setNx('jmp_customer_jid-' . $customer_id, $jid);
+	}
 
 	function electrum_rpc($method, $params) {
 		global $electrum_id_prefix, $electrum_rpc_username,
@@ -79,7 +113,7 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	$details = electrum_rpc('add_request', array(
 		'expiration' => 10800,
 		'amount'     => strval($amount),
-		'memo'       => 'payment_for_'.$_GET['bc_id']
+		'memo'       => 'payment_for_'.$customer_id
 	));
 
 	if ($details === FALSE) {
@@ -101,10 +135,12 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 
 		$address = $details['result']['address'];
 
+		$redis->sadd('jmp_customer_btc_addresses-'.$customer_id, $address);
+
 		// TODO: no need to use a public URL here
 		$notify = 'https://jmp.chat/sp1a/electrum_notify.php';
 		$notify .= '?address=' . urlencode($address);
-		$notify .= '&bc_id=' . urlencode($_GET['bc_id']);
+		$notify .= '&customer_id=' . urlencode($customer_id);
 		electrum_rpc('notify', array(
 			'address' => $address,
 			'URL'     => $notify
@@ -113,6 +149,11 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 		if (empty($_GET['number']) or empty($_GET['sid'])) {
 			header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
 		} else {
+			$redis->setEx(
+				'reg-sid_for-'.$customer_id,
+				$key_ttl_seconds,
+				$_GET['sid']
+			);
 			header('Location: '.$electrum_url_prefix.$address.
 				'&number='.urlencode($_GET['number']).'&sid='.
 				urlencode($_GET['sid']), TRUE, 303);
