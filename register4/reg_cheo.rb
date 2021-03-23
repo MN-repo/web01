@@ -24,6 +24,7 @@ require 'net/http'
 require 'uri'
 
 require 'redis/connection/hiredis'
+require 'pg_ext'
 require 'pg'
 
 require 'open3'
