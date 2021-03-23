@@ -24,6 +24,7 @@ require 'net/http'
 require 'uri'
 
 require 'redis/connection/hiredis'
+require 'pg'
 
 require 'open3'
 require 'securerandom'
@@ -40,6 +41,10 @@ eval File.readlines('../../../../settings-jmp.php')[1..-2].join("\n")
 
 $q_send = Queue.new
 $q_done = Queue.new
+
+DB = PG.connect(dbname: "jmp")
+DB.type_map_for_results = PG::BasicTypeMapForResults.new(DB)
+DB.type_map_for_queries = PG::BasicTypeMapForQueries.new(DB)
 
 class SApp < Sinatra::Application
 	get '/' do
@@ -116,10 +121,11 @@ class SApp < Sinatra::Application
 		conn.write ["GET", paymentPlanKey]
 		payPlan = conn.read
 
+		conn.write ["GET", 'jmp_customer_id-' + cheo_jid]
+		customer_id = conn.read
+
 		# TODO: don't hard-code expected payment plan name
 		if payPlan.nil? or payPlan != 'xxx_stable_trial-v20200913'
-			$stderr.puts 'yError when trying to verify plan for ' +
-				jid + ' with plan name "' + payPlan.to_s + '"'
 			# TODO: confirm this text is correct
 			@error_text = 'Currently registration requires either '\
 				'manual approval, or payment via Bitcoin.  If '\
@@ -142,8 +148,23 @@ class SApp < Sinatra::Application
 				'approval (for a trial account) per above and '\
 				'upgrade to a paid account later, using PayPal'\
 				', credit card, cryptocurrencies, etc.'
-			conn.disconnect
-			return erb :error
+
+			has_db_plan = DB.exec_params(<<-SQL, [customer_id]).first["count"] > 0
+				SELECT count(1)
+				FROM customer_plans
+				WHERE expires_at > NOW() AND customer_id=$1
+				LIMIT 1
+			SQL
+
+			if !has_db_plan
+				$stderr.puts 'yError when trying to verify plan for ' +
+					jid + ' with plan name "' + payPlan.to_s + '"'
+				@jid = jid
+				@number = params['number']
+				@sid = params['sid']
+				conn.disconnect
+				return erb :error
+			end
 		end
 
 
