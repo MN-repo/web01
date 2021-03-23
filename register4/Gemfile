@@ -10,3 +10,4 @@ gem 'pg'
 
 gem 'rack'
 gem 'sinatra'
+gem 'erubi'

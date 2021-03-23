@@ -30,7 +30,7 @@ require 'open3'
 require 'securerandom'
 
 require 'sinatra/base'
-require 'tilt/erb'
+require 'erubi'
 require 'webrick'
 
 require 'timeout'
@@ -47,6 +47,7 @@ DB.type_map_for_results = PG::BasicTypeMapForResults.new(DB)
 DB.type_map_for_queries = PG::BasicTypeMapForQueries.new(DB)
 
 class SApp < Sinatra::Application
+	set :erb, escape_html: true
 	get '/' do
 		# TODO NOW: MUST confirm that reg attempt for DNE number fails
 		#  spec'ly must fail gracefully - user can retry, no partial reg
