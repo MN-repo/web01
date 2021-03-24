@@ -147,6 +147,7 @@ class SApp < Sinatra::Application
 				@number = params['number']
 				@sid = params['sid']
 				@return_to = request.url
+				@customer_id = customer_id
 				conn.disconnect
 				return erb :need_approval
 			end
