@@ -1,0 +1,29 @@
+Currently registration requires either manual approval, or payment.</p>
+
+<p>If you would like to activate immediately, you can do so by paying for
+5 months of JMP service (which costs $14.95 USD, $17.95 CAD, or 0.25 mBTC):</p>
+
+<form method="get" action="https://pay.jmp.chat/<%= u @cheo_jid %>/activate">
+	<input type="hidden" name="return_to" value="<%= @return_to %>" />
+
+	<button type="submit">Pay with Credit Card</button>
+</form>
+
+<form method="get" action="../upgrade4/">
+	<input type="hidden" name="bc_id" value="<%= @jid %>" />
+	<input type="hidden" name="number" value="<%= @number %>" />
+	<input type="hidden" name="sid" value="<%= @sid %>" />
+	<input type="hidden" name="amount_sat" value="25000" />
+
+	<button type="submit" style="border: 0px none transparent;">
+		<img
+			src="../static/pay_with_bitcoin-lukasz_adam.png"
+			alt="Pay with Bitcoin icon, by Lukasz Adam" />
+	</button>
+</form>
+
+<p>Otherwise, if you would like to ask for trial approval, you can contact
+support by replying to your verification code message, or by texting
+<a href="sms:+14169938000">+1 416 993 8000</a> or messaging
+<a href="xmpp:+14169938000@cheogram.com">+14169938000@cheogram.com</a>
+with your XMPP client.</p>

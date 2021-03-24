@@ -31,7 +31,8 @@ require 'open3'
 require 'securerandom'
 
 require 'sinatra/base'
-require 'tilt/erb'
+require 'erb'
+require 'erubi'
 require 'webrick'
 
 require 'timeout'
@@ -48,6 +49,9 @@ DB.type_map_for_results = PG::BasicTypeMapForResults.new(DB)
 DB.type_map_for_queries = PG::BasicTypeMapForQueries.new(DB)
 
 class SApp < Sinatra::Application
+	set :erb, escape_html: true
+	include ERB::Util
+
 	get '/' do
 		# TODO NOW: MUST confirm that reg attempt for DNE number fails
 		#  spec'ly must fail gracefully - user can retry, no partial reg
@@ -128,28 +132,6 @@ class SApp < Sinatra::Application
 		# TODO: don't hard-code expected payment plan name
 		if payPlan.nil? or payPlan != 'xxx_stable_trial-v20200913'
 			# TODO: confirm this text is correct
-			@error_text = 'Currently registration requires either '\
-				'manual approval, or payment via Bitcoin.  If '\
-				'you would like to ask for approval, you can '\
-				'contact support by replying to your '\
-				'verification code message, or by texting '\
-				'+1 416 993 8000 or messaging <a '\
-				'href="xmpp:+14169938000@cheogram.com">+14169938000@cheogram.com</a>'\
-				' with your XMPP client.  We reply within 9 '\
-				'hours to trial account inquiries.</p><p>'\
-				'If you prefer to activate immediately, you '\
-				'can do so by paying for 5 months of JMP '\
-				'service in Bitcoin (which costs 0.25 mBTC):'\
-				'</p><p style="text-align:center;"><a href="../upgrade4/?bc_id=' +
-				CGI.escape(jid) + '&amp;number=' +
-				CGI.escape(params['number']) + '&amp;sid=' +
-				CGI.escape(params['sid']) +
-				'&amp;amount_sat=25000"><img src="../static/pay_with_bitcoin-lukasz_adam.png" alt="Pay with Bitcoin icon, by Lukasz Adam" /></a></p>'\
-				'<p>Otherwise you can ask support for manual '\
-				'approval (for a trial account) per above and '\
-				'upgrade to a paid account later, using PayPal'\
-				', credit card, cryptocurrencies, etc.'
-
 			has_db_plan = DB.exec_params(<<-SQL, [customer_id]).first["count"] > 0
 				SELECT count(1)
 				FROM customer_plans
@@ -161,10 +143,12 @@ class SApp < Sinatra::Application
 				$stderr.puts 'yError when trying to verify plan for ' +
 					jid + ' with plan name "' + payPlan.to_s + '"'
 				@jid = jid
+				@cheo_jid = cheo_jid
 				@number = params['number']
 				@sid = params['sid']
+				@return_to = request.url
 				conn.disconnect
-				return erb :error
+				return erb :need_approval
 			end
 		end
 
