@@ -4,8 +4,9 @@ Currently registration requires either manual approval, or payment.</p>
 5 months of JMP service (which costs $14.95 USD, $17.95 CAD, or 0.25 mBTC):</p>
 
 <form method="get" action="https://pay.jmp.chat/<%= u @cheo_jid %>/activate">
-	- if @customer_id
+	<% if @customer_id %>
 		<input type="hidden" name="customer_id" value="<%= @customer_id %>" />
+	<% end %>
 	<input type="hidden" name="return_to" value="<%= @return_to %>" />
 
 	<button type="submit">Pay with Credit Card</button>
