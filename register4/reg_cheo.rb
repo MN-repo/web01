@@ -37,6 +37,8 @@ require 'webrick'
 
 require 'timeout'
 
+require 'braintree'
+
 
 # read in the settings file, trimming the "<?php" and "?>"
 eval File.readlines('../../../../settings-jmp.php')[1..-2].join("\n")
@@ -128,6 +130,21 @@ class SApp < Sinatra::Application
 
 		conn.write ["GET", 'jmp_customer_id-' + cheo_jid]
 		customer_id = conn.read
+
+		if !customer_id
+			result = Braintree::Gateway.new(
+				environment: $braintree_config[0]["environment"],
+				merchant_id: $braintree_config[0]["merchantId"],
+				public_key: $braintree_config[0]["publicKey"],
+				private_key: $braintree_config[0]["privateKey"]
+			).customer.create
+			raise "Braintree customer create failed" unless result.success?
+			customer_id = result.customer.id.to_s
+			conn.write ["SET", 'jmp_customer_id-' + cheo_jid, customer_id]
+			conn.read
+			conn.write ["SET", 'jmp_customer_jid-' + customer_id, cheo_jid]
+			conn.read
+		end
 
 		# TODO: don't hard-code expected payment plan name
 		if payPlan.nil? or payPlan != 'xxx_stable_trial-v20200913'
