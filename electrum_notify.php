@@ -1,4 +1,5 @@
 <?php
+@include_once __DIR__ . '/vendor/go.php';
 
 $rcv_time = microtime(TRUE);
 
