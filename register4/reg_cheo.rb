@@ -132,12 +132,16 @@ class SApp < Sinatra::Application
 		customer_id = conn.read
 
 		if !customer_id
-			result = Braintree::Gateway.new(
+			gateway = Braintree::Gateway.new(
 				environment: $braintree_config[0]["environment"],
 				merchant_id: $braintree_config[0]["merchantId"],
 				public_key: $braintree_config[0]["publicKey"],
 				private_key: $braintree_config[0]["privateKey"]
-			).customer.create
+			)
+			logger = Logger.new("/dev/null")
+			logger.level = Logger::INFO
+			gateway.config.logger = logger
+			result = gateway.customer.create
 			raise "Braintree customer create failed" unless result.success?
 			customer_id = result.customer.id.to_s
 			conn.write ["SET", 'jmp_customer_id-' + cheo_jid, customer_id]
