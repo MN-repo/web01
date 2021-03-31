@@ -13,7 +13,7 @@
 				<ul>
 					<li><a href="<?php echo $to_root; ?>/">Home</a></li>
 					<li><a href="<?php echo $to_root; ?>/faq">FAQ</a></li>
-					<li><a href="<?php echo $to_root; ?>/notify_signup">Newsletter signup</a></li>
+					<li><a href="https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news">Newsletter signup</a></li>
 					<li><a href="https://soprani.ca/pipermail/jmp-news/">Newsletter archives</a></li>
 					<li><a href="<?php echo $to_root; ?>/upgrade1">Pay for your account</a></li>
 					<li><a href="<?php echo $to_root; ?>/credits">Credits and source code</a></li>
