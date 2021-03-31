@@ -108,13 +108,13 @@
 		<section id="payment">
 			<h1>Do I have to use PayPal to signup for JMP?</h1>
 
-			<p>No.  Other payment methods are available.  For details, please contact our support team by sending a text message to <a href="sms:+14169938000">+1 416 993 8000</a> (Canada) or <a href="sms:+13127968000">+1 312 796 8000</a> (US) or send a private message to "ossguy" in the JMP/Soprani.ca chatroom at <a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>.</p>
+			<p>No.  Other payment methods are available.  For details, please contact our support team by sending a text message to <a href="sms:+14169938000">+1 416 993 8000</a> (Canada) or <a href="sms:+13127968000">+1 312 796 8000</a> (US) or send a private message to a moderator/owner in the JMP/Soprani.ca chatroom at <a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a> (just ask in the room if it's unclear who the moderators are).</p>
 		</section>
 
 		<section id="existing">
 			<h1>Can I port my existing number into JMP?</h1>
 
-			<p>Yes!  We support most regions in Canada and the US.  The process normally takes 1-2 weeks, depending on the number being ported in.  You can <a href="/sp1a/porting1/">submit your port request here</a>.  For questions, please reach our support team by sending a text message to <a href="sms:+14169938000">+1 416 993 8000</a> (Canada) or <a href="sms:+13127968000">+1 312 796 8000</a> (US) or send a private message to "ossguy" in the JMP/Soprani.ca chatroom at <a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>.</p>
+			<p>Yes!  We support most regions in Canada and the US.  The process normally takes 1-2 weeks, depending on the number being ported in.  You can <a href="/sp1a/porting1/">submit your port request here</a>.  For questions, please reach our support team by sending a text message to <a href="sms:+14169938000">+1 416 993 8000</a> (Canada) or <a href="sms:+13127968000">+1 312 796 8000</a> (US) or send a private message to a moderator/owner in the JMP/Soprani.ca chatroom at <a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a> (just ask in the room if it's unclear who the moderators are).</p>
 		</section>
 
 		<section id="clients">
