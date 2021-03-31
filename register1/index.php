@@ -74,7 +74,7 @@ try another area code (<a href=
 <tr><th>number</th><th>city</th><th>state</th></tr>
 <?php foreach ($fancy_keys as $key): ?>
 <tr>
-	<td><a href="../register2/?number=<?php
+	<td><a href="../register/?number=<?php
 		echo urlencode($fancynums[0][$key]).'&city=Manhattan%2C+NY';
 	?>"><?php echo preg_replace('/^\+1(...)(...)(....)$/', '($1) $2-$3',
 		$fancynums[0][$key]); ?></a></td>
@@ -114,7 +114,7 @@ try another area code (<a href=
 <tr><th>number</th><th>rate centre</th><th>city</th><th>province/state</th></tr>
 <?php foreach ($num_list as $number): ?>
 <tr>
-	<td><a href="../register2/?number=<?php
+	<td><a href="../register/?number=<?php
 		echo urlencode($number["number"]).'&city='.urlencode(
 			str_replace(' - ', '-', ucwords(strtolower(str_replace(
 				'-', ' - ', $number["city"])))).
