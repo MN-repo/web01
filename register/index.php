@@ -44,16 +44,16 @@
 				}
 			}
 
-			a[href^="get_jid"] {
-				background-image: url(getjid.svg);
+			a[href^="../getjid"] {
+				background-image: url(../static/getjid.svg);
 				background-repeat: no-repeat;
 				background-size: 3em;
 				background-position: 1em center;
 				padding-left: 4em;
 			}
 
-			a[href^="register2"] {
-				background-image: url(havejid.svg);
+			a[href^="../register2"] {
+				background-image: url(../static/havejid.svg);
 				background-repeat: no-repeat;
 				background-size: 3em;
 				background-position: 1em center;
