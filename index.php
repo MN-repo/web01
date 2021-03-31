@@ -126,7 +126,7 @@
 
 			<p>Or search <a href="register1">by area code</a> to find even more numbers.</p>
 
-			<p>You can also <a href="porting">bring your own number</a> to JMP if you like.</p>
+			<p>You can also <a href="porting1">bring your own number</a> to JMP if you like.</p>
 		</section>
 
 		<p class="warning">
