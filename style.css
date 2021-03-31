@@ -62,3 +62,7 @@ body > nav li a {
 		background-color: #aaa;
 	}
 }
+
+*[id] {
+	scroll-margin-top: 5em;
+}
