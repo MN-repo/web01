@@ -59,7 +59,7 @@ if (!empty($_GET['jmp-number'])) {
 $signature_date = date('m/d/Y');
 
 include '../../../../settings-jmp.php';
-mail($notify_receiver_email, 'port '.htmlentities($_GET['port_number']).
+mail($port_in_receiver_email, 'port '.htmlentities($_GET['port_number']).
 	' to JMP', "convert command:\n\n".
 	"date; time convert -background transparent -fill black -font \\\n".
 		"URW-Chancery-L-Medium-Italic -pointsize 36 \\\n".

@@ -50,6 +50,7 @@ variables:
 
 * $support_number (an sgx-catapult hosted E.164 number to send from)
 * $notify_receiver_email (the email address where notification list requests go)
+* $port_in_receiver_email (the email address where number port-in requests go)
 * $fwdcalls_url (should match the <delivery_receipt_url> that jmp-fwdcalls uses)
 * $sgx_jid (the JID that sgx-catapult uses, ie. "example.sgx.soprani.ca")
 * $cheogram_did (the DID that Cheogram uses, ie. "+12266669977")
