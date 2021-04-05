@@ -26,7 +26,7 @@
 			<h1>What do I get when I signup for JMP?</h1>
 
 			<p>JMP gives you a Canadian or US phone number that is yours to keep (for <a href="https://soprani.ca/vonage/prices_by_country.html">46 other countries</a> you can use the <a href="https://wiki.soprani.ca/VonageSetup">the Vonage SGX</a>, also part of <a href="https://soprani.ca/">Soprani.ca</a>).  JMP allows you to send and receive text messages and picture messages using your <a href="#jabber_client">Jabber client</a>, with calls <a href="#voicemail"> delivered to voicemail</a> (including a text transcription) by default.</p>
-			<p>If you like, you can <a href="#calling">make and receive phone calls</a> using your <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> client (or receive with an existing Canadian or US phone number).  You can <a href="#voicemail">configure a voicemail timeout</a> if you'd like JMP to automatically handle any calls that ring for too long.</p>
+			<p>If you like, you can <a href="#calling">make and receive phone calls</a> using your <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> client (or receive with an existing Canadian or US phone number or directly in a supporting Jabber client).  You can <a href="#voicemail">configure a voicemail timeout</a> if you'd like JMP to automatically handle any calls that ring for too long.</p>
 		</section>
 
 		<section id="jabber">
