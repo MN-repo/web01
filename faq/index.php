@@ -152,8 +152,8 @@
 		<section id="bot">
 			<h1>How do I see my JMP number and change other settings?</h1>
 
-			<p>The <a href="xmpp:account@jmp.chat">JMP account bot</a> can be used to view and change a number of settings of your JMP account.  You can find the complete list of commands by typing "help" or any other word in a new conversation with the JMP account bot's Jabber ID (<a href="xmpp:account@jmp.chat">account@jmp.chat</a>) - feel free to add it to your contact list.</p>
-			<p>As an example, you can type 'n' to see your JMP number, or 'u' to see your usage for the past 31 days (per above).  You can also switch incoming calls to go to your XMPP client instead of your SIP client ('j enable') or set your outgoing Caller ID (<a href="https://en.wikipedia.org/wiki/Calling_Name_Presentation">CNAM</a>) using the 'm' command.</p>
+			<p><a href="xmpp:cheogram.com">cheogram.com</a> should already be in your contacts, and can be used to view and change a number of settings for your JMP account.  You can find a comple list of options by typing "help" in a new conversation with the bot, or get a wizard in supporting clients by looking for an "Execute Command" or "Actions" option.</p>
+			<p>If you do not have cheogram.com in your contacts and try to add it, it is just "cheogram.com" with no "@". Some clients will give a warning about adding such an address, please press "Add Anyway".</p>
 		</section>
 
 		<?php require dirname(__FILE__).'/../nav.php'; ?>
