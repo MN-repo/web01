@@ -92,8 +92,10 @@
 		<section id="calling">
 			<h1>How do I make a phone call with my JMP number?</h1>
 
-			<p>Login to the SIP account that was provided during the signup process using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call. Currently JMP supports calling to Canada and the US.</p>
-			<p>If you don't have your SIP account information, you can reset your SIP account and receive the new password and other details using an XMPP ad-hoc command. For example, you can do this on a computer using your JID in <a href="https://fr.movim.eu/">Movim</a> and then clicking on cheogram.com in your contacts.  Under Actions, you can then choose "Reset SIP Account (if forgot password)".  The next page will show you your new SIP password as well as the SIP username and domain you can use to login.</p>
+			<p>Currently JMP supports calling to Canada and the US.</p>
+			<p>The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Siskin, Movim, or Gajim.  Simply add a contact just as you would for <a href="#sending">messaging</a> and then select the voice call option in your client.</a>
+			<p>Another way to make calls is to login to the SIP account that was provided during the signup process using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call.</p>
+			<p>If you don't have your SIP account information, you can reset your SIP account and receive the new password and other details by communicating with <a href="xmpp:cheogram.com">cheogram.com</a>, which should already be in your contacts.  In some clients you can find "Execute command" or "Actions" in the menus and select "Reset SIP Account" from there.  Otherwise send the message "help" and the bot will reply with a list of options.</p>
 		</section>
 
 		<section id="voicemail">
