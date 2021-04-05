@@ -143,7 +143,8 @@
 		<section id="usage">
 			<h1>How many minutes and messages have I used this month?</h1>
 
-			<p>You can see how many minutes and outgoing messages you've used for each of the past several days or months, including a total, by sending 'u' to the <a href="#bot">JMP account bot</a> (Jabber ID <a href="xmpp:account@jmp.chat">account@jmp.chat</a>).  Without any parameters, it will reply with the last 31 days of usage.  You can show usage for a given day or range of days by specifying the day or start and end days after 'u' (i.e. 'u YYYYMMDD YYYYMMDD' for a range).</p>
+			<p>You can see how many minutes and outgoing messages you've used for each of the past several days or months, including a total, by sending 'u' to <a href="xmpp:cheogram.com">cheogram.com</a> which should already be in your contacts.</p>
+			<p>Alternately, you can see historical data from the JMP Account bot by adding <a href="xmpp:account@jmp.chat">account@jmp.chat</a> and sending a message with arguments specifying the day or start and end days after 'u' (i.e. 'u YYYYMMDD YYYYMMDD' for a range).</p>
 			<p>Note that usage is reported for <a href="https://en.wikipedia.org/wiki/Gregorian_calendar">Gregorian calendar</a> days using <a href="https://en.wikipedia.org/wiki/International_Atomic_Time">International Atomic Time (TAI)</a>.</p>
 			<p>Since JMP does not charge for nor count incoming message usage, only minutes and outgoing message usage are shown.</p>
 		</section>
