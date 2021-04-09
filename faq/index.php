@@ -26,14 +26,14 @@
 			<h1>What do I get when I signup for JMP?</h1>
 
 			<p>JMP gives you a Canadian or US phone number that is yours to keep (for <a href="https://soprani.ca/vonage/prices_by_country.html">46 other countries</a> you can use the <a href="https://wiki.soprani.ca/VonageSetup">the Vonage SGX</a>, also part of <a href="https://soprani.ca/">Soprani.ca</a>).  JMP allows you to send and receive text messages and picture messages using your <a href="#jabber_client">Jabber client</a>, with calls <a href="#voicemail"> delivered to voicemail</a> (including a text transcription) by default.</p>
-			<p>If you like, you can <a href="#calling">make and receive phone calls</a> using your <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> client (or receive with an existing Canadian or US phone number).  You can <a href="#voicemail">configure a voicemail timeout</a> if you'd like JMP to automatically handle any calls that ring for too long.</p>
+			<p>If you like, you can <a href="#calling">make and receive phone calls</a> using your <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> client (or receive with an existing Canadian or US phone number or directly in a supporting Jabber client).  You can <a href="#voicemail">configure a voicemail timeout</a> if you'd like JMP to automatically handle any calls that ring for too long.</p>
 		</section>
 
 		<section id="jabber">
 			<h1>What's this Jabber thing?</h1>
 			<p>XMPP (formerly Jabber) is a <a href="https://en.wikipedia.org/wiki/Federation_%28information_technology%29">federated protocol</a> and <a href="https://singpolyma.net/2009/01/beasts-of-the-standards-world/">open standard</a> for messaging.  It uses Jabber IDs (JIDs) to communicate, which are similar to email addresses.  As with email, you can get a Jabber ID from one of <a href="../suggested_servers.html">many free and open servers</a>.</p>
 
-			<p id="jabber_client">And just like email, there are many different <a href="https://xmpp.org/software/clients.html">Jabber clients</a> available, so you can use Jabber from your phone (<a href="https://conversations.im/">Conversations</a> and <a href="https://siskin.im/">Siskin IM</a> are our recommended apps), <a href="https://fr.movim.eu/">the web</a>, and <a href="https://gajim.org/">your computer</a>.</p>
+			<p id="jabber_client">And just like email, there are many different <a href="https://xmpp.org/software/clients.html">Jabber clients</a> available, so you can use Jabber from your phone (<a href="https://conversations.im/">Conversations</a> and <a href="https://siskin.im/">Siskin IM</a> are our recommended apps), <a href="https://mov.im">the web</a>, and <a href="https://gajim.org/">your computer</a>.</p>
 			<p>Jabber is <a href="https://xmpp.org/about/history.html">long-standing</a>, widely-used, and privacy-focused.  If you have ever used <a href="https://developers.google.com/talk/open_communications">Google Chat</a>, HipChat, the pre-2016 Facebook Messenger, WhatsApp, Kik, <a href="https://movim.eu">Movim</a>, <a href="https://blog.process-one.net/google-cloud-messaging-update-boosted-by-xmpp/">Android Push Notifications</a>, or a private company chat server, then you have used <a href="https://xmpp.org/">XMPP</a>.</p>
 			<p>JMP extends the freedom of Jabber and the XMPP network to cell phone texting.</p>
 		</section>
@@ -67,7 +67,7 @@
 		<section id="about">
 			<h1>How do I learn more about JMP?</h1>
 
-			<p>All of the software that makes up JMP is <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">free and open source</a> software.  You can view, download, and modify the source code <a href="https://gitlab.com/users/ossguy/projects">here</a>.</p>
+			<p>All of the software that makes up JMP is <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">free and open source</a> software.  You can view, download, and modify the source code <a href="https://soprani.ca">here</a>.</p>
 			<p>For news about JMP, you can signup for our low-volume notification list <a href="https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news">here</a>. You can also <a href="https://twitter.com/JMP_chat">follow us on Twitter</a>.</p>
 		</section>
 
@@ -92,15 +92,17 @@
 		<section id="calling">
 			<h1>How do I make a phone call with my JMP number?</h1>
 
-			<p>Login to the SIP account that was provided during the signup process using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call. Currently JMP supports calling to Canada and the US.</p>
-			<p>If you don't have your SIP account information, you can reset your SIP account and receive the new password and other details using an XMPP ad-hoc command. For example, you can do this on a computer using your JID in <a href="https://fr.movim.eu/">Movim</a> and then clicking on cheogram.com in your contacts.  Under Actions, you can then choose "Reset SIP Account (if forgot password)".  The next page will show you your new SIP password as well as the SIP username and domain you can use to login.</p>
+			<p>Currently JMP supports calling to Canada and the US.</p>
+			<p>The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Siskin, Movim, or Gajim.  Simply add a contact just as you would for <a href="#sending">messaging</a> and then select the voice call option in your client.</a>
+			<p>Another way to make calls is to login to the SIP account that was provided during the signup process using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call.</p>
+			<p>If you don't have your SIP account information, you can reset your SIP account and receive the new password and other details by communicating with <a href="xmpp:cheogram.com">cheogram.com</a>, which should already be in your contacts.  In some clients you can find "Execute command" or "Actions" in the menus and select "Reset SIP Account" from there.  Otherwise send the message "help" and the bot will reply with a list of options.</p>
 		</section>
 
 		<section id="voicemail">
 			<h1>How does voicemail work?</h1>
 
 			<p>Calls will be delivered to voicemail if your SIP account (or forwarding number) is busy or not logged in.  Voicemails will be sent as messages to your XMPP client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).</p>
-			<p>If SIP or forwarding is setup, you can configure calls to be sent to voicemail after a certain number of rings by using an XMPP ad-hoc command, which is done (ie. on a computer, using your JID in <a href="https://fr.movim.eu/">Movim</a>) by clicking on cheogram.com in your contacts.  Under Actions, you can then choose to either "Configure Calls" (set the seconds until voicemail - a ring is about 5 seconds and "-1" means unlimited rings) or "Record Voicemail Greeting" (see below).</p>
+			<p>If SIP or forwarding is setup, you can configure calls to be sent to voicemail after a certain number of rings by using an XMPP ad-hoc command, which is done (ie. on a computer, using your JID in <a href="https://mov.im">Movim</a>) by clicking on cheogram.com in your contacts.  Under Actions, you can then choose to either "Configure Calls" (set the seconds until voicemail - a ring is about 5 seconds and "-1" means unlimited rings) or "Record Voicemail Greeting" (see below).</p>
 			<p>The default voicemail greeting is: "You have reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a message after the tone."  If your XMPP user <a href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or NICKNAME specified, then JMP will use that instead of "a user of <a href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc command (see above), which will call your SIP account (or forwarding number) to record the greeting.</p>
 		</section>
 
@@ -141,7 +143,8 @@
 		<section id="usage">
 			<h1>How many minutes and messages have I used this month?</h1>
 
-			<p>You can see how many minutes and outgoing messages you've used for each of the past several days or months, including a total, by sending 'u' to the <a href="#bot">JMP account bot</a> (Jabber ID <a href="xmpp:account@jmp.chat">account@jmp.chat</a>).  Without any parameters, it will reply with the last 31 days of usage.  You can show usage for a given day or range of days by specifying the day or start and end days after 'u' (i.e. 'u YYYYMMDD YYYYMMDD' for a range).</p>
+			<p>You can see how many minutes and outgoing messages you've used for each of the past several days or months, including a total, by sending 'u' to <a href="xmpp:cheogram.com">cheogram.com</a> which should already be in your contacts.</p>
+			<p>Alternately, you can see historical data from the JMP Account bot by adding <a href="xmpp:account@jmp.chat">account@jmp.chat</a> and sending a message with arguments specifying the day or start and end days after 'u' (i.e. 'u YYYYMMDD YYYYMMDD' for a range).</p>
 			<p>Note that usage is reported for <a href="https://en.wikipedia.org/wiki/Gregorian_calendar">Gregorian calendar</a> days using <a href="https://en.wikipedia.org/wiki/International_Atomic_Time">International Atomic Time (TAI)</a>.</p>
 			<p>Since JMP does not charge for nor count incoming message usage, only minutes and outgoing message usage are shown.</p>
 		</section>
@@ -149,8 +152,8 @@
 		<section id="bot">
 			<h1>How do I see my JMP number and change other settings?</h1>
 
-			<p>The <a href="xmpp:account@jmp.chat">JMP account bot</a> can be used to view and change a number of settings of your JMP account.  You can find the complete list of commands by typing "help" or any other word in a new conversation with the JMP account bot's Jabber ID (<a href="xmpp:account@jmp.chat">account@jmp.chat</a>) - feel free to add it to your contact list.</p>
-			<p>As an example, you can type 'n' to see your JMP number, or 'u' to see your usage for the past 31 days (per above).  You can also switch incoming calls to go to your XMPP client instead of your SIP client ('j enable') or set your outgoing Caller ID (<a href="https://en.wikipedia.org/wiki/Calling_Name_Presentation">CNAM</a>) using the 'm' command.</p>
+			<p><a href="xmpp:cheogram.com">cheogram.com</a> should already be in your contacts, and can be used to view and change a number of settings for your JMP account.  You can find a comple list of options by typing "help" in a new conversation with the bot, or get a wizard in supporting clients by looking for an "Execute Command" or "Actions" option.</p>
+			<p>If you do not have cheogram.com in your contacts and try to add it, it is just "cheogram.com" with no "@". Some clients will give a warning about adding such an address, please press "Add Anyway".</p>
 		</section>
 
 		<?php require dirname(__FILE__).'/../nav.php'; ?>
