@@ -246,11 +246,11 @@ href="https://godex.io/">Godex</a>.
 </p>
 
 <?php
-$customer_id = $redis->get('jmp_customer_id-' . $jid);
-if ($customer_id) {
-	$addresses = $redis->smembers('jmp_customer_btc_addresses-' . $customer_id);
-}
-if(!empty($addresses)) :
+	$customer_id = $redis->get('jmp_customer_id-' . $jid);
+	if ($customer_id) {
+		$addresses = $redis->smembers('jmp_customer_btc_addresses-' . $customer_id);
+	}
+	if(!empty($addresses)) :
 ?>
 <p>You may buy account credit by sending any amount of BTC to any of these
 addresses
@@ -264,7 +264,7 @@ transaction receiving at least 3 confirmations):</p>
 <?php endforeach; ?>
 </ul>
 <?php
-else :
+	else :
 ?>
 
 <p>
@@ -283,18 +283,7 @@ return here to try again.
 <form method="get" action="../upgrade4/" id="upgrade4">
 	<input type="hidden" name="bc_id" value="<?php echo $bc_id ?>" />
 	<input type="hidden" name="amount_sat" value="55000" />
-
-	<fieldset>
-		<legend>Choose a currency for your account balance</legend>
-		<label>
-			<input type="radio" name="currency" value="CAD" />
-			Canadian Dollars
-		</label>
-		<label>
-			<input type="radio" name="currency" value="USD" />
-			US Dollars
-		</label>
-	</fieldset>
+	<input type="hidden" name="currency" value="USD" />
 
 	<button type="submit" style="border: 0px none transparent;">
 		<img
