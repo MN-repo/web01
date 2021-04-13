@@ -192,7 +192,7 @@ US$34.99/year<br />
 </td></tr>
 <tr><td>
 
-<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+<form action="https://<?php echo $paypal_host; ?>/cgi-bin/webscr" method="post">
 <p style="text-align:center;">
 <input name="return" value="<?php
 echo $register_base_url;
@@ -219,7 +219,7 @@ US$2.99/month
 </td></tr>
 <tr><td>
 
-<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+<form action="https://<?php echo $paypal_host; ?>/cgi-bin/webscr" method="post">
 <p style="text-align:center;">
 <input name="return" value="<?php
 echo $register_base_url;
