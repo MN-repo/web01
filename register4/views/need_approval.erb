@@ -11,6 +11,8 @@ at least 0.25 mBTC, any extra BTC will extend your service proportionally):</p>
 	<button type="submit">Pay with Credit Card</button>
 </form>
 
+<p>or</p>
+
 <form method="get" action="../upgrade4/" id="upgrade4">
 	<input type="hidden" name="bc_id" value="<%= @jid %>" />
 	<input type="hidden" name="number" value="<%= @number %>" />
@@ -20,11 +22,11 @@ at least 0.25 mBTC, any extra BTC will extend your service proportionally):</p>
 	<fieldset>
 		<legend>Choose a currency for your account balance</legend>
 		<label>
-			<input type="radio" name="currency" value="CAD" />
+			<input type="radio" name="currency" value="CAD" required="required" />
 			Canadian Dollars
 		</label>
 		<label>
-			<input type="radio" name="currency" value="USD" />
+			<input type="radio" name="currency" value="USD" required="required" />
 			US Dollars
 		</label>
 	</fieldset>
