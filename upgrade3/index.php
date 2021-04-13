@@ -117,7 +117,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 	#  /forum/topic/paypal-updates-affecting-ipn-and-pdt-scripts
 	$options = array('http' => array(
 		'protocol_version'	=> 1.1,
-		'header'		=> "Host: www.sandbox.paypal.com\r\n".
+		'header'		=> "Host: $paypal_host\r\n".
 			"Content-type: application/x-www-form-urlencoded\r\n",
 		'method'		=> 'POST',
 		'content'		=> $postdata
@@ -125,7 +125,7 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 
 	$context = stream_context_create($options);
 	$result = file_get_contents(
-		'https://www.sandbox.paypal.com/cgi-bin/webscr',
+		'https://'.$paypal_host.'/cgi-bin/webscr',
 		false, $context);
 
 

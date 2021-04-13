@@ -183,7 +183,7 @@ US$34.99<br />
 </td></tr>
 <tr><td>
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<form action="https://<?php echo $paypal_host; ?>/cgi-bin/webscr" method="post">
 <p style="text-align:center;">
 <input name="return" value="<?php
 echo $register_base_url;
