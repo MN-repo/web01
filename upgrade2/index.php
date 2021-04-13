@@ -18,7 +18,7 @@
   You should have received a copy of the GNU Affero General Public License along
   with jmp-register.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
+<?php @include_once __DIR__ . '/../vendor/go.php'; ?>
 <html lang="en">
 <head>
 <meta charset="utf-8" />

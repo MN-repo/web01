@@ -13,3 +13,4 @@ gem 'sinatra'
 gem 'erubi'
 
 gem 'braintree'
+gem 'sentry-ruby'
