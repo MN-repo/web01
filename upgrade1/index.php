@@ -66,9 +66,9 @@ unlimited outgoing text and picture messages.
 </p>
 
 <p>
-If you'd like to use a payment method other than PayPal or cryptocurrency,
+If you'd like to use a payment method other than credit card or cryptocurrency,
 please <a
-href="../#payment">contact us</a>.  Otherwise please enter your JMP number or
+href="../faq/#payment">contact us</a>.  Otherwise please enter your JMP number or
 Jabber ID (JID) below:
 </p>
 

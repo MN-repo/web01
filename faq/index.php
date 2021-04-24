@@ -52,8 +52,8 @@
 			<p>JMP is available for the prices below, either at signup time or after a trial period of up to 30 days.  A trial period can be requested during the signup process and is granted at JMP's discretion.  During a trial period you can send up to 300 text or pictures messages and use up to 30 minutes of voice calls.  And you can receive as many text and picture messages as you like.  To see how many minutes and messages you've used, follow <a href="#usage">these instructions</a>.</p>
 			<p>At any time within the first 30 days of a trial period you can <a href="../upgrade1/">upgrade to a paid account</a> (or pay for JMP at signup time)  to send and receive unlimited text and picture messages, as well as use up to 120 minutes of voice calls per month.  JMP is currently in beta - the introductory rate for beta users is US$2.99 per month (or US$34.99 per year).</p>
 			<p>Once the beta period for JMP is over, the US$2.99/month and US$34.99/year subscriptions will still be available and will still have unlimited incoming SMS and MMS, but the number of outgoing SMS/MMS will be limited; other plans will be available.</p>
-			<p>You may cancel your subscription at any time (via PayPal or by <a href="#support">contacting the support team</a>). After cancellation (or after your trial period expires), your number will be reclaimed after 30 days unless you <a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a> it to another carrier.</p>
-			<p>The beta period will last until at least July 2021, and a new unlimited messaging plan will be made available once the beta period has ended.  After the beta period, additional <a href="#payment">non-PayPal methods of payment</a> will be made available.</p>
+			<p>You may cancel your subscription at any time (by <a href="#support">contacting the support team</a>). After cancellation (or after your trial period expires), your number will be reclaimed after 30 days unless you <a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a> it to another carrier.</p>
+			<p>The beta period will last until at least July 2021, and a new unlimited messaging plan will be made available once the beta period has ended.  After the beta period, additional <a href="#payment">methods of payment</a> will be made available.</p>
 		</section>
 
 		<section id="support">
@@ -108,7 +108,7 @@
 
 		<!-- FIXME: merge into #pricing? -->
 		<section id="payment">
-			<h1>Do I have to use PayPal to signup for JMP?</h1>
+			<h1>Do I have to use a credit card to signup for JMP?</h1>
 
 			<p>No.  Other payment methods are available.  For details, please contact our support team by sending a text message to <a href="sms:+14169938000">+1 416 993 8000</a> (Canada) or <a href="sms:+13127968000">+1 312 796 8000</a> (US) or send a private message to a moderator/owner in the JMP/Soprani.ca chatroom at <a href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a> (just ask in the room if it's unclear who the moderators are).</p>
 		</section>
