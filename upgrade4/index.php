@@ -110,30 +110,17 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	}
 
 	$amount = intval($_GET['amount_sat']) / 100000000;
-	$details = electrum_rpc('add_request', array(
-		'expiration' => 10800,
-		'amount'     => strval($amount),
-		'memo'       => 'payment_for_'.$customer_id
-	));
+	$details = electrum_rpc('createnewaddress', array());
 
 	if ($details === FALSE) {
-		error_log('pError - could not create payment request');
+		error_log('pError - could not create address');
 ?>
 <p>
 There was an error creating your payment request.  Please press Reload to try
 again or <a href="../upgrade1/">start from the beginning</a>.
 <?php
         } else {
-		# TODO: remove hack for payment attempt notify
-		$time = microtime(TRUE);
-		mail($notify_receiver_email,
-			'paying for '.htmlentities($_GET['bc_id']),
-			'amount: '.$_GET['amount_sat']."\n".
-			'email time: '.$time."\n".
-			'JSON: '.json_encode($details)
-		);
-
-		$address = $details['result']['address'];
+		$address = $details['result'];
 
 		$redis->sadd('jmp_customer_btc_addresses-'.$customer_id, $address);
 
@@ -161,7 +148,14 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 		));
 
 		if (empty($_GET['number']) or empty($_GET['sid'])) {
-			header('Location: '.$electrum_url_prefix.$address, TRUE, 303);
+?>
+<p>Send any amount of BTC to this address:</p>
+<kbd>
+<?php
+			echo $address;
+?>
+</kbd><p>You will be notified when your transaction has 3 confirmations.
+<?php
 		} else {
 			$redis->setEx(
 				'reg-sid_for-'.$customer_id,
@@ -172,13 +166,15 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			// Store the tel we're working with, for possible later use
 			$sessionTel = 'reg-session_tel-'.$_GET['sid'];
 			$redis->setEx($sessionTel, $key_ttl_seconds, $_GET['number']);
-
-			header('Location: '.$electrum_url_prefix.$address.
-				'&number='.urlencode($_GET['number']).'&sid='.
-				urlencode($_GET['sid']), TRUE, 303);
+?>
+<p>Send a minimum of 0.25 mBTC to this address:</p>
+<tt>
+<?php
+			echo $address;
+?>
+</tt><p>You will be notified when your transaction has 3 confirmations.
+<?php
 		}
-		ob_end_clean();
-		exit;
 	}
 }
 ?>
