@@ -169,10 +169,7 @@ Please press Back and enter just one of Jabber ID (JID) or JMP number.
 # TODO: above should be indented by another tab, but leave as-is for now
 }
 
-$customer_id = $redis->get('jmp_customer_id-' . $jid);
-if (!$customer_id) {
-	$customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
-}
+$customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
 
 if (!$customer_id) {
 	require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
@@ -220,6 +217,7 @@ options:
 			echo htmlspecialchars($_SERVER['HTTP_HOST']);
 			echo htmlspecialchars(dirname(dirname($_SERVER['REQUEST_URI'])));
 			echo '/upgrade3/?tx=card&amp;jmp-jid='.urlencode($jid);
+			echo '&amp;jmp-number='.urlencode($clean_jmpnum);
 		?>" />
 
 	<button type="submit">Pay with Credit Card</button>
