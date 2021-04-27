@@ -169,74 +169,75 @@ Please press Back and enter just one of Jabber ID (JID) or JMP number.
 # TODO: above should be indented by another tab, but leave as-is for now
 }
 
+$customer_id = $redis->get('jmp_customer_id-' . $jid);
+if (!$customer_id) {
+	$customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
+}
+
+if (!$customer_id) {
+	require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
+	$braintree = new Braintree\Gateway($braintree_config); // settings-jmp.php
+	$result = $braintree->customer()->create();
+	if (!$result->success) {
+		die('Could not create customer');
+	}
+
+	$customer_id = $result->customer->id;
+
+	$redis->setNx('jmp_customer_id-' . $jid, $customer_id);
+	$redis->setNx('jmp_customer_jid-' . $customer_id, $jid);
+}
+
+pg_connect('dbname=jmp');
+$customer = pg_query_params(
+	'SELECT count(1) AS count ' .
+	'FROM customer_plans ' .
+	'WHERE customer_id=$1 AND expires_at > NOW() LIMIT 1',
+	[$customer_id]
+);
+if ($customer) $customer = pg_fetch_object($customer);
+
 if ($print_success) {
+if (!$customer || $customer->count < 1) {
 ?>
 
 Once you've completed the payment process, you'll receive unlimited incoming and
 outgoing text and picture messages, and 120 minutes of voice calls per
-month.  If you'd like to use a payment method other than PayPal or
+month.  If you'd like to use a payment method other than credit card or
 cryptocurrency, please <a
-href="../#payment">contact us</a>.  Otherwise please choose one of these payment
+href="../faq/#payment">contact us</a>.  Otherwise please choose one of these payment
 options:
 </p>
 
-<table style=
-"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
->
-<tr><td style="vertical-align:top;">
-<p>
-annual subscription<br />
-US$34.99/year<br />
-(2.5% savings)
-</p>
-</td></tr>
-<tr><td>
+<?php $scheme = $_SERVER['HTTPS'] === 'on' ? "https" : "http"; ?>
+<form method="get"
+	action="https://pay.jmp.chat/<?php echo urlencode($cheo_jid); ?>/activate">
+	<input type="hidden" name="customer_id"
+		value="<?php echo htmlspecialchars($customer_id); ?>" />
+	<input type="hidden" name="return_to"
+		value="<?php
+			echo $scheme.'://';
+			echo htmlspecialchars($_SERVER['HTTP_HOST']);
+			echo htmlspecialchars(dirname(dirname($_SERVER['REQUEST_URI'])));
+			echo 'upgrade3/?tx=card&amp;jmp-jid='.urlencode($jid);
+		?>" />
 
-<form action="https://<?php echo $paypal_host; ?>/cgi-bin/webscr" method="post">
-<p style="text-align:center;">
-<input name="return" value="<?php
-echo $register_base_url;
-?>/upgrade3/?jmp-number=<?php
-echo urlencode($clean_jmpnum);
-?>&amp;jmp-jid=<?php
-echo urlencode($jid);
-?>" type="hidden" />
-<?php echo $paypal_tags_annual ?>
-</p>
+	<button type="submit">Pay with Credit Card</button>
 </form>
 
-</td></tr>
-</table>
-
-<table style=
-"margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
->
-<tr><td style="vertical-align:top;">
-<p>
-monthly subscription<br />
-US$2.99/month
-</p>
-</td></tr>
-<tr><td>
-
-<form action="https://<?php echo $paypal_host; ?>/cgi-bin/webscr" method="post">
-<p style="text-align:center;">
-<input name="return" value="<?php
-echo $register_base_url;
-?>/upgrade3/?jmp-number=<?php
-echo urlencode($clean_jmpnum);
-?>&amp;jmp-jid=<?php
-echo urlencode($jid);
-?>" type="hidden" />
-<?php echo $paypal_tags_monthly ?>
-</p>
-</form>
-
-</td></tr>
-</table>
+<?php
+} else {
+?>
+<p>Your account is fully paid-up.</p>
+<?php } ?>
 
 <p>
-You can also pay for your JMP account in Bitcoin.  If you'd
+<?php if (!$customer || $customer->count < 1) : ?>
+You can also pay for your JMP account in Bitcoin.
+<?php else : ?>
+You can top-up your JMP account balance by depositing Bitcoin.
+<?php endif; ?>
+If you'd
 prefer to pay with an anonymous cryptocurrency like Monero or most other
 cryptocurrencies, you can use a service like <a
 href="https://simpleswap.io/">SimpleSwap</a>, <a
@@ -246,10 +247,7 @@ href="https://godex.io/">Godex</a>.
 </p>
 
 <?php
-	$customer_id = $redis->get('jmp_customer_id-' . $jid);
-	if ($customer_id) {
-		$addresses = $redis->smembers('jmp_customer_btc_addresses-' . $customer_id);
-	}
+	$addresses = $redis->smembers('jmp_customer_btc_addresses-' . $customer_id);
 	if(!empty($addresses)) :
 ?>
 <p>You may buy account credit by sending any amount of BTC to any of these

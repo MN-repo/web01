@@ -71,89 +71,89 @@ href="xmpp:discuss@conference.soprani.ca?join">discuss@conference.soprani.ca</a>
 } else {
 	include '../../../../settings-jmp.php';
 
-	$redis = new Redis();
-	$redis->pconnect($redis_host, $redis_port);
-	if (!empty($redis_auth)) {
-		# TODO: check return value to confirm login successful
-		$redis->auth($redis_auth);
-	}
-
-
-	# log the GET params - put in a variable keyed on transaction ID
-	$pLog = '';
-	$pLog .= microtime(true);
-	$pLog .= "\n";
-	foreach ($_GET as $get_key => $get_item) {
-		if (is_array($get_item)) {
-			foreach ($get_item as $array_item) {
-				$pLog .= "$get_key: $get_item, $array_item\n";
-			}
-		} else {
-			$pLog .= "$get_key: $get_item\n";
+	if($_GET['tx'] != 'card') {
+		$redis = new Redis();
+		$redis->pconnect($redis_host, $redis_port);
+		if (!empty($redis_auth)) {
+			# TODO: check return value to confirm login successful
+			$redis->auth($redis_auth);
 		}
-	}
 
-	$logParamsKey = 'log-paypal_log_params-'.$_GET['tx'];
-	$redis->rPush($logParamsKey, $pLog);
-
-
-	# setup mappings so that it's easy to get to the logs given various IDs
-	# NOTE: JID or number will be empty, so the "..to_tx-" list'll get large
-	$jidLinkKey = 'log-jid_to_tx-'.$_GET['jmp-jid'];
-	$redis->rPush($jidLinkKey, $_GET['tx']);
-
-	$jpnLinkKey = 'log-jpn_to_tx-'.$_GET['jmp-number'];
-	$redis->rPush($jpnLinkKey, $_GET['tx']);
-
-
-	# first do the PDT verification to ensure user actually paid for service
-	$postdata = http_build_query(array(
-		'cmd'	=> '_notify-synch',
-		'tx'	=> $_GET['tx'],
-		'at'	=> $paypal_pdt_token
-	));
-
-	# HTTP/1.1 (and Host:) is required per http://www.tipsandtricks-hq.com
-	#  /forum/topic/paypal-updates-affecting-ipn-and-pdt-scripts
-	$options = array('http' => array(
-		'protocol_version'	=> 1.1,
-		'header'		=> "Host: $paypal_host\r\n".
-			"Content-type: application/x-www-form-urlencoded\r\n",
-		'method'		=> 'POST',
-		'content'		=> $postdata
-	));
-
-	$context = stream_context_create($options);
-	$result = file_get_contents(
-		'https://'.$paypal_host.'/cgi-bin/webscr',
-		false, $context);
-
-
-	# log the results string - put in a variable keyed on transaction ID
-	$rLog = '';
-	$rLog .= microtime(true);
-	$rLog .= "\n";
-	if ($result === FALSE) {
-		$rLog .= "[FALSE]\n";
-
-		foreach ($http_response_header as $k => $header_line) {
-			if (is_array($header_line)) {
-				foreach ($header_line as $k_item) {
-					$rLog .= "$k: $header_line, $k_item\n";
+		# log the GET params - put in a variable keyed on transaction ID
+		$pLog = '';
+		$pLog .= microtime(true);
+		$pLog .= "\n";
+		foreach ($_GET as $get_key => $get_item) {
+			if (is_array($get_item)) {
+				foreach ($get_item as $array_item) {
+					$pLog .= "$get_key: $get_item, $array_item\n";
 				}
 			} else {
-				$rLog .= "$k: $header_line\n";
+				$pLog .= "$get_key: $get_item\n";
 			}
 		}
-	} else {
-		$rLog .= $result;
+
+		$logParamsKey = 'log-paypal_log_params-'.$_GET['tx'];
+		$redis->rPush($logParamsKey, $pLog);
+
+
+		# setup mappings so that it's easy to get to the logs given various IDs
+		# NOTE: JID or number will be empty, so the "..to_tx-" list'll get large
+		$jidLinkKey = 'log-jid_to_tx-'.$_GET['jmp-jid'];
+		$redis->rPush($jidLinkKey, $_GET['tx']);
+
+		$jpnLinkKey = 'log-jpn_to_tx-'.$_GET['jmp-number'];
+		$redis->rPush($jpnLinkKey, $_GET['tx']);
+
+
+		# first do the PDT verification to ensure user actually paid for service
+		$postdata = http_build_query(array(
+			'cmd'	=> '_notify-synch',
+			'tx'	=> $_GET['tx'],
+			'at'	=> $paypal_pdt_token
+		));
+
+		# HTTP/1.1 (and Host:) is required per http://www.tipsandtricks-hq.com
+		#  /forum/topic/paypal-updates-affecting-ipn-and-pdt-scripts
+		$options = array('http' => array(
+			'protocol_version'	=> 1.1,
+			'header'		=> "Host: $paypal_host\r\n".
+				"Content-type: application/x-www-form-urlencoded\r\n",
+			'method'		=> 'POST',
+			'content'		=> $postdata
+		));
+
+		$context = stream_context_create($options);
+		$result = file_get_contents(
+			'https://'.$paypal_host.'/cgi-bin/webscr',
+			false, $context);
+
+
+		# log the results string - put in a variable keyed on transaction ID
+		$rLog = '';
+		$rLog .= microtime(true);
+		$rLog .= "\n";
+		if ($result === FALSE) {
+			$rLog .= "[FALSE]\n";
+
+			foreach ($http_response_header as $k => $header_line) {
+				if (is_array($header_line)) {
+					foreach ($header_line as $k_item) {
+					$rLog .= "$k: $header_line, $k_item\n";
+					}
+				} else {
+					$rLog .= "$k: $header_line\n";
+				}
+			}
+		} else {
+			$rLog .= $result;
+		}
+
+		$logResultKey = 'log-paypal_log_result-'.$_GET['tx'];
+		$redis->rPush($logResultKey, $rLog);
 	}
 
-	$logResultKey = 'log-paypal_log_result-'.$_GET['tx'];
-	$redis->rPush($logResultKey, $rLog);
-
-
-	if ($result === FALSE || substr($result, 0, 7) != 'SUCCESS') {
+	if ($_GET['tx'] != 'card' && ($result === FALSE || substr($result, 0, 7) != 'SUCCESS')) {
 ?>
 The payment was not received or there was an error verifying your transaction.
 It is unlikely that a payment was charged, but it would help to confirm this.
