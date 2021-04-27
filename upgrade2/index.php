@@ -142,7 +142,7 @@ enter a JMP number or use your Jabber ID (JID) instead.
 		$bc_id = '1'.$clean_jmpnum;
 		$clean_jmpnum = '+1'.$clean_jmpnum;
 
-		if ($jid = $redis->get('catapult_jid-'.$clean_jmpnum)) {
+		if ($cheo_jid = $redis->get('catapult_jid-'.$clean_jmpnum)) {
 			$print_success = TRUE;
 ?>
 To confirm, you'd like to upgrade the JMP account with JMP number
@@ -184,8 +184,8 @@ if (!$customer_id) {
 
 	$customer_id = $result->customer->id;
 
-	$redis->setNx('jmp_customer_id-' . $jid, $customer_id);
-	$redis->setNx('jmp_customer_jid-' . $customer_id, $jid);
+	$redis->setNx('jmp_customer_id-' . $cheo_jid, $customer_id);
+	$redis->setNx('jmp_customer_jid-' . $customer_id, $cheo_jid);
 }
 
 pg_connect('dbname=jmp');
