@@ -80,6 +80,33 @@
 				width: 18rem;
 				height: 14rem;
 			}
+
+			.ribbon {
+				width: 10em;
+				height: 10em;
+				overflow: hidden;
+				position: absolute;
+				top: -1em;
+				right: -1em;
+			}
+			.ribbon span {
+				position: absolute;
+				display: block;
+				left: -1em;
+				top: 2em;
+				transform: rotate(45deg);
+				width: 15em;
+				padding: 1em 0;
+				background-color: #00a;
+				box-shadow: 0 5px 10px rgba(0,0,0,.1);
+				color: #fff;
+				text-shadow: 0 1px 1px rgba(0,0,0,.2);
+				text-align: center;
+				font-weight: bold;
+			}
+			@media (max-width: 25rem) {
+				.ribbon { display: none; }
+			}
 		</style>
 
 		<script type="text/javascript">
@@ -135,5 +162,9 @@
 
 		<?php $at_root = true; ?>
 		<?php require dirname(__FILE__).'/nav.php'; ?>
+
+		<a class="ribbon" href="faq/#support">
+			<span>Support</span>
+		</a>
 	</body>
 </html>
