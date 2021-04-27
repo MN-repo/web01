@@ -219,7 +219,7 @@ options:
 			echo $scheme.'://';
 			echo htmlspecialchars($_SERVER['HTTP_HOST']);
 			echo htmlspecialchars(dirname(dirname($_SERVER['REQUEST_URI'])));
-			echo 'upgrade3/?tx=card&amp;jmp-jid='.urlencode($jid);
+			echo '/upgrade3/?tx=card&amp;jmp-jid='.urlencode($jid);
 		?>" />
 
 	<button type="submit">Pay with Credit Card</button>
