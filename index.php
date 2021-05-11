@@ -21,7 +21,7 @@
 		<meta property="og:description" content="Your phone number on every device" />
 		<meta property="og:image" content="https://jmp.chat/static/card.png" />
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta property="twitter:site" content="@JMP_chat" />
+		<meta name="twitter:site" content="@JMP_chat" />
 
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<style type="text/css">
