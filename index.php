@@ -5,6 +5,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>JMP: Your phone number on every device</title>
 
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"url": "https://jmp.chat",
+			"logo": "https://jmp.chat/static/jmp.svg",
+			"telephone": "+14169938000",
+			"slogan": "Your phone number on every device"
+		}
+		</script>
+		<meta property="og:url" content="https://jmp.chat" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="JMP.chat" />
+		<meta property="og:description" content="Your phone number on every device" />
+		<meta property="og:image" content="https://jmp.chat/static/card.png" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta property="twitter:site" content="@JMP_chat" />
+
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<style type="text/css">
 			h1 {
