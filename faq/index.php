@@ -42,7 +42,7 @@
 			<h1 property="name">What's this Jabber thing?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>XMPP (formerly Jabber) is a <a href="https://en.wikipedia.org/wiki/Federation_%28information_technology%29">federated protocol</a> and <a href="https://singpolyma.net/2009/01/beasts-of-the-standards-world/">open standard</a> for messaging.  It uses Jabber IDs (JIDs) to communicate, which are similar to email addresses.  As with email, you can get a Jabber ID from one of <a href="../suggested_servers.html">many free and open servers</a>.</p>
+				<p>Jabber (and the underlying technology, XMPP) is a <a href="https://en.wikipedia.org/wiki/Federation_%28information_technology%29">federated protocol</a> and <a href="https://singpolyma.net/2009/01/beasts-of-the-standards-world/">open standard</a> for messaging.  It uses Jabber IDs (JIDs) to communicate, which are similar to email addresses.  As with email, you can get a Jabber ID from one of <a href="../suggested_servers.html">many free and open servers</a>.</p>
 
 				<p id="jabber_client">And just like email, there are many different <a href="https://xmpp.org/software/clients.html">Jabber clients</a> available, so you can use Jabber from your phone (<a href="https://conversations.im/">Conversations</a> and <a href="https://siskin.im/">Siskin IM</a> are our recommended apps), <a href="https://mov.im">the web</a>, and <a href="https://gajim.org/">your computer</a>.</p>
 				<p>Jabber is <a href="https://xmpp.org/about/history.html">long-standing</a>, widely-used, and privacy-focused.  If you have ever used <a href="https://developers.google.com/talk/open_communications">Google Chat</a>, HipChat, the pre-2016 Facebook Messenger, WhatsApp, Kik, <a href="https://movim.eu">Movim</a>, <a href="https://blog.process-one.net/google-cloud-messaging-update-boosted-by-xmpp/">Android Push Notifications</a>, or a private company chat server, then you have used <a href="https://xmpp.org/">XMPP</a>.</p>
@@ -129,9 +129,9 @@
 			<h1 property="name">How does voicemail work?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>Calls will be delivered to voicemail if your SIP account (or forwarding number) is busy or not logged in.  Voicemails will be sent as messages to your XMPP client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).</p>
+				<p>Calls will be delivered to voicemail if your SIP account (or forwarding number) is busy or not logged in.  Voicemails will be sent as messages to your Jabber client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).</p>
 				<p>If SIP or forwarding is setup, you can configure calls to be sent to voicemail after a certain number of rings by using a command <a href="#bot">via bot or client UI</a>.</p>
-				<p>The default voicemail greeting is: "You have reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a message after the tone."  If your XMPP user <a href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or NICKNAME specified, then JMP will use that instead of "a user of <a href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc command (see above), which will call your SIP account (or forwarding number) to record the greeting.</p>
+				<p>The default voicemail greeting is: "You have reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a message after the tone."  If your Jabber ID <a href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or NICKNAME specified, then JMP will use that instead of "a user of <a href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc command (see above), which will call your SIP account (or forwarding number) to record the greeting.</p>
 			</div></div>
 		</section>
 
@@ -153,20 +153,20 @@
 		</section>
 
 		<section id="clients" property="mainEntity" typeof="Question">
-			<h1 property="name">Which XMPP clients are supported?</h1>
+			<h1 property="name">Which Jabber clients are supported?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>You can use any XMPP client you like.  If a client doesn't work for some reason, please <a href="https://gitlab.com/ossguy/sgx-catapult/issues">file a ticket</a> or <a href="#support">discuss it with the team</a>.  JMP is normally tested with <a href="https://gajim.org/">Gajim</a> and <a href="https://conversations.im/">Conversations</a>, since they both support the needed XEPs for JMP's complete feature set (which includes XEP-0184, XEP-0234, and XEP-0261, among others).</p>
-				<p>The XMPP clients mentioned above are known to work correctly with JMP.  If you choose to use a different XMPP client, it may not receive messages from phone numbers that are new to you by default.  Please see <a href="#blocking">the section on message blocking</a> for more details.</p>
+				<p>You can use any Jabber client you like.  If a client doesn't work for some reason, please <a href="https://gitlab.com/ossguy/sgx-catapult/issues">file a ticket</a> or <a href="#support">discuss it with the team</a>.  JMP is normally tested with <a href="https://gajim.org/">Gajim</a> and <a href="https://conversations.im/">Conversations</a>, since they both support the needed XEPs for JMP's complete feature set (which includes XEP-0184, XEP-0234, and XEP-0261, among others).</p>
+				<p>The Jabber clients mentioned above are known to work correctly with JMP.  If you choose to use a different Jabber client, it may not receive messages from phone numbers that are new to you by default.  Please see <a href="#blocking">the section on message blocking</a> for more details.</p>
 			</div></div>
 		</section>
 
 		<section id="servers" property="mainEntity" typeof="Question">
-			<h1 property="name">Which XMPP servers are supported?</h1>
+			<h1 property="name">Which Jabber servers are supported?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>You can use any federated XMPP server, though we specifically recommend those on <a href="../suggested_servers.html">our suggested servers list</a> since we have confirmed that those servers generally support the features that JMP requires.</p>
-				<p>The XMPP servers mentioned in <a href="../suggested_servers.html">our suggested servers list</a> are known to work correctly with JMP.  If you choose to use a different XMPP server, it may not receive messages from phone numbers that are new to you by default.  Please see <a href="#blocking">the section on message blocking</a> for more details.</p>
+				<p>You can use any federated Jabber server, though we specifically recommend those on <a href="../suggested_servers.html">our suggested servers list</a> since we have confirmed that those servers generally support the features that JMP requires.</p>
+				<p>The Jabber servers mentioned in <a href="../suggested_servers.html">our suggested servers list</a> are known to work correctly with JMP.  If you choose to use a different Jabber server, it may not receive messages from phone numbers that are new to you by default.  Please see <a href="#blocking">the section on message blocking</a> for more details.</p>
 			</div></div>
 		</section>
 
@@ -175,7 +175,7 @@
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
 				<p>If you are not using one of the <a href="../suggested_servers.html">suggested servers</a> or clients listed above, then it is possible your client or server silently blocks message from numbers/contacts not in your contact list (roster). We have most often seen this problem with servers (rather than clients), so check with your server operator first if you are not receiving text messages from phone numbers you haven't <a href="#sending">added to your contact list</a> yet.</p>
-				<p>If that does not resolve the problem, please feel free to <a href="https://gitlab.com/ossguy/sgx-catapult/issues">file a ticket</a> or <a href="#support">discuss it with the team</a> (we can help determine where the issue might be and, if you like, switch your JMP number to a different Jabber ID if want to switch XMPP servers).  Be sure to note which XMPP client you are using, and ideally which server as well.  We want to make sure that JMP works with as many XMPP clients and servers as possible!</p>
+				<p>If that does not resolve the problem, please feel free to <a href="https://gitlab.com/ossguy/sgx-catapult/issues">file a ticket</a> or <a href="#support">discuss it with the team</a> (we can help determine where the issue might be and, if you like, switch your JMP number to a different Jabber ID if want to switch Jabber servers).  Be sure to note which Jabber client you are using, and ideally which server as well.  We want to make sure that JMP works with as many Jabber clients and servers as possible!</p>
 			</div></div>
 		</section>
 
