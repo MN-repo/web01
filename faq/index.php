@@ -170,6 +170,15 @@
 			</div></div>
 		</section>
 
+
+		<section id="gateway" property="mainEntity" typeof="Question">
+			<h1 property="name">What is a Gateway?</h1>
+
+			<div property="acceptedAnswer" typeof="Answer"><div property="text">
+				<p>A Jabber or XMPP gateway or transport is a service that can be used to connect from your Jabber ID to other communications networks.  There exist gateways for most known communication systems.  JMP is, among other things, a Jabber SMS transport.</p>
+			</div></div>
+		</section>
+
 		<section id="blocking" property="mainEntity" typeof="Question">
 			<h1 property="name">Why might I not be receiving certain messages?</h1>
 
