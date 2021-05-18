@@ -23,7 +23,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>JMP - JIDs for Messaging with Phones - Upgrade</title>
+<title>JMP: Pay for your account</title>
+<link rel="stylesheet" type="text/css" href="../style.css" />
 <style type="text/css">
 	dt { font-weight: bold }
 	dd { margin-top: 5px; margin-bottom: 10px }
@@ -51,7 +52,7 @@
 	}
 </style>
 </head>
-<body style="padding: 0 5%;">
+<body>
 <div style="text-align:center;">
 <a href="../"><img src="../static/jmp_beta.png" alt="JMP - beta" /></a>
 <h3>Upgrade to a paid JMP account</h3>
@@ -107,8 +108,8 @@ JIDs - please press Back and enter a valid JID or use your JMP number instead.
 		if ($redis->exists('catapult_cred-'.$cheo_jid)) {
 			$print_success = TRUE;
 ?>
-You've chosen to upgrade the JMP account with Jabber ID (JID)
-"<?php echo htmlentities($jid) ?>" to a paid JMP account.  If that JID looks
+You've chosen to pay for the JMP account with Jabber ID (JID)
+"<?php echo htmlentities($jid) ?>".  If that JID looks
 correct, then you can continue with payment.  Otherwise press Back to use a
 different JID or JMP number.
 </p>
@@ -118,7 +119,7 @@ different JID or JMP number.
 ?>
 It doesn't look like you're a JMP user yet (given your Jabber ID (JID),
 "<?php echo htmlentities($jid) ?>").  Please feel free to <a href="../">signup
-for JMP</a> - you can return here and upgrade to a paid account after that.
+for JMP</a>.
 <?php
 		}
 	}
@@ -145,8 +146,8 @@ enter a JMP number or use your Jabber ID (JID) instead.
 		if ($cheo_jid = $redis->get('catapult_jid-'.$clean_jmpnum)) {
 			$print_success = TRUE;
 ?>
-To confirm, you'd like to upgrade the JMP account with JMP number
-<?php echo $clean_jmpnum ?> to a paid JMP account.  If that JMP number looks
+To confirm, you'd like to pay for the JMP account with JMP number
+<?php echo $clean_jmpnum ?>.  If that JMP number looks
 correct, then you can continue with payment.  Otherwise, press Back to use a
 different JID or JMP number.
 </p>
@@ -156,8 +157,7 @@ different JID or JMP number.
 ?>
 The number you entered (<?php echo $clean_jmpnum ?>) doesn't appear to be a JMP
 number.  If you'd like to get a JMP number, please feel free to
-<a href="../">signup for JMP</a> - you can return here and upgrade to a paid
-account after that.
+<a href="../">signup for JMP</a>.
 <?php
 		}
 	}
@@ -297,13 +297,7 @@ return here to try again.
 ?>
 </p>
 
-<hr />
+<?php require dirname(__FILE__).'/../nav.php'; ?>
 
-<p>
-Copyright &copy; 2017, 2020 <a href="https://ossguy.com/">Denver Gingerich</a> and
-others.  jmp-register is licensed under AGPLv3+.
-You can download the Complete Corresponding Source code <a
-href="https://gitlab.com/ossguy/jmp-register">here</a>.
-</p>
 </body>
 </html>

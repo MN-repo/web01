@@ -23,7 +23,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>JMP - JIDs for Messaging with Phones - Upgrade</title>
+<title>JMP: Pay for your account</title>
 <link rel="stylesheet" type="text/css" href="../style.css" />
 <style type="text/css">
 	#signup_bottom {
@@ -36,33 +36,23 @@
 	}
 </style>
 </head>
-<body style="padding: 0 5%;">
+<body>
 <h1><a href="../"><img src="../static/jmp_beta.png" alt="JMP - beta" /></a></h1>
-<h1>Upgrade to a paid JMP account</h1>
+<h1>Pay for your JMP account</h1>
 
 <p>
-If you're happy with your <a href="../">JMP</a> free trial so far, you can
-upgrade to a paid account at any time within the first 30 days.  There are
-currently four options for paid accounts: US$2.99/month or US$34.99/year (a 2.5%
-savings), or <abbr title="0.00055 Bitcoin">0.55 mBTC</abbr> for 1 year, <abbr
-title="0.00155 Bitcoin">1.55 mBTC</abbr> for 3 years (a 6% savings).
+You can pay for your JMP account using this page, either via credit card or Bitcoin.
+Activating an account via credit card currently requires US$15.00 (5 months),
+there will be options to top-up larger amounts later.
+Bitcoin users can top-up their account by sending any amount of Bitcoin to the
+addresses associated with their account at any time.
 </p>
 
 <p>
-Once you've completed the payment process, you'll receive unlimited incoming and
-outgoing text and picture messages, and 120 minutes of voice calls per
-month.
-</p>
-
-<p>
-Note that unlimited text and picture messages will last for the duration of the
-payment period that you choose.  After that, if JMP is still in beta (as it will
-be until at least July 2021), your account will auto-renew with unlimited text
-and picture messages.  If JMP is no longer in beta, then your account will be
-automatically updated to a new account type with limited outgoing text and
-picture messages, but will keep unlimited incoming text and picture messages.
-There will be other account options at that time if you wish to keep the
-unlimited outgoing text and picture messages.
+During the beta, JMP is $2.99 USD / month or $3.59 CAD / month,
+billed out of the balance on your account.  Paid beta accounts get unlimited
+incoming and outgoing text and picture messages, and 120 minutes of voice calls
+per month.
 </p>
 
 <p>
@@ -93,15 +83,6 @@ Jabber ID (JID) below:
 </table>
 
 <?php require dirname(__FILE__).'/../nav.php'; ?>
-
-<hr />
-
-<p>
-Copyright &copy; 2017 <a href="https://ossguy.com/">Denver Gingerich</a> and
-others.  jmp-register is licensed under AGPLv3+.
-You can download the Complete Corresponding Source code <a
-href="https://gitlab.com/ossguy/jmp-register">here</a>.
-</p>
 
 </body>
 </html>
