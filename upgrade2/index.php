@@ -273,7 +273,7 @@ return here to try again.
 "margin-left:auto;margin-right:auto;text-align:center;border-spacing:8rem 0rem;"
 >
 <tr><td style="vertical-align:top;">
-<p>JMP account credit (0.55 mBTC or more)</p>
+<p>JMP account credit</p>
 </td></tr>
 <tr><td>
 <form method="get" action="../upgrade4/" id="upgrade4">
