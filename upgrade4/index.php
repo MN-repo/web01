@@ -167,7 +167,7 @@ again or <a href="../upgrade1/">start from the beginning</a>.
 			$sessionTel = 'reg-session_tel-'.$_GET['sid'];
 			$redis->setEx($sessionTel, $key_ttl_seconds, $_GET['number']);
 ?>
-<p>Send a minimum of 0.25 mBTC to this address:</p>
+<p>Send a minimum of 0.0005 BTC to this address:</p>
 <tt>
 <?php
 			echo $address;
