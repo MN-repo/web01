@@ -461,7 +461,7 @@ module BApp
 		msg.add_child(f)
 
 		i = Blather::Stanza::Iq::Command.new(:set,
-			'configure-direct-message-route', action)
+			'register', action)
 
 		if not sid.empty?
 			i.command['sessionid'] = sid
