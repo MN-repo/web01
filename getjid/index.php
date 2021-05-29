@@ -11,7 +11,8 @@
 				margin-top: 3em;
 			}
 
-			a[href="https://dismail.de/register.html"] {
+			a#chatterboxtown {
+				font-size: 3em;
 				display: block;
 				text-align: center;
 			}
@@ -63,7 +64,17 @@
 
 		<p>A Jabber ID is an account identifier similar to an email address.  It is what you will log into your Jabber client with and how you will send and receive text messages with your new phone number.  You can use a Jabber ID from any standards-compliant service with JMP.</p>
 
-		<a href="https://dismail.de/register.html" target="_blank"><img src="../static/dismail.png" alt="Get it on dismail.de" /></a>
+		<a
+			id="chatterboxtown"
+			href="https://chatterboxtown.us:5443/register/new/"
+			target="_blank"
+		>
+			Get one from ChatterboxTown
+		</a>
+		<script type="text/javascript">
+			document.querySelector("#chatterboxtown").href =
+				"https://movim.chatterboxtown.us/?account";
+		</script>
 
 		<section>
 			<h1>Step 2: Sign in with your new Jabber ID using a Jabber app</h1>
