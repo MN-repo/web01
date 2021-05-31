@@ -95,7 +95,7 @@ space or quotation mark (").  Spaces and quotation marks are not allowed in bare
 JIDs - please press Back and enter a valid JID or use your JMP number instead.
 <?php
 	} else {
-		$bc_id = urlencode($jid);
+		$bc_id = $jid;
 
 		# TODO: XEP-0106 Sec 4.3 compliance; won't work with pre-escaped
 		$ej_search  = array('\\',  ' ',   '"',   '&',   "'",   '/',
@@ -277,7 +277,7 @@ return here to try again.
 </td></tr>
 <tr><td>
 <form method="get" action="../upgrade4/" id="upgrade4">
-	<input type="hidden" name="bc_id" value="<?php echo $bc_id ?>" />
+	<input type="hidden" name="bc_id" value="<?php echo htmlspecialchars($bc_id); ?>" />
 	<input type="hidden" name="amount_sat" value="55000" />
 	<input type="hidden" name="currency" value="USD" />
 
