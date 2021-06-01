@@ -170,6 +170,13 @@
 			</div></div>
 		</section>
 
+		<section id="voip" property="mainEntity" typeof="Question">
+			<h1 property="name">Is JMP a VoIP Provider?</h1>
+
+			<div property="acceptedAnswer" typeof="Answer"><div property="text">
+				<p><abbr title="Voice over IP">VoIP</abbr> is a term used to describe any system where bidirectional voice communication happens over the Internet.  It is sometimes used specifically to describe services which provide telephone numbers linked to voice communication operating over the Internet.  Since JMP does offer phone numbers which can both make and receive voice calls using the Internet, it would be accurate to say that JMP is a free and open source VoIP provider.  JMP is much more than this, however, also providing best-in-class access to SMS, MMS, and other more "mobile phone" related services.</p>
+			</div></div>
+		</section>
 
 		<section id="gateway" property="mainEntity" typeof="Question">
 			<h1 property="name">What is a Gateway?</h1>
