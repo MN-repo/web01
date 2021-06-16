@@ -127,10 +127,13 @@
 				font-weight: bold;
 				font-size: 1.2em;
 				text-decoration: none;
+				transition: color 0.25s ease-in-out;
 			}
 
-			.price:hover {
-				color: #2069cf;
+			@media (hover: hover) {
+				.price:hover {
+					color: #2069cf;
+				}
 			}
 
 			iframe {
@@ -163,6 +166,12 @@
 				text-shadow: 0 1px 1px rgba(0,0,0,.2);
 				text-align: center;
 				font-weight: bold;
+				transition: color 0.25s ease-in-out;
+			}
+			@media (hover: hover) {
+				.ribbon span:hover {
+					color: #2069cf;
+				}
 			}
 			@media (max-width: 25rem) {
 				.ribbon { display: none; }
