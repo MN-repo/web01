@@ -15,6 +15,32 @@
 			"slogan": "Your phone number on every device"
 		}
 		</script>
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org/",
+			"@type": "Product",
+			"name": "Phone Number",
+			"image": ["https://jmp.chat/static/jmp.svg"],
+			"brand": {
+				"@type": "Brand",
+				"name": "JMP"
+			},
+			"offers": [
+				{
+					"@type": "Offer",
+					"url": "https://jmp.chat",
+					"priceCurrency": "USD",
+					"price": "2.99"
+				},
+				{
+					"@type": "Offer",
+					"url": "https://jmp.chat",
+					"priceCurrency": "CAD",
+					"price": "3.59"
+				}
+			]
+		}
+		</script>
 		<meta property="og:url" content="https://jmp.chat" />
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="JMP.chat" />
