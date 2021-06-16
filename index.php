@@ -119,7 +119,7 @@
 
 			.price {
 				background: #84C7F7;
-				color: #1e0036;
+				color: #1E0036;
 				border-radius: 2em;
 				padding: 1em;
 				margin-bottom: 2em;

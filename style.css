@@ -32,6 +32,21 @@ h1 {
 	font-family: 'Archivo Black', sans-serif;
 }
 
+a {
+	color: #2069cf;
+}
+
+a:visited {
+	color: #1e0038;
+}
+
+@media (hover: hover) {
+	a:hover {
+		color: #7401cf;
+		transition: color 0.25s ease-in-out;
+	}
+}
+
 body > h1 {
 	text-align: center;
 	margin-top: 0;
@@ -70,7 +85,8 @@ body > nav li {
 	list-style-type: none;
 }
 
-body > nav li a {
+body > nav li a,
+body > nav li a:visited {
 	display: block;
 	text-decoration: none;
 	padding: 0.5em 1em 0.5em;
@@ -80,6 +96,7 @@ body > nav li a {
 @media (hover: hover) {
 	body > nav li a:hover {
 		background-color: #aaa;
+		color: black;
 	}
 }
 
