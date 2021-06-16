@@ -157,9 +157,9 @@
 				transform: rotate(45deg);
 				width: 15em;
 				padding: 1em 0;
-				background-color: #00a;
+				background-color: #84C7F7;
 				box-shadow: 0 5px 10px rgba(0,0,0,.1);
-				color: #fff;
+				color: #1e0036;
 				text-shadow: 0 1px 1px rgba(0,0,0,.2);
 				text-align: center;
 				font-weight: bold;
