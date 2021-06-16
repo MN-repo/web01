@@ -218,9 +218,9 @@
 		<section id="signup">
 			<a href="faq/#pricing" class="price">
 			<?php if(geoip_country_code_by_name($_SERVER['REMOTE_ADDR']) == "CA") : ?>
-				🇨🇦 $3.59 / month
+				$3.59 / month
 			<?php else : ?>
-				🇺🇸 $2.99 / month
+				$2.99 / month
 			<?php endif; ?>
 			</a>
 
