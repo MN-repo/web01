@@ -91,6 +91,22 @@
 				background-image: url(static/share.svg);
 			}
 
+			.price {
+				background: #84C7F7;
+				color: #1e0036;
+				border-radius: 2em;
+				padding: 1em;
+				margin-bottom: 2em;
+				display: inline-block;
+				font-weight: bold;
+				font-size: 1.2em;
+				text-decoration: none;
+			}
+
+			.price:hover {
+				color: #2069cf;
+			}
+
 			iframe {
 				display: block;
 				margin: 0 auto;
@@ -165,6 +181,14 @@
 		</section>
 
 		<section id="signup">
+			<a href="faq/#pricing" class="price">
+			<?php if(geoip_country_code_by_name($_SERVER['REMOTE_ADDR']) == "CA") : ?>
+				🇨🇦 $3.59 / month
+			<?php else : ?>
+				🇺🇸 $2.99 / month
+			<?php endif; ?>
+			</a>
+
 			<h1>Start by choosing a phone number to use</h1>
 
 			<iframe src="register1/num_find.php"></iframe>
