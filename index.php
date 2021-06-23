@@ -15,6 +15,32 @@
 			"slogan": "Your phone number on every device"
 		}
 		</script>
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org/",
+			"@type": "Product",
+			"name": "Phone Number",
+			"image": ["https://jmp.chat/static/jmp.svg"],
+			"brand": {
+				"@type": "Brand",
+				"name": "JMP"
+			},
+			"offers": [
+				{
+					"@type": "Offer",
+					"url": "https://jmp.chat",
+					"priceCurrency": "USD",
+					"price": "2.99"
+				},
+				{
+					"@type": "Offer",
+					"url": "https://jmp.chat",
+					"priceCurrency": "CAD",
+					"price": "3.59"
+				}
+			]
+		}
+		</script>
 		<meta property="og:url" content="https://jmp.chat" />
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content="JMP.chat" />
@@ -91,6 +117,25 @@
 				background-image: url(static/share.svg);
 			}
 
+			.price {
+				background: #84C7F7;
+				color: #1E0036;
+				border-radius: 2em;
+				padding: 1em;
+				margin-bottom: 2em;
+				display: inline-block;
+				font-weight: bold;
+				font-size: 1.2em;
+				text-decoration: none;
+				transition: color 0.25s ease-in-out;
+			}
+
+			@media (hover: hover) {
+				.price:hover {
+					color: #2069cf;
+				}
+			}
+
 			iframe {
 				display: block;
 				margin: 0 auto;
@@ -115,12 +160,18 @@
 				transform: rotate(45deg);
 				width: 15em;
 				padding: 1em 0;
-				background-color: #00a;
+				background-color: #84C7F7;
 				box-shadow: 0 5px 10px rgba(0,0,0,.1);
-				color: #fff;
+				color: #1e0036;
 				text-shadow: 0 1px 1px rgba(0,0,0,.2);
 				text-align: center;
 				font-weight: bold;
+				transition: color 0.25s ease-in-out;
+			}
+			@media (hover: hover) {
+				.ribbon span:hover {
+					color: #2069cf;
+				}
 			}
 			@media (max-width: 25rem) {
 				.ribbon { display: none; }
@@ -165,6 +216,14 @@
 		</section>
 
 		<section id="signup">
+			<a href="faq/#pricing" class="price">
+			<?php if(geoip_country_code_by_name($_SERVER['REMOTE_ADDR']) == "CA") : ?>
+				<abbr title="Canadian Dollars">$</abbr>3.59 / month
+			<?php else : ?>
+				<abbr title="US Dollars">$</abbr>2.99 / month
+			<?php endif; ?>
+			</a>
+
 			<h1>Start by choosing a phone number to use</h1>
 
 			<iframe src="register1/num_find.php"></iframe>
