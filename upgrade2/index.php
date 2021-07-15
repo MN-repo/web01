@@ -105,7 +105,7 @@ JIDs - please press Back and enter a valid JID or use your JMP number instead.
 		$cheo_jid = str_replace($ej_search, $ej_replace, $jid).'@'.
 			$cheogram_jid;
 
-		if ($redis->exists('catapult_cred-'.$cheo_jid)) {
+		if (preg_match('/customer_(\d+)@jmp.chat/', $cheo_jid) || $redis->exists('catapult_cred-'.$cheo_jid)) {
 			$print_success = TRUE;
 ?>
 You've chosen to pay for the JMP account with Jabber ID (JID)
@@ -169,20 +169,25 @@ Please press Back and enter just one of Jabber ID (JID) or JMP number.
 # TODO: above should be indented by another tab, but leave as-is for now
 }
 
+if (preg_match('/customer_(\d+)@jmp.chat/', $cheo_jid, $matches)) {
+	$customer_id = $matches[1][0];
+} else {
+
 $customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
 
-if (!$customer_id) {
-	require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
-	$braintree = new Braintree\Gateway($braintree_config); // settings-jmp.php
-	$result = $braintree->customer()->create();
-	if (!$result->success) {
-		die('Could not create customer');
+	if (!$customer_id) {
+		require_once dirname(__FILE__).'/../lib/braintree_php/lib/Braintree.php';
+		$braintree = new Braintree\Gateway($braintree_config); // settings-jmp.php
+		$result = $braintree->customer()->create();
+		if (!$result->success) {
+			die('Could not create customer');
+		}
+
+		$customer_id = $result->customer->id;
+
+		$redis->setNx('jmp_customer_id-' . $cheo_jid, $customer_id);
+		$redis->setNx('jmp_customer_jid-' . $customer_id, $cheo_jid);
 	}
-
-	$customer_id = $result->customer->id;
-
-	$redis->setNx('jmp_customer_id-' . $cheo_jid, $customer_id);
-	$redis->setNx('jmp_customer_jid-' . $customer_id, $cheo_jid);
 }
 
 pg_connect('dbname=jmp');
