@@ -73,6 +73,12 @@ No session ID found.  Please <a href="../">start again</a>.
 Too many verification attempts.  Please refresh this page in about 10 minutes or
 <a href="../">start again</a>.
 <?php
+	} elseif (strpos($jid, '.') === FALSE) {
+?>
+The JID that was entered (<?php echo htmlentities($jid)?>) does not contain any
+dots.  At least one dot (.) is required in a valid JID (e.g. user@example.com) -
+please press Back and enter a valid JID or <a href="../">start again</a>.
+<?php
 	} elseif (strpos($jid, ' ') !== FALSE ||
 		strpos($jid, '"') !== FALSE) {
 ?>
