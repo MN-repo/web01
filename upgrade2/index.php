@@ -105,6 +105,8 @@ JIDs - please press Back and enter a valid JID or use your JMP number instead.
 		$cheo_jid = str_replace($ej_search, $ej_replace, $jid).'@'.
 			$cheogram_jid;
 
+		$customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
+		if ($customer_id) $cheo_jid = 'customer_' . $customer_id . '@jmp.chat';
 		if (preg_match('/customer_(\d+)@jmp.chat/', $cheo_jid) || $redis->exists('catapult_cred-'.$cheo_jid)) {
 			$print_success = TRUE;
 ?>
@@ -170,7 +172,7 @@ Please press Back and enter just one of Jabber ID (JID) or JMP number.
 }
 
 if (preg_match('/customer_(\d+)@jmp.chat/', $cheo_jid, $matches)) {
-	$customer_id = $matches[1][0];
+	$customer_id = $matches[1];
 } else {
 
 $customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
