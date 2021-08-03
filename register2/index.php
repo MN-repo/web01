@@ -1,4 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php
+	if(rand(0, 1)) {
+		header(
+			'Location: ../register-jid/'
+			.'?number='.$_GET['number']
+			.'&city='.$_GET['city'],
+			true,
+			303
+		);
+		exit;
+	}
+?><?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
