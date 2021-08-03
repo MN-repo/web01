@@ -2,8 +2,8 @@
 	if(rand(0, 1)) {
 		header(
 			'Location: ../register-jid/'
-			.'?number='.$_GET['number']
-			.'&city='.$_GET['city'],
+			.'?number='.urlencode($_GET['number'])
+			.'&city='.urlencode($_GET['city']),
 			true,
 			303
 		);
