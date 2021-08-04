@@ -110,9 +110,16 @@ The amount entered is too low.  Please <a href="../upgrade1/">start again</a>.
 	}
 
 	$amount = intval($_GET['amount_sat']) / 100000000;
-	$details = electrum_rpc('createnewaddress', array());
+	$address = $redis->evalSha(
+		'11bde988dd77485c7986941488c202d1f9c67cd9',
+		[
+			'jmp_available_btc_addresses',
+			'jmp_customer_btc_addresses-'.$customer_id
+		],
+		2
+	);
 
-	if ($details === FALSE) {
+	if (!$address) {
 		error_log('pError - could not create address');
 ?>
 <p>
@@ -120,9 +127,6 @@ There was an error creating your payment request.  Please press Reload to try
 again or <a href="../upgrade1/">start from the beginning</a>.
 <?php
         } else {
-		$address = $details['result'];
-
-		$redis->sadd('jmp_customer_btc_addresses-'.$customer_id, $address);
 
 		if ($_GET['currency'] == 'CAD') {
 			$redis->set(
