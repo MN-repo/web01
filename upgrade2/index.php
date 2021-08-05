@@ -173,6 +173,7 @@ Please press Back and enter just one of Jabber ID (JID) or JMP number.
 
 if (preg_match('/customer_(\d+)@jmp.chat/', $cheo_jid, $matches)) {
 	$customer_id = $matches[1];
+	$cheo_jid = $redis->get('jmp_customer_jid-' . $customer_id);
 } else {
 
 $customer_id = $redis->get('jmp_customer_id-' . $cheo_jid);
