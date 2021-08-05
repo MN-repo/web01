@@ -62,6 +62,15 @@
 			<iframe src="https://jabber-iq-gateway.api.cheogram.com/?to=cheogram.com"></iframe>
 		</section>
 
+		<section id="calling" property="mainEntity" typeof="Question">
+			<h1 property="name">How do I make a phone call with my JMP number?</h1>
+
+			<div property="acceptedAnswer" typeof="Answer"><div property="text">
+				<p>Currently JMP supports calling to Canada and the US.</p>
+				<p>The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Siskin, Movim, or Gajim.  Simply add a contact just as you would for <a href="#sending">messaging</a> and then select the voice call option in your client.</a>
+				<p>Another way to make calls is to create a <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> account <a href="#bot">in your account settings</a> and then login using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call.</p>
+			</div>
+		</section>
 
 		<section id="pricing" property="mainEntity" typeof="Question">
 			<h1 property="name">How much does JMP cost?</h1>
@@ -112,33 +121,13 @@
 			</div></div>
 		</section>
 
-		<section id="calling" property="mainEntity" typeof="Question">
-			<h1 property="name">How do I make a phone call with my JMP number?</h1>
-
-			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>Currently JMP supports calling to Canada and the US.</p>
-				<p>The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Siskin, Movim, or Gajim.  Simply add a contact just as you would for <a href="#sending">messaging</a> and then select the voice call option in your client.</a>
-				<p>Another way to make calls is to login to the <a href="https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/">SIP</a> account that was provided during the signup process using a SIP client (we recommend <a href="https://f-droid.org/archive/com.csipsimple_2459.apk" >CSipSimple</a> for Android and <a href="https://itunes.apple.com/us/app/linphone/id360065638">Linphone</a> for iOS).  Then enter the 10-digit phone number that you'd like to call.</p>
-				<p>If you don't have your SIP account information, you can reset your SIP account and receive the new password and other details by communicating with <a href="xmpp:cheogram.com">cheogram.com</a>, which should already be in your contacts.  In some clients you can find "Execute command" or "Actions" in the menus and select "Reset SIP Account" from there.  Otherwise send the message "help" and the bot will reply with a list of options.</p>
-			</div>
-		</section>
-
 		<section id="voicemail" property="mainEntity" typeof="Question">
 			<h1 property="name">How does voicemail work?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>Calls will be delivered to voicemail if your SIP account (or forwarding number) is busy or not logged in.  Voicemails will be sent as messages to your Jabber client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).</p>
-				<p>If SIP or forwarding is setup, you can configure calls to be sent to voicemail after a certain number of rings by using a command <a href="#bot">via bot or client UI</a>.</p>
-				<p>The default voicemail greeting is: "You have reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a message after the tone."  If your Jabber ID <a href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or NICKNAME specified, then JMP will use that instead of "a user of <a href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.  You can also set your own voicemail greeting using the "Record Voicemail Greeting" ad-hoc command (see above), which will call your SIP account (or forwarding number) to record the greeting.</p>
-			</div></div>
-		</section>
-
-		<!-- FIXME: merge into #pricing? -->
-		<section id="payment" property="mainEntity" typeof="Question">
-			<h1 property="name">Do I have to use a credit card to signup for JMP?</h1>
-
-			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>No.  Other payment methods are available.  For details, please <a href="#support">contact our support team</a>.</p>
+				<p>Calls will be delivered to voicemail if you do not answer or are not logged in.  Voicemails will be sent as messages to your Jabber client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).</p>
+				<p>The default voicemail greeting is: "You have reached the voicemail of a user of <a href="https://jmp.chat/">JMP.chat</a>.  Please send a text message, or leave a message after the tone."  If your Jabber ID <a href="https://xmpp.org/extensions/xep-0054.html">has a vCard</a> with FN or NICKNAME specified, then JMP will use that instead of "a user of <a href="https://jmp.chat/">JMP.chat</a>" in your voicemail greeting.</p>
+				<p>You can configure the timeout before a call goes to voicemail, or change your voicemail greeting, <a href="#bot">via bot or client UI</a>.</p>
 			</div></div>
 		</section>
 
