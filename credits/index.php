@@ -16,6 +16,7 @@
 		<ul>
 			<li>Website and registration system by <a href="https://ossguy.com/">Denver Gingerich</a> and others.  jmp-register is licensed under AGPLv3+. You can download the Complete Corresponding Source code <a href="https://gitlab.com/ossguy/jmp-register">here</a>.</li>
 			<li>Backend and other code available from the <a href="https://soprani.ca">Soprani.ca</a> family of projects.</li>
+			<li><a href="https://blog.jmp.chat">Blog</a> powered by <a href="https://salut-a-toi.org/">Libervia</a>.</li>
 			<li><a href="../static/numbers.svg">numbers.svg</a> created by <a href="https://singpolyma.net">Stephen Paul Weber</a> based on work by <a href="https://thenounproject.com/term/phone-number/3377914/">LAFS</a>, CC-BY</a></li>
 			<li><a href="../static/share.svg">share.svg</a> created by <a href="https://thenounproject.com/term/share/3147017/">Justin Blake</a>, CC-BY</a></li>
 			<li><a href="../static/devices.svg">devices.svg</a> created by <a href="https://thenounproject.com/term/devices/127450/">Funtastic</a>, CC-BY</a></li>
