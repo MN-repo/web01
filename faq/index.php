@@ -76,9 +76,9 @@
 			<h1 property="name">How much does JMP cost?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>During the beta, JMP is $2.99 USD / month or $3.59 CAD / month, billed out of the balance on your account. Paid beta accounts get unlimited incoming and outgoing text and picture messages, and 120 minutes of voice calls per month.</p>
+				<p>During the beta, JMP is $2.99 USD / month or $3.59 CAD / month, billed out of the balance on your account. Paid beta accounts get unlimited incoming and outgoing text and picture messages, and 120 minutes of voice calls per month.  Minutes past 120 will soon be available at the rate of $0.0087 USD / minute or $0.0099 CAD / minute.</p>
 				<p>You may cancel your subscription at any time (by <a href="#support">contacting the support team</a>). After cancellation, your number will be reclaimed after 30 days unless you <a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a> it to another carrier.</p>
-				<p>The beta period will last until at least September 2021, and new pricing will be available once the beta has ended.</p>
+				<p>The beta period will last until at least February 2022, and new pricing will be available once the beta has ended.</p>
 			</div></div>
 		</section>
 
@@ -97,7 +97,7 @@
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
 				<p>All of the software that makes up JMP is <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">free and open source</a> software.  You can view, download, and modify the source code <a href="https://soprani.ca">here</a>.</p>
-				<p>For news about JMP you can follow <a href="https://blog.jmp.chat">our blog</a> or signup for our low-volume notification list <a href="https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news">here</a>. You can also <a href="https://twitter.com/JMP_chat">follow us on Twitter</a>.</p>
+				<p>For news about JMP you can follow <a href="https://blog.jmp.chat">our blog</a> or signup for our <a href="https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news">low-volume notification list</a>. You can also <a href="https://twitter.com/JMP_chat">follow us on Twitter</a>.</p>
 			</div></div>
 		</section>
 
@@ -107,11 +107,11 @@
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
 				<p>JMP supports the following text messaging features:</p>
 				<ul>
-					<li>Send and receive text and picture messages (SMS and MMS) between your JMP number and any other Canadian or US phone number, as well as most other countries in the world (the latter is currently in alpha).</li>
+					<li>Send and receive text and picture messages (SMS and MMS) between your JMP number and any other Canadian or US phone number, as well as most other countries in the world.</li>
 					<li>Send and receive text and picture messages with most Canadian and US short codes.  For example, you can send "info" to 33733 and receive the reply.</li>
 					<li>Use any emoji or other Unicode characters in your text messages.</li>
 					<li>Delivery receipts, as indicated by the carrier.  To receive these for a given contact, they must be in your contact list (roster).</li>
-					<li>Send and receive group text messages (to send group texts, please <a href="#support">contact support</a> to enable for your account).</li>
+					<li>Send and receive group text messages (this feature is currently in alpha).</li>
 				</ul>
 
 				<p>JMP does not (yet) support these features:</p>
