@@ -76,7 +76,7 @@
 			<h1 property="name">How much does JMP cost?</h1>
 
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
-				<p>During the beta, JMP is $2.99 USD / month or $3.59 CAD / month, billed out of the balance on your account. Paid beta accounts get unlimited incoming and outgoing text and picture messages, and 120 minutes of voice calls per month.</p>
+				<p>During the beta, JMP is $2.99 USD / month or $3.59 CAD / month, billed out of the balance on your account. Paid beta accounts get unlimited incoming and outgoing text and picture messages, and 120 minutes of voice calls per month.  Minutes past 120 will soon be available at the rate of $0.0087 USD / minute or $0.0099 CAD / minute.</p>
 				<p>You may cancel your subscription at any time (by <a href="#support">contacting the support team</a>). After cancellation, your number will be reclaimed after 30 days unless you <a href="https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers">port</a> it to another carrier.</p>
 				<p>The beta period will last until at least February 2022, and new pricing will be available once the beta has ended.</p>
 			</div></div>
