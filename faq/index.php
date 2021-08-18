@@ -107,11 +107,11 @@
 			<div property="acceptedAnswer" typeof="Answer"><div property="text">
 				<p>JMP supports the following text messaging features:</p>
 				<ul>
-					<li>Send and receive text and picture messages (SMS and MMS) between your JMP number and any other Canadian or US phone number, as well as most other countries in the world (the latter is currently in alpha).</li>
+					<li>Send and receive text and picture messages (SMS and MMS) between your JMP number and any other Canadian or US phone number, as well as most other countries in the world.</li>
 					<li>Send and receive text and picture messages with most Canadian and US short codes.  For example, you can send "info" to 33733 and receive the reply.</li>
 					<li>Use any emoji or other Unicode characters in your text messages.</li>
 					<li>Delivery receipts, as indicated by the carrier.  To receive these for a given contact, they must be in your contact list (roster).</li>
-					<li>Send and receive group text messages (to send group texts, please <a href="#support">contact support</a> to enable for your account).</li>
+					<li>Send and receive group text messages (this feature is currently in alpha).</li>
 				</ul>
 
 				<p>JMP does not (yet) support these features:</p>
