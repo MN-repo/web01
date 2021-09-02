@@ -1,0 +1,14 @@
+- content_for :title, "JMP: Your phone number on every device"
+
+section
+	h1= form.title
+	- if form.instructions
+		p= form.instructions
+
+	form method="get" action="/tels"
+		- form.fields.each do |field|
+			label
+				= field.label
+				input type="search" name=field.var
+				- if field.desc
+					p= field.desc
