@@ -48,8 +48,16 @@ class JmpRegister < Roda
 
 	compile_assets if production?
 
+	def faq_entry(id, q, &block)
+		render(:faq_entry, locals: { id: id, q: q }, &block)
+	end
+
 	route do |r|
 		r.assets if JmpRegister.development?
+
+		r.get "faq" do
+			view :faq
+		end
 
 		r.root do
 			Jabber.write_with_promise(

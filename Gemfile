@@ -4,6 +4,7 @@ source "https://rubygems.org"
 
 gem "em_promise.rb"
 gem "roda"
+gem "slim"
 gem "thin"
 gem "blather", git: "https://github.com/singpolyma/blather.git", branch: "ergonomics"
 
