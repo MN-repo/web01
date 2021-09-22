@@ -1,0 +1,57 @@
+- content_for :title, "JMP: #{form.title}"
+- if embed
+	meta name="viewport" content="width=device-width, initial-scale=1.0"
+	== assets :css
+	scss:
+		body { padding: 0; font-size: 1.5rem; }
+		#tels { text-align: center; }
+		a { text-decoration: none; }
+scss:
+	body {
+		max-width: 120rem;
+	}
+
+	label small { display: block; }
+
+	#tels {
+		&, li {
+			list-style-type: none;
+			padding: 0;
+		}
+
+		@media(min-width: 60rem) {
+			column-count: 2;
+		}
+
+		@media(min-width: 90rem) {
+			column-count: 3;
+		}
+
+		@media(min-width: 120rem) {
+			column-count: 4;
+		}
+	}
+
+- if form.instructions && !embed
+	p= form.instructions
+
+- tels = form.field("tel")&.options
+- if tels
+	ul#tels
+		- tels.each do |option|
+			li
+				- ref = option.find("ns:reference", ns: "urn:xmpp:reference:0").first
+				= option.label[-1..ref[:begin].to_i] unless embed
+				a href="/register?number=#{u option.value}" target="_top"
+					= option.label[ref[:begin].to_i..ref[:end].to_i]
+				= option.label[ref[:end].to_i+1..-1] unless embed
+
+- if form.fields.map(&:var).find { |var| var != "tel" }
+form method="get" action="" title=form.title
+	- form.fields.each do |field|
+		- next if field.var == "tel"
+		label
+			= "#{field.label} "
+			input type="search" name=field.var
+			- if field.desc
+				small= field.desc

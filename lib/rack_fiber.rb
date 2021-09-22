@@ -9,17 +9,21 @@ module Rack
 		end
 
 		def call(env)
-			async_callback = env.delete('async.callback')
-			EM.next_tick do
-				::Fiber.new {
-					begin
-						async_callback.call(@app.call(env))
-					rescue ::Exception
-						async_callback.call([500, {}, [$!.to_s]])
-					end
-				}.resume
-			end
+			async_callback = env.delete("async.callback")
+			EM.next_tick { run_fiber(env, async_callback) }
 			throw :async
+		end
+
+	protected
+
+		def run_fiber(env, async_callback)
+			::Fiber.new {
+				begin
+					async_callback.call(@app.call(env))
+				rescue ::Exception # rubocop:disable Lint/RescueException
+					async_callback.call([500, {}, [$!.to_s]])
+				end
+			}.resume
 		end
 	end
 end

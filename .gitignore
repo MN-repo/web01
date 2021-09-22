@@ -1,0 +1,4 @@
+*.dhall
+.gems/
+.bundle/
+.sass-cache/

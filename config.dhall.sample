@@ -1,0 +1,6 @@
+{
+	jid = "test@localhost",
+	password = "test",
+	maxmind = { user = "", token = "" },
+	sgx_jmp = "jmp.chat"
+}

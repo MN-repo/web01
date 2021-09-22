@@ -2,11 +2,16 @@
 
 source "https://rubygems.org"
 
+gem "blather", git: "https://github.com/singpolyma/blather.git", branch: "ergonomics"
+gem "dhall"
+gem "em-http-request"
 gem "em_promise.rb"
+gem "multi_json"
+gem "geoip"
+gem "redis"
 gem "roda"
 gem "slim"
 gem "thin"
-gem "blather", git: "https://github.com/singpolyma/blather.git", branch: "ergonomics"
 
 group(:development) do
 	gem "pry-reload"

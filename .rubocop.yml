@@ -1,0 +1,96 @@
+AllCops:
+  TargetRubyVersion: 2.5
+
+Metrics/LineLength:
+  Max: 80
+  Exclude:
+    - Gemfile
+
+Metrics/ClassLength:
+  Exclude:
+    - test/*
+
+Metrics/MethodLength:
+  Exclude:
+    - test/*
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - route
+    - "on"
+  Exclude:
+    - test/*
+
+Metrics/ClassLength:
+  Exclude:
+    - test/*
+
+Metrics/AbcSize:
+  Exclude:
+    - test/*
+
+Style/Tab:
+  Enabled: false
+
+Style/IndentationWidth:
+  Width: 1 # one tab
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/WordArray:
+  EnforcedStyle: brackets
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  EnforcedStyle: allowed_in_returns
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  EnforcedStyle: use_perl_names
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent
+
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Layout/IndentArray:
+  EnforcedStyle: consistent
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - forms/*
+
+Naming/AccessorMethodName:
+  Enabled: false
