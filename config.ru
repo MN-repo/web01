@@ -113,8 +113,11 @@ class JmpRegister < Roda
 	route do |r|
 		r.assets if JmpRegister.development?
 
-		r.get "faq" do
-			view :faq
+		r.root do
+			canada = GEOIP.country(request.ip).country_code2 == "CA"
+			Jabber.execute("jabber:iq:register").then do |iq|
+				view :home, locals: { canada: canada, form: iq.form }
+			end
 		end
 
 		r.get "tels" do
@@ -123,11 +126,20 @@ class JmpRegister < Roda
 			).catch { "307" }.then(&method(:tels))
 		end
 
-		r.root do
-			canada = GEOIP.country(request.ip).country_code2 == "CA"
-			Jabber.execute("jabber:iq:register").then do |iq|
-				view :home, locals: { canada: canada, form: iq.form }
-			end
+		r.get "faq" do
+			view :faq
+		end
+
+		r.get "credits" do
+			view :credits
+		end
+
+		r.get "upgrade1" do
+			view :upgrade1
+		end
+
+		r.get /([^\/]+)\/\Z/ do |match|
+			r.redirect "/#{match}", 301
 		end
 	end
 end
