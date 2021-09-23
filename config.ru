@@ -181,6 +181,10 @@ class JmpRegister < Roda
 			view :upgrade1
 		end
 
+		r.get "register1" do
+			r.redirect "/", 301
+		end
+
 		r.get "getjid" do
 			r.redirect "/register/jabber/new?#{request.query_string}", 301
 		end
