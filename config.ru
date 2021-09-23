@@ -92,6 +92,7 @@ class JmpRegister < Roda
 	plugin :content_for
 	plugin :branch_locals
 	plugin :assets, css: ["style.scss"]
+	plugin :public
 	plugin :environments
 	plugin RodaEMPromise # Must go last!
 
@@ -124,8 +125,6 @@ class JmpRegister < Roda
 	end
 
 	route do |r|
-		r.assets if JmpRegister.development?
-
 		r.root do
 			canada = GEOIP.country(request.ip).country_code2 == "CA"
 			Jabber.execute("jabber:iq:register").then do |iq|
@@ -194,6 +193,9 @@ class JmpRegister < Roda
 			qs = request.query_string ? "?#{request.query_string}" : ""
 			r.redirect "/#{match}#{qs}", 301
 		end
+
+		r.assets if JmpRegister.development?
+		r.public if JmpRegister.development?
 	end
 end
 
