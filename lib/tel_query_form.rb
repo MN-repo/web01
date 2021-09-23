@@ -2,15 +2,18 @@
 
 require "blather"
 
+require_relative "to_form"
+
 class TelQueryForm
+	using ToForm
+
 	def initialize(q, max)
 		@q = q
 		@max = max
 	end
 
 	def to_node
-		Blather::Stanza::Iq::X.new(:form).tap do |form|
-			form.fields = [var: "q", value: @q]
+		{ q: @q }.to_form(:submit).tap do |form|
 			Nokogiri::XML::Builder.with(form) do |xml|
 				xml.set xmlns: "http://jabber.org/protocol/rsm" do
 					xml.max @max

@@ -11,6 +11,7 @@ require_relative "lib/maxmind"
 require_relative "lib/roda_em_promise"
 require_relative "lib/rack_fiber"
 require_relative "lib/tel_query_form"
+require_relative "lib/to_form"
 
 use Rack::Fiber # Must go first!
 
@@ -84,10 +85,12 @@ end
 
 class JmpRegister < Roda
 	include ERB::Util
+	using ToForm
 
 	plugin :common_logger, $stdout
 	plugin :render, engine: "slim"
 	plugin :content_for
+	plugin :branch_locals
 	plugin :assets, css: ["style.scss"]
 	plugin :environments
 	plugin RodaEMPromise # Must go last!
@@ -116,6 +119,10 @@ class JmpRegister < Roda
 		end
 	end
 
+	def tel
+		request.params["tel"] || request.params["number"]
+	end
+
 	route do |r|
 		r.assets if JmpRegister.development?
 
@@ -132,6 +139,37 @@ class JmpRegister < Roda
 			).catch { "307" }.then(&method(:tels))
 		end
 
+		r.on "register" do
+			r.redirect "/" unless tel.to_s.match?(/\A\+1\d{10}\Z/)
+			Sentry.set_user(tel: tel)
+
+			set_view_locals city: request.params["city"]
+
+			r.on "jabber" do
+				r.get "new" do
+					view "register/jabber/new"
+				end
+
+				r.get do
+					view "register/jabber"
+				end
+
+				r.post do
+					Sentry.set_user(jid: request.params["jid"], tel: tel)
+					Jabber.execute(
+						"web-register",
+						{ jid: request.params["jid"], tel: tel }.to_form(:submit)
+					).then do
+						view "register/jabber/success"
+					end
+				end
+			end
+
+			r.get do
+				view :register
+			end
+		end
+
 		r.get "faq" do
 			view :faq
 		end
@@ -144,8 +182,17 @@ class JmpRegister < Roda
 			view :upgrade1
 		end
 
-		r.get /([^\/]+)\/\Z/ do |match|
-			r.redirect "/#{match}", 301
+		r.get "getjid" do
+			r.redirect "/register/jabber/new?#{request.query_string}", 301
+		end
+
+		r.get(/register(?:-jid|2)\Z/) do
+			r.redirect "/register/jabber?#{request.query_string}", 301
+		end
+
+		r.get(/([^\/]+)\/\Z/) do |match|
+			qs = request.query_string ? "?#{request.query_string}" : ""
+			r.redirect "/#{match}#{qs}", 301
 		end
 	end
 end

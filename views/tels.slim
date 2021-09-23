@@ -42,16 +42,16 @@ scss:
 			li
 				- ref = option.find("ns:reference", ns: "urn:xmpp:reference:0").first
 				= option.label[-1..ref[:begin].to_i] unless embed
-				a href="/register?number=#{u option.value}" target="_top"
+				a href="/register?tel=#{u option.value}" target="_top"
 					= option.label[ref[:begin].to_i..ref[:end].to_i]
 				= option.label[ref[:end].to_i+1..-1] unless embed
 
 - if form.fields.map(&:var).find { |var| var != "tel" }
-form method="get" action="" title=form.title
-	- form.fields.each do |field|
-		- next if field.var == "tel"
-		label
-			= "#{field.label} "
-			input type="search" name=field.var
-			- if field.desc
-				small= field.desc
+	form method="get" action="" title=form.title
+		- form.fields.each do |field|
+			- next if field.var == "tel"
+			label
+				= "#{field.label} "
+				input type="search" name=field.var
+				- if field.desc
+					small= field.desc

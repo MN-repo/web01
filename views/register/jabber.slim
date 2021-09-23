@@ -1,0 +1,17 @@
+h1
+	' You've selected
+	= tel
+	- if city
+		= " (#{city})"
+	|  as your JMP number
+
+p Please enter your <a href="../../faq#jabber">Jabber</a> ID and press Submit (a Jabber ID normally looks like an email address, of the form user@example.com). A message will be sent to you to allow you to complete registration from your Jabber client.
+
+form action="?#{request.query_string}" method="post"
+	label>
+		' Jabber ID:
+		input type="text" name="jid"
+	button type="submit" Submit
+
+p class="warning"
+	<b>Note:</b> By continuing to the next step, you agree to JMP's Fair Usage Policy, which our carriers require us to make you aware of: You will not participate in or assist in any fraudulent usage, you acknowledge and agree that SMS messages to or from you may be blocked by carriers or other service providers for reasons known or unknown to JMP, your usage will be consistent with typical human operation, each SMS message will be initiated due to human interaction (as opposed to automated or timed messages), and you acknowledge that JMP reserves the right to take any action necessary for JMP to comply with any applicable CTIA and/or CRTC guidelines.
