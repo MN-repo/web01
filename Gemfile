@@ -10,6 +10,7 @@ gem "multi_json"
 gem "geoip"
 gem "redis"
 gem "roda"
+gem "sentry-ruby", "<= 4.3.1"
 gem "slim"
 gem "thin"
 

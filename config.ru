@@ -14,6 +14,12 @@ require_relative "lib/tel_query_form"
 
 use Rack::Fiber # Must go first!
 
+require "sentry-ruby"
+Sentry.init do |config|
+	config.traces_sample_rate = 1
+end
+use Sentry::Rack::CaptureExceptions
+
 if ENV["RACK_ENV"] == "development"
 	require "pry-rescue"
 	use PryRescue::Rack
