@@ -164,6 +164,10 @@ class JmpRegister < Roda
 				end
 			end
 
+			r.get "snikket" do
+				view "register/snikket"
+			end
+
 			r.get do
 				view :register
 			end

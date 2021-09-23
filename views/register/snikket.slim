@@ -1,0 +1,16 @@
+h1
+	' You've selected
+	= tel
+	- if city
+		= " (#{city})"
+	|  as your JMP number
+
+p A Snikket address is a valid <a href="../../faq#jabber">Jabber</a> ID that looks like an email address, of the form user@example.com. A message will be sent to you to allow you to complete registration from your Snikket app.
+
+form action="jabber?#{request.query_string}" method="post"
+	label>
+		' Snikket address:
+		input type="text" name="jid"
+	button type="submit" Submit
+
+== render "register/fup"
