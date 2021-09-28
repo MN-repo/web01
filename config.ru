@@ -198,7 +198,7 @@ class JmpRegister < Roda
 		end
 
 		r.get(/([^\/]+)\/\Z/) do |match|
-			qs = request.query_string ? "?#{request.query_string}" : ""
+			qs = request.query_string.to_s != "" ? "?#{request.query_string}" : ""
 			r.redirect "/#{match}#{qs}", 301
 		end
 
