@@ -185,6 +185,10 @@ class JmpRegister < Roda
 			view :upgrade1
 		end
 
+		r.get "paypal-migration" do
+			view :paypal_migration
+		end
+
 		r.get "register1" do
 			r.redirect "/", 301
 		end
