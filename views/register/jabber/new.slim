@@ -1,10 +1,6 @@
 - content_for :title, "JMP: Get a Jabber ID"
 - content_for :head do
 	scss:
-		body > section {
-			margin-top: 3em;
-		}
-
 		a#chatterboxtown {
 			font-size: 10vw;
 			display: block;
@@ -19,19 +15,23 @@
 			height: 5em;
 		}
 
-		body > section ul {
-			padding: 0;
-		}
+		body > section {
+			margin-top: 3em;
 
-		body > section ul li {
-			padding: 0;
-			list-style-type: none;
-			display: inline-block;
-		}
+			ul {
+				padding: 0;
 
-		body > section ul li a {
-			display: inline-block;
-			height: 5em;
+				li {
+					padding: 0;
+					list-style-type: none;
+					display: inline-block;
+
+					a {
+						display: inline-block;
+						height: 5em;
+					}
+				}
+			}
 		}
 
 		a[href="https://gajim.org/"] {
@@ -40,13 +40,13 @@
 			border: 0.13em solid #888;
 			text-decoration: none;
 			color: #fff;
-		}
 
-		a[href="https://gajim.org/"] span {
-			font-size: 2em;
-			padding-right: 0.5em;
-			position: relative;
-			top: -1em;
+			span {
+				font-size: 2em;
+				padding-right: 0.5em;
+				position: relative;
+				top: -1em;
+			}
 		}
 
 		#continue a {
