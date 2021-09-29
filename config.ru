@@ -83,6 +83,7 @@ module Jabber
 	end
 end
 
+# rubocop:disable Metrics/ClassLength
 class JmpRegister < Roda
 	include ERB::Util
 	using ToForm
@@ -189,6 +190,10 @@ class JmpRegister < Roda
 			view :paypal_migration
 		end
 
+		r.get(/porting[12]\Z/) do
+			view :porting
+		end
+
 		r.get "register1" do
 			r.redirect "/", 301
 		end
@@ -210,6 +215,7 @@ class JmpRegister < Roda
 		r.public if JmpRegister.development?
 	end
 end
+# rubocop:enable Metrics/ClassLength
 
 EM.next_tick { Jabber.run }
 run JmpRegister.freeze.app
