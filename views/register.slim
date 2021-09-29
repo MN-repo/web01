@@ -1,0 +1,86 @@
+- content_for :title, "JMP: Register a New Number"
+- content_for :head do
+	scss:
+		body > a {
+			display: block;
+			float: left;
+			width: calc(40% - 4em);
+			min-width: 10em;
+			vertical-align: top;
+			clear: left;
+			margin-top: 2em;
+			font-size: 1.5em;
+			text-align: center;
+			text-decoration: none;
+			padding: 1em;
+		}
+
+		body > a:nth-of-type(2n) {
+			float: right;
+			clear: right;
+		}
+
+		body > a:last-of-type {
+			float: none;
+			margin: auto;
+			position: relative;
+			top: 2em;
+		}
+
+		@media (max-width: 50rem) {
+			body > a {
+				font-size: 6vw;
+				width: calc(80% - 4em);
+				float: none;
+				margin: auto;
+			}
+
+			body > a:nth-of-type(2n) {
+				float: none;
+			}
+
+			body > a:last-of-type {
+				position: static;
+			}
+		}
+
+		@media (hover: hover) {
+			body > a:hover {
+				background-color: #ccc;
+			}
+		}
+
+		a[href^="register/"] {
+			background-repeat: no-repeat;
+			background-size: 3em;
+			background-position: 1em center;
+			padding-left: 4em;
+		}
+
+		a[href^="register/jabber/new"] {
+			background-image: url(static/getjid.svg);
+		}
+
+		a[href^="register/jabber"] {
+			background-image: url(static/havejid.svg);
+		}
+
+		a[href^="register/snikket"] {
+			background-image: url(static/snikket.svg);
+		}
+
+h1
+	' You've selected
+	= tel
+	- if city
+		= " (#{city})"
+	|  as your JMP number
+
+a href="register/jabber/new?#{request.query_string}"
+	| I need to sign up for a new Jabber ID to use for this number
+
+a href="register/jabber?#{request.query_string}"
+	| I already have a Jabber ID I want to use for this number
+
+a href="register/snikket?#{request.query_string}"
+	| I am a Snikket user

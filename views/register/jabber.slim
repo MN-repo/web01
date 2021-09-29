@@ -1,0 +1,16 @@
+h1
+	' You've selected
+	= tel
+	- if city
+		= " (#{city})"
+	|  as your JMP number
+
+p Please enter your <a href="../../faq#jabber">Jabber</a> ID and press Submit (a Jabber ID normally looks like an email address, of the form user@example.com). A message will be sent to you to allow you to complete registration from your Jabber client.
+
+form action="jabber?#{request.query_string}" method="post"
+	label>
+		' Jabber ID:
+		input type="text" name="jid"
+	button type="submit" Submit
+
+== render "register/fup"

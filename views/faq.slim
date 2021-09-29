@@ -1,0 +1,131 @@
+- @html_attrs = { vocab: "https://schema.org/", typeof: "FAQPage" }
+- content_for :title, "JMP: Frequently Asked Questions"
+
+scss:
+	body > section { counter-increment: heading; }
+	body > section h1:before { content: "Q"counter(heading)". "; }
+	iframe {
+		border: none;
+		width: 38rem;
+		height: 8rem;
+		background: #fff;
+		border-radius: 1em;
+	}
+
+h1 property="name" Frequently Asked Questions
+
+== faq_entry "features", "What do I get when I signup for JMP?"
+	markdown:
+		JMP gives you a Canadian or US phone number that is yours to keep (for [46 other countries](https://soprani.ca/vonage/prices_by_country.html) you can use the [the Vonage SGX](https://wiki.soprani.ca/VonageSetup), also part of [Soprani.ca](https://soprani.ca)). JMP allows you to send and receive text messages and picture messages using your [Jabber client](#jabber_client). You can also [make and receive phone calls](#calling), including receiving [voicemails](#voicemail) delivered to you as audio recordings and text transcriptions.
+
+== faq_entry "jabber", "What's this Jabber thing?" do
+	markdown:
+		Jabber (and the underlying technology, XMPP) is a [federated protocol](https://en.wikipedia.org/wiki/Federation_%28information_technology%29) and [open standard](https://singpolyma.net/2009/01/beasts-of-the-standards-world/) for messaging. It uses Jabber IDs (JIDs) to communicate, which are similar to email addresses. As with email, you can get a Jabber ID from one of [many free and open servers](../suggested_servers.html).
+
+		And just like email, there are many different [Jabber clients](https://xmpp.org/software/clients.html) available, so you can use Jabber from your phone ([Conversations](https://conversations.im/) and [Siskin IM](https://siskin.im/) are our recommended apps), [the web](https://mov.im), and [your computer](https://gajim.org/).
+
+		Jabber is [long-standing](https://xmpp.org/about/history.html), widely-used, and privacy-focused. If you have ever used [Google Chat](https://developers.google.com/talk/open_communications), HipChat, the pre-2016 Facebook Messenger, WhatsApp, Kik, [Movim](https://movim.eu), [Android Push Notifications](https://blog.process-one.net/google-cloud-messaging-update-boosted-by-xmpp/), or a private company chat server, then you have used [XMPP](https://xmpp.org/).
+
+		JMP extends the freedom of Jabber and the XMPP network to cell phone texting.
+
+== faq_entry "sending", "How do I send text messages?" do
+	markdown:
+		Text messages are sent and received using special Jabber IDs. To send a text message, first add the Jabber ID representing the destination phone number to your Jabber contact list. For example, to send a text message to +1 416 993 8000 you would add "+14169938000@cheogram.com" to your contacts. You can then send the contact a message or picture and they will receive it as an SMS/MMS message.
+
+		To send text messages to short codes, use the special suffix for short codes, ie. "33733;phone-context=ca-us.phone-context.soprani.ca@cheogram.com" represents the 33733 short code. This will be simplified in the future, but is required for now in order to maintain proper uniqueness going forward.
+
+		From the same device as your [Jabber client](#jabber_client) you can also add contacts using the form below:
+
+		<iframe src="https://jabber-iq-gateway.api.cheogram.com/?to=cheogram.com"></iframe>
+
+== faq_entry "calling", "How do I make a phone call with my JMP number?" do
+	markdown:
+		Currently JMP supports calling to Canada and the US.
+
+		The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Siskin, Movim, or Gajim. Simply add a contact just as you would for [messaging](#sending) and then select the voice call option in your client.
+
+		Another way to make calls is to create a [SIP](https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/) account [in your account settings](#bot) and then login using a SIP client (we recommend [CSipSimple](https://f-droid.org/archive/com.csipsimple_2459.apk) for Android and [Linphone](https://itunes.apple.com/us/app/linphone/id360065638) for iOS). Then enter the 10-digit phone number that you'd like to call.
+
+== faq_entry "pricing", "How much does JMP cost?" do
+	markdown:
+		During the beta, JMP is $2.99 USD / month or $3.59 CAD / month, billed out of the balance on your account. Paid beta accounts get unlimited incoming and outgoing text and picture messages, and 120 minutes of voice calls per month. Minutes past 120 will soon be available at the rate of $0.0087 USD / minute or $0.0099 CAD / minute.
+
+		You may cancel your subscription at any time (by [contacting the support team](#support)). After cancellation, your number will be reclaimed after 30 days unless you [port](https://www.fcc.gov/consumers/guides/porting-keeping-your-phone-number-when-you-change-providers) it to another carrier.
+
+		The beta period will last until at least February 2022, and new pricing will be available once the beta has ended.
+
+== faq_entry "support", "How do I get help with JMP?" do
+	markdown:
+		The best venue for help using or developing features for JMP is the Soprani.ca chatroom, which you can join [from your chat client](xmpp:discuss@conference.soprani.ca?join) or [on the web](https://anonymous.cheogram.com/discuss@conference.soprani.ca). It is an active and enthusiastic channel, and the fastest way to solve problems with the developers or other users.
+
+		For private inquiries, contact support directly by Jabber at [+14169938000@cheogram.com](xmpp:+14169938000@cheogram.com) or by SMS at [+1 416 993 8000](sms:+14169938000) (Canada) or [+1 312 796 8000](sms:+13127968000) (US) and we will get back to you within 8 business hours. Both numbers can be texted from most other countries, though your carrier may charge a fee for international text messaging.
+
+== faq_entry "about", "How do I learn more about JMP?" do
+	markdown:
+		All of the software that makes up JMP is [free and open source](https://en.wikipedia.org/wiki/Free_and_open-source_software) software. You can view, download, and modify the source code [here](https://soprani.ca).
+
+		For news about JMP you can follow [our blog](https://blog.jmp.chat) or signup for our [low-volume notification list](https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news). You can also [follow us on Twitter](https://twitter.com/JMP_chat).
+
+== faq_entry "sms_features", "Which text messaging features are supported?" do
+	markdown:
+		JMP supports the following text messaging features:
+
+		* Send and receive text and picture messages (SMS and MMS) between your JMP number and any other Canadian or US phone number, as well as most other countries in the world.
+		* Send and receive text and picture messages with most Canadian and US short codes. For example, you can send "info" to 33733 and receive the reply.
+		* Use any emoji or other Unicode characters in your text messages.
+		* Delivery receipts, as indicated by the carrier. To receive these for a given contact, they must be in your contact list (roster).
+		* Send and receive group text messages (this feature is currently in alpha).
+
+		JMP does not (yet) support these features:
+
+		* [RCS](https://en.wikipedia.org/wiki/Rich_Communication_Services), which allows for video calls over the phone network.
+
+== faq_entry "voicemail", "How does voicemail work?" do
+	markdown:
+		Calls will be delivered to voicemail if you do not answer or are not logged in. Voicemails will be sent as messages to your Jabber client, both as an audio file as soon as the voicemail is left, and also as transcribed text once our transcription engine has finished converting the audio to text for you (normally this takes just a few seconds).
+
+		The default voicemail greeting is: "You have reached the voicemail of a user of [JMP.chat](https://jmp.chat/). Please send a text message, or leave a message after the tone." If your Jabber ID [has a vCard](https://xmpp.org/extensions/xep-0054.html) with FN or NICKNAME specified, then JMP will use that instead of "a user of [JMP.chat](https://jmp.chat/)" in your voicemail greeting.
+
+		You can configure the timeout before a call goes to voicemail, or change your voicemail greeting, [via bot or client UI](#bot).
+
+== faq_entry "existing", "Can I port my existing number into JMP?" do
+	markdown:
+		Yes! We support most regions in Canada and the US. The process normally takes 1-2 weeks, depending on the number being ported in. You can [submit your port request here](/porting1/). For questions, please [contact our support team](#support).
+
+== faq_entry "clients", "Which Jabber clients are supported?" do
+	markdown:
+		You can use any Jabber client you like. If a client doesn't work for some reason, please [file a ticket](https://gitlab.com/ossguy/sgx-catapult/issues) or [discuss it with the team](#support). JMP is normally tested with [Gajim](https://gajim.org/) and [Conversations](https://conversations.im/), since they both support the needed XEPs for JMP's complete feature set (which includes XEP-0184, XEP-0234, and XEP-0261, among others).
+
+		The Jabber clients mentioned above are known to work correctly with JMP. If you choose to use a different Jabber client, it may not receive messages from phone numbers that are new to you by default. Please see [the section on message blocking](#blocking) for more details.
+
+== faq_entry "servers", "Which Jabber servers are supported?" do
+	markdown:
+		You can use any federated Jabber server, though we specifically recommend those on [our suggested servers list](../suggested_servers.html) since we have confirmed that those servers generally support the features that JMP requires.
+
+		The Jabber servers mentioned in [our suggested servers list](../suggested_servers.html) are known to work correctly with JMP. If you choose to use a different Jabber server, it may not receive messages from phone numbers that are new to you by default. Please see [the section on message blocking](#blocking) for more details.
+
+== faq_entry "voip", "Is JMP a VoIP Provider?" do
+	markdown:
+		VoIP is a term used to describe any system where bidirectional voice communication happens over the Internet. It is sometimes used specifically to describe services which provide telephone numbers linked to voice communication operating over the Internet. Since JMP does offer phone numbers which can both make and receive voice calls using the Internet, it would be accurate to say that JMP is a free and open source VoIP provider. JMP is much more than this, however, also providing best-in-class access to SMS, MMS, and other more "mobile phone" related services.
+
+== faq_entry "gateway", "What is a Gateway?" do
+	markdown:
+		A Jabber or XMPP gateway or transport is a service that can be used to connect from your Jabber ID to other communications networks. There exist gateways for most known communication systems. JMP is, among other things, a Jabber SMS transport.
+
+== faq_entry "blocking", "Why might I not be receiving certain messages?" do
+	markdown:
+		If you are not using one of the [suggested servers](../suggested_servers.html) or clients listed above, then it is possible your client or server silently blocks message from numbers/contacts not in your contact list (roster). We have most often seen this problem with servers (rather than clients), so check with your server operator first if you are not receiving text messages from phone numbers you haven't [added to your contact list](#sending) yet.
+
+		If that does not resolve the problem, please feel free to [file a ticket](https://gitlab.com/ossguy/sgx-catapult/issues) or [discuss it with the team](#support) (we can help determine where the issue might be and, if you like, switch your JMP number to a different Jabber ID if want to switch Jabber servers). Be sure to note which Jabber client you are using, and ideally which server as well. We want to make sure that JMP works with as many Jabber clients and servers as possible\!
+
+== faq_entry "usage", "How many minutes and messages have I used this month?" do
+	markdown:
+		You can see how many minutes and outgoing messages you've used for each of the past several days or months, including a total, by sending 'u' to [cheogram.com](xmpp:cheogram.com) which should already be in your contacts.
+
+		Since JMP does not charge for nor count incoming message usage, only minutes and outgoing message usage are shown.
+
+== faq_entry "bot", "How do I see my JMP number and change other settings?" do
+	markdown:
+		[cheogram.com](xmpp:cheogram.com) should already be in your contacts, and can be used to view and change a number of settings for your JMP account. You can find a comple list of options by typing "help" in a new conversation with the bot, or get a wizard in supporting clients by looking for an "Execute Command" or "Actions" option.
+
+		If you do not have cheogram.com in your contacts and try to add it, it is just "cheogram.com" with no "@". Some clients will give a warning about adding such an address, please press "Add Anyway".
