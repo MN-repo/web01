@@ -92,12 +92,10 @@ class JmpRegister < Roda
 	plugin :render, engine: "slim"
 	plugin :content_for
 	plugin :branch_locals
-	plugin :assets, css: ["style.scss"]
+	plugin :assets, css: ["style.scss"], add_suffix: true
 	plugin :public
 	plugin :environments
 	plugin RodaEMPromise # Must go last!
-
-	compile_assets if production?
 
 	def faq_entry(id, q, &block)
 		render(:faq_entry, locals: { id: id, q: q }, &block)
