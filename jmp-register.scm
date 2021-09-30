@@ -668,13 +668,36 @@ and the city, ISP and other information, if you have that database version.")
      ''(#:install-plan '(("." "share/jmp-register"))
         #:phases
        (modify-phases %standard-phases
+         (add-after 'install 'runner
+           (lambda* (#:key outputs #:allow-other-keys)
+             (use-modules (ice-9 ftw))
+             (let* ((out (assoc-ref outputs "out"))
+                    (appdir (string-append out "/share/jmp-register"))
+                    (bindir (string-append out "/bin/")))
+               (mkdir-p bindir)
+               (let ((binstub (string-append bindir "jmp-register")))
+                 (call-with-output-file binstub
+                   (lambda (port)
+                     (format port
+                       "#!~a~@
+                        ENV['GEM_PATH'] = ['~a', ENV['GEM_PATH']].compact.join(':')~@
+                        ENV['RACK_ENV'] = 'production' unless ENV.key?('RACK_ENV')~@
+                        Gem.clear_paths~@
+                        Dir.chdir '~a'~@
+                        load '~a'~%"
+                       (which "ruby")
+                       (getenv "GEM_PATH") ; https://lists.gnu.org/archive/html/guix-devel/2021-09/msg00336.html
+                       appdir
+                       (which "rackup"))))
+                 (chmod binstub #o755)))
+             #t))
          (add-before 'install 'build-assets
            (lambda _
-             (invoke "mkdir" "-p" "public/assets/css")
+             (mkdir-p "public/assets/css")
              (invoke "sassc" "-texpanded" "assets/css/style.scss" "public/assets/css/style.scss.css")
-             (invoke "rm" "-r" "assets")
+             (delete-file-recursively "assets")
              #t)))))
-    (propagated-inputs
+    (inputs
       '`(("ruby-blather" ,ruby-blather)
         ("ruby-dhall" ,ruby-dhall)
         ("ruby-em-http-request" ,ruby-em-http-request)
@@ -684,8 +707,9 @@ and the city, ISP and other information, if you have that database version.")
         ("ruby-redis" ,ruby-redis)
         ("ruby-roda" ,ruby-roda)
         ("ruby-sentry" ,ruby-sentry)
-        ("ruby" ,ruby) ;; Normally ruby-build-system adds this for us
-        ("ruby-slim" ,ruby-slim)))
+        ("ruby-slim" ,ruby-slim)
+        ("ruby" ,ruby)
+        ("ruby-thin" ,ruby-thin)))
     (native-inputs
      '`(("sassc" ,sassc)))
     (synopsis
