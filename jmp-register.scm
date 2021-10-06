@@ -5,6 +5,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system ruby)
   #:use-module (guix build-system copy)
+  #:use-module (gnu packages dhall)
   #:use-module (gnu packages ruby)
   #:use-module (gnu packages rails)
   #:use-module (gnu packages databases)
@@ -665,7 +666,12 @@ and the city, ISP and other information, if you have that database version.")
          ,(read-line (open-pipe* OPEN_READ "guix" "hash" "-rx" %source-dir))))))
     (build-system 'copy-build-system)
     (arguments
-     ''(#:install-plan '(("." "share/jmp-register"))
+     '`(#:install-plan '(
+         ("." "share/jmp-register" #:exclude
+           ("config.dhall.sample" "Makefile" "Gemfile" "jmp-register.scm"
+            "README.md" "COPYING") #:exclude-regexp ("^\\./\\."))
+          ("README.md" ,(string-append "share/doc/jmp-register-" version "/"))
+          ("config.dhall.sample" ,(string-append "share/doc/jmp-register-" version "/")))
         #:phases
        (modify-phases %standard-phases
          (add-after 'install 'runner
@@ -693,6 +699,7 @@ and the city, ISP and other information, if you have that database version.")
              #t))
          (add-before 'install 'build-assets
            (lambda _
+             (invoke "make")
              (mkdir-p "public/assets/css")
              (invoke "sassc" "-texpanded" "assets/css/style.scss" "public/assets/css/style.scss.css")
              (delete-file-recursively "assets")
@@ -711,7 +718,8 @@ and the city, ISP and other information, if you have that database version.")
         ("ruby" ,ruby)
         ("ruby-thin" ,ruby-thin)))
     (native-inputs
-     '`(("sassc" ,sassc)))
+     '`(("dhall" ,dhall)
+        ("sassc" ,sassc)))
     (synopsis
       "JMP homepage and registration stub")
     (description "")
