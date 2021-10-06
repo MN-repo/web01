@@ -9,10 +9,16 @@
   #:use-module (gnu packages ruby)
   #:use-module (gnu packages rails)
   #:use-module (gnu packages databases)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages web)
   #:use-module (ice-9 rdelim)
   #:use-module (ice-9 popen)
 )
+
+(define-public ruby-eventmachine-openssl
+  (package
+    (inherit ruby-eventmachine)
+    (inputs `(("openssl" ,openssl)))))
 
 (define-public ruby-sucker-punch
   (package
@@ -640,17 +646,18 @@ and the city, ISP and other information, if you have that database version.")
 
 ; Bake a template by eval'ing the leaves
 (define-public (bake tmpl)
- (cons
+ (list
   (car tmpl)
-  (map
+  (cons (caadr tmpl) (map
    (lambda (x) (list (car x) (eval (cadr x) %module)))
-   (cdr tmpl))))
+   (cdadr tmpl)))))
 
 ; double-escaped template of the jmp-register sexp
 ; This allows us to bake the expression without doing a full eval to a record,
 ; so it can be written
 (define-public jmp-register-template
-  '(package
+  '((package-input-rewriting `((,ruby-eventmachine . ,ruby-eventmachine-openssl)))
+  (package
     (name "jmp-register")
     (version (read-line (open-pipe* OPEN_READ "git" "--git-dir" %git-dir "describe" "--always" "--dirty")))
     (source
@@ -725,7 +732,7 @@ and the city, ISP and other information, if you have that database version.")
     (description "")
     (home-page
       "https://gitlab.com/ossguy/jmp-register")
-    (license 'license:agpl3)))
+    (license 'license:agpl3))))
 
 ; Build clean from git the version from a local clone
 ; To build whatever is sitting in local use:
