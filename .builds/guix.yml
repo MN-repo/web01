@@ -1,4 +1,6 @@
-image: guix 
+image: guix
+packages:
+- plzip
 sources:
 - https://gitlab.com/ossguy/jmp-register
 secrets:
@@ -6,7 +8,7 @@ secrets:
 - fd52c9ce-04e8-4684-af6c-1ab78d2e124a
 artifacts:
 - jmp-register.scm
-- jmp-register.nar.xz
+- jmp-register.nar.lz
 tasks:
 - bake: |
     sed '/^;;;;$/q' jmp-register/jmp-register.scm > jmp-register.scm
@@ -24,4 +26,4 @@ tasks:
     sudo chown root:root /etc/guix/signing-key.sec
     sudo chmod 0400 /etc/guix/signing-key.sec
     guix archive --export -r --no-grafts -L. jmp-register > jmp-register.nar
-    xz jmp-register.nar
+    plzip jmp-register.nar
