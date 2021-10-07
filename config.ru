@@ -36,6 +36,27 @@ CONFIG =
 GEOIP = GeoIP.new("/usr/share/GeoIP/GeoIPv6.dat")
 MAXMIND = Maxmind.new(Redis.new, GEOIP, **CONFIG[:maxmind])
 
+module OriginalStdOutStdErr
+	OUT = $stdout.dup
+	ERR = $stderr.dup
+	OUT.sync = true
+
+	# After a daemonize action or similar, reset standard streams to original
+	# Unless they are to a TTY
+	def self.reset
+		$stdout.reopen(OUT) unless OUT.tty?
+		$stderr.reopen(ERR) unless ERR.tty?
+	end
+
+	# Write to original out stream, unless it was a tty and has been changed
+	def self.write(s)
+		OUT.write(s) unless OUT.closed? || (OUT.tty? && !$stdout.tty?)
+	rescue Errno::EIO
+		# Writing to a disconnected terminal
+		nil
+	end
+end
+
 module Jabber
 	extend Blather::DSL
 
@@ -51,6 +72,9 @@ module Jabber
 	)
 
 	when_ready do
+		OriginalStdOutStdErr.reset
+		$stdout.sync = true
+		$stderr.sync = true
 		puts "XMPP ready..."
 	end
 
@@ -88,7 +112,7 @@ class JmpRegister < Roda
 	include ERB::Util
 	using ToForm
 
-	plugin :common_logger, $stdout
+	plugin :common_logger, OriginalStdOutStdErr
 	plugin :render, engine: "slim"
 	plugin :content_for
 	plugin :branch_locals
