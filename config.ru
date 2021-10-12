@@ -83,7 +83,13 @@ module Jabber
 
 	def self.write_with_promise(stanza)
 		promise = EMPromise.new
-		client.write_with_handler(stanza) { |s| promise.fulfill(s) }
+		client.write_with_handler(stanza) do |s|
+			if s.error?
+				promise.reject(s)
+			else
+				promise.fulfill(s)
+			end
+		end
 		promise
 	end
 
@@ -153,7 +159,9 @@ class JmpRegister < Roda
 	route do |r|
 		r.root do
 			canada = GEOIP.country(request.ip).country_code2 == "CA"
-			Jabber.execute("jabber:iq:register").then do |iq|
+			Jabber.execute("jabber:iq:register").catch {
+				OpenStruct.new(form: Blather::Stanza::X.new)
+			}.then do |iq|
 				view :home, locals: { canada: canada, form: iq.form }
 			end
 		end
