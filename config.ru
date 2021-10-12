@@ -36,7 +36,8 @@ CONFIG =
 GEOIP = GeoIP.new("/usr/share/GeoIP/GeoIPv6.dat")
 
 EM.next_tick do
-	MAXMIND = Maxmind.new(EM::Hiredis.connect, GEOIP, **CONFIG[:maxmind])
+	REDIS = EM::Hiredis.connect
+	MAXMIND = Maxmind.new(REDIS, GEOIP, **CONFIG[:maxmind])
 end
 
 module OriginalStdOutStdErr
@@ -204,6 +205,12 @@ class JmpRegister < Roda
 
 			r.get do
 				view :register
+			end
+		end
+
+		r.on "ipn-endpoint" do
+			REDIS.xadd("paypal_ipn", "*", *request.params.flatten(1).to_a).then do
+				"OK"
 			end
 		end
 
