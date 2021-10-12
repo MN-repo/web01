@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require "dhall"
+require "em-hiredis"
 require "erb"
 require "roda"
 require "blather/client/dsl"
 require "geoip"
-require "redis"
 
 require_relative "lib/maxmind"
 require_relative "lib/roda_em_promise"
@@ -34,7 +34,10 @@ CONFIG =
 		transform_keys: ->(k) { k&.to_sym }
 	)
 GEOIP = GeoIP.new("/usr/share/GeoIP/GeoIPv6.dat")
-MAXMIND = Maxmind.new(Redis.new, GEOIP, **CONFIG[:maxmind])
+
+EM.next_tick do
+	MAXMIND = Maxmind.new(EM::Hiredis.connect, GEOIP, **CONFIG[:maxmind])
+end
 
 module OriginalStdOutStdErr
 	OUT = $stdout.dup
