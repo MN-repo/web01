@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require "dhall"
+require "em-hiredis"
 require "erb"
 require "roda"
 require "blather/client/dsl"
 require "geoip"
-require "redis"
 
 require_relative "lib/maxmind"
 require_relative "lib/roda_em_promise"
@@ -34,7 +34,10 @@ CONFIG =
 		transform_keys: ->(k) { k&.to_sym }
 	)
 GEOIP = GeoIP.new("/usr/share/GeoIP/GeoIPv6.dat")
-MAXMIND = Maxmind.new(Redis.new, GEOIP, **CONFIG[:maxmind])
+
+EM.next_tick do
+	MAXMIND = Maxmind.new(EM::Hiredis.connect, GEOIP, **CONFIG[:maxmind])
+end
 
 module OriginalStdOutStdErr
 	OUT = $stdout.dup
@@ -80,7 +83,13 @@ module Jabber
 
 	def self.write_with_promise(stanza)
 		promise = EMPromise.new
-		client.write_with_handler(stanza) { |s| promise.fulfill(s) }
+		client.write_with_handler(stanza) do |s|
+			if s.error?
+				promise.reject(s)
+			else
+				promise.fulfill(s)
+			end
+		end
 		promise
 	end
 
@@ -150,7 +159,9 @@ class JmpRegister < Roda
 	route do |r|
 		r.root do
 			canada = GEOIP.country(request.ip).country_code2 == "CA"
-			Jabber.execute("jabber:iq:register").then do |iq|
+			Jabber.execute("jabber:iq:register").catch {
+				OpenStruct.new(form: Blather::Stanza::X.new)
+			}.then do |iq|
 				view :home, locals: { canada: canada, form: iq.form }
 			end
 		end
