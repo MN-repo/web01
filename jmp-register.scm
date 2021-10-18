@@ -5,6 +5,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system ruby)
   #:use-module (guix build-system copy)
+  #:use-module (guix utils)
   #:use-module (gnu packages dhall)
   #:use-module (gnu packages ruby)
   #:use-module (gnu packages rails)
@@ -19,6 +20,55 @@
   (package
     (inherit ruby-eventmachine)
     (inputs `(("openssl" ,openssl)))))
+
+(define-public ruby-hiredis
+  (package
+    (name "ruby-hiredis")
+    (version "0.6.3")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (rubygems-uri "hiredis" version))
+        (sha256
+          (base32 "04jj8k7lxqxw24sp0jiravigdkgsyrpprxpxm71ba93x1wr2w1bz"))))
+    (build-system ruby-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-before 'build 'use-cc-for-build
+           (lambda _
+             (setenv "CC" ,(cc-for-target))
+             #t)))))
+    (native-inputs
+     `(("ruby-rake-compiler" ,ruby-rake-compiler)))
+    (synopsis
+      "Ruby wrapper for hiredis (protocol serialization/deserialization and blocking I/O)")
+    (description
+      "Ruby wrapper for hiredis (protocol serialization/deserialization and blocking I/O)")
+    (home-page "http://github.com/redis/hiredis-rb")
+    (license #f)))
+
+(define-public ruby-em-hiredis
+  (package
+    (name "ruby-em-hiredis")
+    (version "0.3.1")
+    (source
+      (origin
+        (method url-fetch)
+        (uri (rubygems-uri "em-hiredis" version))
+        (sha256
+          (base32 "0lh276x6wngq9xy75fzzvciinmdlys93db7chy968i18japghk6z"))))
+    (build-system ruby-build-system)
+    (arguments
+     ;; Require too-old rspec
+     `(#:tests? #f))
+    (propagated-inputs
+      `(("ruby-eventmachine" ,ruby-eventmachine)
+        ("ruby-hiredis" ,ruby-hiredis)))
+    (synopsis "Eventmachine redis client using hiredis native parser")
+    (description "Eventmachine redis client using hiredis native parser")
+    (home-page "http://github.com/mloughran/em-hiredis")
+    (license #f)))
 
 (define-public ruby-sucker-punch
   (package
@@ -718,7 +768,7 @@ and the city, ISP and other information, if you have that database version.")
         ("ruby-em-promise.rb" ,ruby-em-promise.rb)
         ("ruby-geoip" ,ruby-geoip)
         ("ruby-multi-json" ,ruby-multi-json)
-        ("ruby-redis" ,ruby-redis)
+        ("ruby-em-hiredis" ,ruby-em-hiredis)
         ("ruby-roda" ,ruby-roda)
         ("ruby-sentry" ,ruby-sentry)
         ("ruby-slim" ,ruby-slim)
