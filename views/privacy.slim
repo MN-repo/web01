@@ -1,0 +1,58 @@
+﻿- content_for :title, "JMP: Privacy & Transparency Statement"
+
+h1 Privacy &amp; Transparency Statement
+
+markdown:
+	Your privacy is important to us.  It is JMP’s policy to respect your privacy regarding any information we may collect while operating our services.  Instead of giving you a list of vague platitudes about how we will protect your information, we want to be concrete and transparent about what information we have, and what you can do to protect yourself.
+
+section
+	h1 Threat Model
+
+	markdown:
+		The most important thing for any privacy-conscious user to understand is their [threat model](https://en.wikipedia.org/wiki/Threat_model).  If you don't know who you are protecting yourself from, you cannot know how to weigh the risks different kinds of data collection may pose to you.  Examples of threats to your privacy may include:
+
+		* Jealous friend or significant other
+		* Malicious user on public Wi-Fi
+		* Rogue employee at a service provider
+		* Exploit of a service provider by malicious entity
+		* State-level actors
+
+		We will keep some of these examples in mind as we examine various parts of the JMP service.
+
+section
+	h1 Scope
+
+	markdown:
+		The subsequent sections apply only to communication done using JMP.  Generally you can achieve greater privacy by communicating directly with your contacts over XMPP (using [OMEMO](https://conversations.im/omemo/), for example), using the same app you use for JMP.  Much of the following applies because JMP connects to the phone network (and would apply to any service that connects to the phone network), while some of it is JMP-specific.
+
+section
+	h1 Encryption
+
+	markdown:
+		The phone network itself does not encrypt metadata or content.  Therefore, if your concern is a state-level actor, exploit of a service provider, or rogue employee, you should consider all the metadata and content of your phone calls and text and picture messages to be **not private**.  Your data will pass through many phone companies outside of your control or influence, including, but not limited to, the phone company of your recipient.
+
+		Messages sent using XMPP to JMP will be encrypted using TLS to your XMPP server and then again over TLS to JMP's servers.  Phone calls over XMPP to JMP are encrypted from your device to JMP's servers.  So if your concern is malicious users on public Wi-Fi you are well protected.
+
+		Phone calls over SIP are not encrypted.  Note that SIP is not part of the default JMP configuration for new users.
+
+		Encryption in transit cannot help if your concern is a jealous friend or significant other who may gain access to your device.  Your best protection in this scenario is to secure your device and to wipe local logs regularly.
+
+section
+	h1 Data Retention
+
+	markdown:
+		Metadata and content of text messages may be retained for up to **7 days** by JMP or associates with the primary purpose being resiliency to partial service outages.
+
+		Media in MMS messages and voicemail recordings need to be retained until retrieved by all of a user's devices, and so may be retained for up to **30 days** after the last time the media is accessed.
+
+		Call metadata is retained for billing purposes, but also for a user's own ability to fetch this data.  Users may contact support to expunge old call records.
+
+		JMP does not host users' XMPP accounts, and has no control over their servers. For greater portability between clients we recommend having the user's server archive messages so clients can synchronize and receive all messages, but this is another place a copy of messages may be stored. Users should contact their chosen XMPP server operators and/or review their policies to see how those messages are being stored.
+
+		It is JMP's goal not to collect or store any personal data that we do not need.  You need to consider for your threat model, however, that JMP is operated by fallible humans.  While we work hard to avoid it, some data or metadata may find its way into log files or backups and may not be properly expunged.  If you are concerned about a rogue employee, as has already been said, there are too many companies involved in the phone network for your data to be safe.  If you are concerned about state-level actors, consider that our employees may have been coerced by law enforcement.  Every effort is made to comply only with legitimate law enforcement requests.
+
+section
+	h1 Law Enforcement
+
+	markdown:
+		JMP will comply with all legitimate law enforcement requests from jurisdictions that have power over JMP.  This includes, at present, the Canadian federal government and the government of British Columbia.  You should also consider that local law enforcement may have power over any one of our employees in other jurisdictions where they may live or travel.  At the time of this writing, all JMP employees normally reside in Canada.
