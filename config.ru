@@ -135,19 +135,19 @@ class JmpRegister < Roda
 		render(:faq_entry, locals: { id: id, q: q }, &block)
 	end
 
-	def tels_embedded(form)
-		return tels("Indianapolis, IN") if form.empty?
+	def tels_embedded(form, fallbacks)
+		return tels(fallbacks.shift, fallbacks) if form.empty? && !fallbacks.empty?
 		render :tels, locals: { form: form, embed: true }
 	end
 
-	def tels(q)
+	def tels(q, fallbacks=CONFIG[:fallback_searches])
 		Jabber.execute(
 			"jabber:iq:register",
 			TelQueryForm.new(q, request.params["max"] || 2000).to_node
 		).then do |iq|
 			Jabber.cancel(iq)
 			form = TelQueryForm.parse(iq)
-			next tels_embedded(form) if request.params.key?("embed")
+			next tels_embedded(form, fallbacks) if request.params.key?("embed")
 
 			view :tels, locals: { form: form, embed: false }
 		end
@@ -170,7 +170,7 @@ class JmpRegister < Roda
 		r.get "tels" do
 			EMPromise.resolve(
 				request.params["q"] || MAXMIND.q(request.ip).then(&:to_q)
-			).catch { "307" }.then(&method(:tels))
+			).catch { CONFIG[:fallback_searches].first }.then(&method(:tels))
 		end
 
 		r.on "register" do

@@ -2,5 +2,6 @@
 	jid = "test@localhost",
 	password = "test",
 	maxmind = { user = "", token = "" },
+	fallback_searches = ["307", "Indianapolis, IN"],
 	sgx_jmp = "jmp.chat"
 }
