@@ -218,6 +218,10 @@ class JmpRegister < Roda
 			view :faq
 		end
 
+		r.get "privacy" do
+			view :privacy
+		end
+
 		r.get "credits" do
 			view :credits
 		end
