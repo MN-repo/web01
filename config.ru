@@ -136,7 +136,7 @@ class JmpRegister < Roda
 	end
 
 	def tels_embedded(form, fallbacks)
-		return tels(fallbacks.shift, fallbacks) if form.empty? && !fallbacks.empty?
+		return tels(fallbacks[0], fallbacks[1..]) if form.empty? && !fallbacks.empty?
 		render :tels, locals: { form: form, embed: true }
 	end
 
