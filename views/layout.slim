@@ -7,7 +7,7 @@ html lang="en" xmlns="http://www.w3.org/1999/xhtml" *(@html_attrs || {})
 		== assets :css
 		== content_for :head
 	body
-		h1: img src="/static/jmp_beta.webp" alt="JMP"
+		h1: a href="/": img src="/static/jmp_beta.webp" alt="JMP"
 		== yield
 
 		== render :nav

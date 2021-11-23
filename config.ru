@@ -129,7 +129,12 @@ class JmpRegister < Roda
 	plugin :assets, css: ["style.scss"], add_suffix: true
 	plugin :public
 	plugin :environments
+	plugin :status_handler
 	plugin RodaEMPromise # Must go last!
+
+	status_handler(404) do
+		view 404
+	end
 
 	def faq_entry(id, q, &block)
 		render(:faq_entry, locals: { id: id, q: q }, &block)
@@ -184,11 +189,11 @@ class JmpRegister < Roda
 					view "register/jabber/new"
 				end
 
-				r.get do
+				r.get true do
 					view "register/jabber"
 				end
 
-				r.post do
+				r.post true do
 					Sentry.set_user(jid: request.params["jid"], tel: tel)
 					Jabber.execute(
 						"web-register",
@@ -203,7 +208,7 @@ class JmpRegister < Roda
 				view "register/snikket"
 			end
 
-			r.get do
+			r.get true do
 				view :register
 			end
 		end
