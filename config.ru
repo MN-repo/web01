@@ -184,11 +184,11 @@ class JmpRegister < Roda
 					view "register/jabber/new"
 				end
 
-				r.get do
+				r.get true do
 					view "register/jabber"
 				end
 
-				r.post do
+				r.post true do
 					Sentry.set_user(jid: request.params["jid"], tel: tel)
 					Jabber.execute(
 						"web-register",
@@ -203,7 +203,7 @@ class JmpRegister < Roda
 				view "register/snikket"
 			end
 
-			r.get do
+			r.get true do
 				view :register
 			end
 		end
