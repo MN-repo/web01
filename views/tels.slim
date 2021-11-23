@@ -47,7 +47,7 @@ scss:
 					= option.label[ref[:begin].to_i..ref[:end].to_i]
 				= option.label[ref[:end].to_i+1..-1] unless embed
 
-- if form.fields.map(&:var).find { |var| var != "tel" }
+- if !embed && form.fields.map(&:var).find { |var| var != "tel" }
 	form method="get" action="" title=form.title
 		- form.fields.each do |field|
 			- next if field.var == "tel"
