@@ -129,7 +129,12 @@ class JmpRegister < Roda
 	plugin :assets, css: ["style.scss"], add_suffix: true
 	plugin :public
 	plugin :environments
+	plugin :status_handler
 	plugin RodaEMPromise # Must go last!
+
+	status_handler(404) do
+		view 404
+	end
 
 	def faq_entry(id, q, &block)
 		render(:faq_entry, locals: { id: id, q: q }, &block)
