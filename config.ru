@@ -251,6 +251,10 @@ class JmpRegister < Roda
 			r.redirect "/register/jabber/new?#{request.query_string}", 301
 		end
 
+		r.get "notify_signup" do
+			r.redirect "https://soprani.ca/cgi-bin/mailman/listinfo/jmp-news", 301
+		end
+
 		r.get(/register(?:-jid|2)\Z/) do
 			r.redirect "/register/jabber?#{request.query_string}", 301
 		end
