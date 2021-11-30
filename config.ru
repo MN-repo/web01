@@ -255,6 +255,10 @@ class JmpRegister < Roda
 			r.redirect "/register/jabber?#{request.query_string}", 301
 		end
 
+		r.on "sp1a", method: :get do
+			r.redirect r.remaining_path, 301
+		end
+
 		r.get(/([^\/]+)\/\Z/) do |match|
 			qs = request.query_string.to_s != "" ? "?#{request.query_string}" : ""
 			r.redirect "/#{match}#{qs}", 301
