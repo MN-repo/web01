@@ -91,6 +91,7 @@ module Jabber
 				promise.fulfill(s)
 			end
 		end
+		EM.add_timer(5) { promise.reject("Timeout") }
 		promise
 	end
 
