@@ -129,6 +129,7 @@ class JmpRegister < Roda
 	plugin :assets, css: ["style.scss"], add_suffix: true
 	plugin :public
 	plugin :environments
+	plugin :head
 	plugin :status_handler
 	plugin RodaEMPromise # Must go last!
 
