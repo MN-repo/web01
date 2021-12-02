@@ -91,6 +91,7 @@ module Jabber
 				promise.fulfill(s)
 			end
 		end
+		EM.add_timer(5) { promise.reject("Timeout") }
 		promise
 	end
 
@@ -141,9 +142,16 @@ class JmpRegister < Roda
 		render(:faq_entry, locals: { id: id, q: q }, &block)
 	end
 
-	def tels_embedded(form, fallbacks)
-		return tels(fallbacks[0], fallbacks[1..]) if form.empty? && !fallbacks.empty?
-		render :tels, locals: { form: form, embed: true }
+	def embed
+		request.params.key?("embed")
+	end
+
+	def embedded_tel_falback(form, fallbacks)
+		if embed && form.empty? && !fallbacks.empty?
+			tels(fallbacks[0], fallbacks[1..])
+		else
+			form
+		end
 	end
 
 	def tels(q, fallbacks=CONFIG[:fallback_searches])
@@ -153,9 +161,7 @@ class JmpRegister < Roda
 		).then do |iq|
 			Jabber.cancel(iq)
 			form = TelQueryForm.parse(iq)
-			next tels_embedded(form, fallbacks) if request.params.key?("embed")
-
-			view :tels, locals: { form: form, embed: false }
+			embedded_tel_falback(form, fallbacks)
 		end
 	end
 
@@ -176,7 +182,17 @@ class JmpRegister < Roda
 		r.get "tels" do
 			EMPromise.resolve(
 				request.params["q"] || MAXMIND.q(request.ip).then(&:to_q)
-			).catch { CONFIG[:fallback_searches].first }.then(&method(:tels))
+			).catch {
+				CONFIG[:fallback_searches].first
+			}.then(&method(:tels)).then { |form|
+				if embed
+					render :tels, locals: { form: form }
+				else
+					view :tels, locals: { form: form }
+				end
+			}.catch { |e|
+				render :retry, locals: { error: e }
+			}
 		end
 
 		r.on "register" do
