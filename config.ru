@@ -142,6 +142,13 @@ class JmpRegister < Roda
 		render(:faq_entry, locals: { id: id, q: q }, &block)
 	end
 
+	def strip_trailing_slash!
+		request.get(/(?:.*\/)?\Z/) do
+			qs = request.query_string.to_s != "" ? "?#{request.query_string}" : ""
+			request.redirect "#{request.path.sub(/\/\Z/, '')}#{qs}", 301
+		end
+	end
+
 	def embed
 		request.params.key?("embed")
 	end
@@ -219,6 +226,8 @@ class JmpRegister < Roda
 						view "register/jabber/success"
 					end
 				end
+
+				strip_trailing_slash!
 			end
 
 			r.get "snikket" do
@@ -228,6 +237,8 @@ class JmpRegister < Roda
 			r.get true do
 				view :register
 			end
+
+			strip_trailing_slash!
 		end
 
 		r.on "ipn-endpoint" do
@@ -280,10 +291,7 @@ class JmpRegister < Roda
 			r.redirect r.remaining_path, 301
 		end
 
-		r.get(/([^\/]+)\/\Z/) do |match|
-			qs = request.query_string.to_s != "" ? "?#{request.query_string}" : ""
-			r.redirect "/#{match}#{qs}", 301
-		end
+		strip_trailing_slash!
 
 		r.assets if JmpRegister.development?
 		r.public if JmpRegister.development?
