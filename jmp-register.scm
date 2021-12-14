@@ -427,14 +427,14 @@
 (define-public ruby-dhall
   (package
     (name "ruby-dhall")
-    (version "0.5.2")
+    (version "0.5.3.fixed")
     (source
       (origin
         (method url-fetch)
         (uri (rubygems-uri "dhall" version))
         (sha256
           (base32
-            "09wcq8xc1ynld04r2f332bx8cn7rjc4afaq8hm1dr2fc35jlpn6m"))))
+            "1qn7fpiakzpllks43m7r3wh6a2rypxgg02y09zzk27lhqv6bbbrz"))))
     (build-system ruby-build-system)
     (arguments
      ;; No test in gem archive
