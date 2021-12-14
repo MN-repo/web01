@@ -122,6 +122,7 @@
            (lambda _
              (substitute* "niceogiri.gemspec"
                (("2.7") "3.8")
+               (("1.0") "2.0")
                ((".*guard-rspec.*") "\n"))
              #t)))))
     (propagated-inputs
@@ -175,7 +176,8 @@
            (lambda _
              (substitute* "blather.gemspec"
                ((".*guard-rspec.*") "\n")
-                ((".*bluecloth.*") "\n"))
+                ((".*bluecloth.*") "\n")
+                ((".*bundler.*") "\n"))
              #t)))))
     (propagated-inputs
       `(("ruby-activesupport" ,ruby-activesupport)
