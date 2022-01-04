@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 gem "blather", git: "https://github.com/singpolyma/blather.git", branch: "ergonomics"
+gem "cbor"
 gem "dhall"
 gem "em-hiredis"
 gem "em-http-request"
@@ -12,6 +13,7 @@ gem "multi_json"
 gem "roda"
 gem "sentry-ruby", "<= 4.3.1"
 gem "slim"
+gem "statsd-instrument", git: "https://github.com/singpolyma/statsd-instrument.git", branch: "graphite"
 gem "thin"
 
 group(:development) do

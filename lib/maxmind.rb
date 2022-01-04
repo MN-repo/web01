@@ -1,24 +1,30 @@
 # frozen_string_literal: true
 
+require "cbor"
 require "em-http"
 require "em-http/middleware/json_response"
 require "em_promise"
-require "json"
+require "statsd-instrument"
 
 class Maxmind
-	def initialize(redis, geoip, user:, token:)
-		@redis = redis
+	def initialize(memcache, geoip, user:, token:)
+		@memcache = memcache
 		@geoip = geoip
 		@user = user
 		@token = token
 	end
 
 	def cache(ip)
-		@redis.get("mmgp_result-#{ip}").then(&JSON.method(:parse)).catch {
-			yield ip
-		}.then do |result|
-			@redis.set("mmgp_result-#{ip}", result.to_json).then { result }
-		end
+		promise = EMPromise.new
+		@memcache.get("mmgp_result-#{ip}", &promise.method(:fulfill))
+
+		StatsD.increment("maxmind_cache.queries")
+		promise.then(&CBOR.method(:decode)).then {
+			StatsD.increment("maxmind_cache.hit")
+		}.catch { yield ip }.then { |result|
+			@memcache.set("mmgp_result-#{ip}", result.to_cbor)
+			result
+		}
 	end
 
 	def call_api(ip)

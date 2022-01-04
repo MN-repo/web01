@@ -37,7 +37,8 @@ GEOIP = GeoIP.new("/usr/share/GeoIP/GeoIPv6.dat")
 
 EM.next_tick do
 	REDIS = EM::Hiredis.connect
-	MAXMIND = Maxmind.new(REDIS, GEOIP, **CONFIG[:maxmind])
+	MEMCACHE = EM::P::Memcache.connect
+	MAXMIND = Maxmind.new(MEMCACHE, GEOIP, **CONFIG[:maxmind])
 end
 
 module OriginalStdOutStdErr

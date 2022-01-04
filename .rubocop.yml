@@ -1,10 +1,6 @@
 AllCops:
-  TargetRubyVersion: 2.5
-
-Metrics/LineLength:
-  Max: 80
-  Exclude:
-    - Gemfile
+  TargetRubyVersion: 2.7
+  NewCops: enable
 
 Metrics/ClassLength:
   Exclude:
@@ -21,19 +17,53 @@ Metrics/BlockLength:
   Exclude:
     - test/*
 
-Metrics/ClassLength:
-  Exclude:
-    - test/*
-
 Metrics/AbcSize:
   Exclude:
     - test/*
 
-Style/Tab:
-  Enabled: false
+Metrics/ParameterLists:
+  Max: 6
 
-Style/IndentationWidth:
+Naming/MethodParameterName:
+  AllowNamesEndingInNumbers: false
+  AllowedNames:
+    - m
+    - e
+    - q
+    - s
+    - k
+    - v
+    - ex
+    - tx
+    - id
+    - iq
+    - ip
+    - db
+
+Layout/IndentationStyle:
+  Enabled: false
+  EnforcedStyle: tabs
+  IndentationWidth: 2
+
+Layout/IndentationWidth:
   Width: 1 # one tab
+
+Layout/LineLength:
+  Max: 80
+  Exclude:
+    - Gemfile
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent
+
+Style/AccessModifierDeclarations:
+  Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -64,22 +94,25 @@ Style/RegexpLiteral:
   EnforcedStyle: slashes
   AllowInnerSlashes: true
 
-Layout/SpaceAroundEqualsInParameterDefault:
-  EnforcedStyle: no_space
+Lint/OutOfRangeRegexpRef:
+  Enabled: false
 
-Layout/AccessModifierIndentation:
-  EnforcedStyle: outdent
-
-Layout/FirstParameterIndentation:
-  EnforcedStyle: consistent
+Lint/MissingSuper:
+  Enabled: false
 
 Style/BlockDelimiters:
-  EnforcedStyle: braces_for_chaining
+  EnforcedStyle: semantic
+  AllowBracesOnProceduralOneLiners: true
+  ProceduralMethods:
+    - execute_command
 
 Style/MultilineBlockChain:
   Enabled: false
 
-Layout/IndentArray:
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
 Style/FormatString:
@@ -90,7 +123,7 @@ Style/FormatStringToken:
 
 Style/FrozenStringLiteralComment:
   Exclude:
-    - forms/*
+    - forms/**/*.rb
 
 Naming/AccessorMethodName:
   Enabled: false
