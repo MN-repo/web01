@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 gem "blather", git: "https://github.com/singpolyma/blather.git", branch: "ergonomics"
+gem "cbor"
 gem "dhall"
 gem "em-hiredis"
 gem "em-http-request"
