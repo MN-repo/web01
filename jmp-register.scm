@@ -16,6 +16,30 @@
   #:use-module (ice-9 popen)
 )
 
+(define-public ruby-statsd-instrument+graphite
+  (package
+    (name "ruby-statsd-instrument")
+    (version "3.1.2+graphite")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/singpolyma/statsd-instrument")
+             (commit "graphite")))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32
+         "1pj87difhx2vkdxv75q7yskla2wg4g0h2528xsxxd27qa4bscf40"))))
+    (build-system ruby-build-system)
+    (arguments
+     `(#:tests? #f))
+    (synopsis
+      "A StatsD client for Ruby apps. Provides metaprogramming methods to inject StatsD instrumentation into your code.")
+    (description
+      "This package provides a StatsD client for Ruby apps.  Provides metaprogramming methods to inject StatsD instrumentation into your code.")
+    (home-page "https://github.com/Shopify/statsd-instrument")
+    (license license:expat)))
+
 (define-public ruby-eventmachine-openssl
   (package
     (inherit ruby-eventmachine)
@@ -774,6 +798,7 @@ and the city, ISP and other information, if you have that database version.")
         ("ruby-roda" ,ruby-roda)
         ("ruby-sentry" ,ruby-sentry)
         ("ruby-slim" ,ruby-slim)
+        ("ruby-stats-instrument" ,ruby-statsd-instrument+graphite)
         ("ruby" ,ruby)
         ("ruby-thin" ,ruby-thin)))
     (native-inputs
