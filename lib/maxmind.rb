@@ -4,6 +4,7 @@ require "cbor"
 require "em-http"
 require "em-http/middleware/json_response"
 require "em_promise"
+require "statsd-instrument"
 
 class Maxmind
 	def initialize(memcache, geoip, user:, token:)
@@ -17,9 +18,10 @@ class Maxmind
 		promise = EMPromise.new
 		@memcache.get("mmgp_result-#{ip}", &promise.method(:fulfill))
 
-		promise.then(&CBOR.method(:decode)).catch {
-			yield ip
-		}.then { |result|
+		StatsD.increment("maxmind_cache.queries")
+		promise.then(&CBOR.method(:decode)).then {
+			StatsD.increment("maxmind_cache.hit")
+		}.catch { yield ip }.then { |result|
 			@memcache.set("mmgp_result-#{ip}", result.to_cbor)
 			result
 		}
