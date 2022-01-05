@@ -20,7 +20,7 @@ class Maxmind
 
 		StatsD.increment("maxmind_cache.queries")
 		promise.then { |cbor|
-			StatsD.increment("maxmind_cache.hit")
+			StatsD.increment("maxmind_cache.hit") if cbor
 			CBOR.decode(cbor)
 		}.catch { yield ip }.then { |result|
 			@memcache.set("mmgp_result-#{ip}", result.to_cbor)
