@@ -45,7 +45,13 @@ h1 property="name" Frequently Asked Questions
 
 		The easiest way is to make a call from your Jabber client, if you are using a supporting client such as Conversations, Snikket, Movim, or Gajim. Simply add a contact just as you would for [messaging](#sending) and then select the voice call option in your client.
 
-		Another way to make calls is to create a [SIP](https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/) account [in your account settings](#bot) and then login using a SIP client. Then enter the 10-digit phone number that you'd like to call.
+== faq_entry "sip", "Does JMP support SIP?" do
+	markdown:
+		For advanced use cases, or others who might have reason to need it, JMP does allow users to create a [SIP](https://arstechnica.com/business/2010/01/voip-in-depth-an-introduction-to-the-sip-protocol-part-1/) account [in your account settings](#bot) and then login using a SIP client.
+
+		Outbound phone calls with SIP are supported.  Inbound calls can optionally be routed to the SIP account as well.  Sending or receiving messages (i.e. SMS and MMS) using SIP is not supported at this time.
+
+		Inbound calls can also be forwarded to any SIP URI.
 
 == faq_entry "pricing", "How much does JMP cost?" do
 	markdown:
