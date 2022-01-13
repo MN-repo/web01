@@ -2,8 +2,18 @@
 - content_for :title, "JMP: Frequently Asked Questions"
 
 scss:
-	body > section { counter-increment: heading; }
-	body > section h1:before { content: "Q"counter(heading)". "; }
+	body > section {
+		counter-increment: heading;
+		padding: 0.25em;
+		padding-bottom: 0;
+		h1 {
+			margin-top: 0;
+			&:before {
+				content: "Q"counter(heading)". ";
+			}
+		}
+	}
+	:target { outline: 1px dotted #000; }
 	iframe {
 		border: none;
 		width: 38rem;
