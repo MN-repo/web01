@@ -2,13 +2,16 @@
 
 require "dhall"
 require "em-hiredis"
+require "em_promise"
 require "erb"
+require "pg/em/connection_pool"
 require "roda"
 require "blather/client/dsl"
 require "geoip"
 
 require_relative "lib/maxmind"
 require_relative "lib/roda_em_promise"
+require_relative "lib/rates"
 require_relative "lib/rack_fiber"
 require_relative "lib/tel_query_form"
 require_relative "lib/to_form"
@@ -39,6 +42,10 @@ EM.next_tick do
 	REDIS = EM::Hiredis.connect
 	MEMCACHE = EM::P::Memcache.connect
 	MAXMIND = Maxmind.new(MEMCACHE, GEOIP, **CONFIG[:maxmind])
+	DB = PG::EM::ConnectionPool.new(dbname: "jmp") { |conn|
+		conn.type_map_for_results = PG::BasicTypeMapForResults.new(conn)
+		conn.type_map_for_queries = PG::BasicTypeMapForQueries.new(conn)
+	}
 end
 
 module OriginalStdOutStdErr
@@ -128,7 +135,12 @@ class JmpRegister < Roda
 	plugin :render, engine: "slim"
 	plugin :content_for
 	plugin :branch_locals
-	plugin :assets, css: ["style.scss"], add_suffix: true
+	plugin(
+		:assets,
+		css: { global: "style.scss", tom_select: "tom_select.scss" },
+		js: { section_list: "section_list.js", tom_select: "tom_select.js" },
+		add_suffix: true
+	)
 	plugin :public
 	plugin :environments
 	plugin :head
@@ -177,13 +189,16 @@ class JmpRegister < Roda
 		request.params["tel"] || request.params["number"]
 	end
 
+	def canada?
+		GEOIP.country(request.ip).country_code2 == "CA"
+	end
+
 	route do |r|
 		r.root do
-			canada = GEOIP.country(request.ip).country_code2 == "CA"
 			Jabber.execute("jabber:iq:register").catch {
 				OpenStruct.new(form: Blather::Stanza::X.new)
 			}.then do |iq|
-				view :home, locals: { canada: canada, form: iq.form }
+				view :home, locals: { form: iq.form }
 			end
 		end
 
@@ -244,6 +259,28 @@ class JmpRegister < Roda
 			end
 
 			strip_trailing_slash!
+		end
+
+		r.on "pricing" do
+			r.get :plan do |plan_name|
+				plan = CONFIG[:plans].find { |p| p[:name] == plan_name }
+				if plan
+					RateRepo.new.plan_cards(plan_name).then do |cards|
+						view "pricing", locals: { plan: plan, cards: cards }
+					end
+				else
+					response.status = 404
+					false
+				end
+			end
+
+			r.get true do
+				if canada?
+					r.redirect "/pricing/cad_beta_unlimited-v20210223", 303
+				else
+					r.redirect "/pricing/usd_beta_unlimited-v20210223", 303
+				end
+			end
 		end
 
 		r.on "ipn-endpoint" do

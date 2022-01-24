@@ -1,0 +1,71 @@
+- content_for :head do
+	== assets [:css, :tom_select]
+	== assets [:js, :tom_select]
+	== assets [:js, :section_list]
+	javascript:
+		window.addEventListener("load", function() {
+			section_list("US");
+			new TomSelect("#section-list > select", {
+				highlight: false,
+				maxOptions: 500
+			});
+		});
+
+	scss:
+		#section-list {
+			position: relative;
+			margin: 0 auto;
+			max-width: 30em;
+			text-align: right;
+
+			& > select {
+				display: block;
+				margin: 0 auto;
+				font-size: 1.2em;
+				padding: 0.2em;
+				text-align: left;
+			}
+
+
+			& > button {
+				position: absolute;
+				top: 0.2em;
+				right: 0.2em;
+				z-index: 900;
+				font-size: 0.6em;
+				margin-bottom: 0.2em;
+			}
+
+			.ts-wrapper {
+				margin: 0 auto;
+				max-width: 30em;
+				text-align: left;
+
+				.ts-control { font-size: 1.2em; }
+				.ts-control > input { font-size: 1em; }
+				.option {
+					padding: 0.3em 0.5em;
+					font-size: 1.5em;
+				}
+			}
+		}
+
+		.rate-card {
+			border: 1px dotted #000;
+			padding: 1em;
+			margin: 0.5em auto;
+			max-width: 30em;
+
+			> h1 { margin-top: 0; }
+
+			> table {
+				width: 100%;
+
+				th { text-align: left; }
+			}
+		}
+
+h1= "Outgoing Call Rates (#{plan[:currency]})"
+
+- cards.each do |(country, card)|
+	== render "rate_card", locals: { country: country, card: card }

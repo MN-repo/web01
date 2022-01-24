@@ -1,0 +1,10 @@
+section.rate-card[id=country.alpha2]
+	h1= "#{country.emoji_flag} #{country.translation("en")}"
+	table
+		tr
+			th Prefix
+			th Rate
+		- card.each do |rate|
+			tr
+				td= rate.prefix
+				td= rate.rate
