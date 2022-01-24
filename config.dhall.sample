@@ -3,5 +3,20 @@
 	password = "test",
 	maxmind = { user = "", token = "" },
 	fallback_searches = ["307", "Indianapolis, IN"],
-	sgx_jmp = "jmp.chat"
+	sgx_jmp = "jmp.chat",
+	plans = [
+		{
+			name = "plan_name",
+			currency = < CAD | USD >.USD,
+			monthly_price = 29900,
+			minutes = <
+				unlimited |
+				limited: { included: Natural, price: Natural }
+			>.limited { included = 120, price = 87 },
+			messages = <
+				unlimited |
+				limited: { included: Natural, price: Natural }
+			>.unlimited
+		}
+	]
 }
