@@ -223,8 +223,12 @@ class JmpRegister < Roda
 					Jabber.execute(
 						"web-register",
 						{ jid: request.params["jid"], tel: tel }.to_form(:submit)
-					).then do
-						view "register/jabber/success"
+					).then do |iq|
+						if iq.note_type
+							view "register/jabber/note", locals: { iq: iq }
+						else
+							view "register/jabber/success"
+						end
 					end
 				end
 
