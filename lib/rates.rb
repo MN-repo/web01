@@ -12,15 +12,15 @@ ISO3166::Data.register(
 	translations: { "en" => "Kosovo" }
 )
 
-INTERNATIONAL = Class.new {
+NON_GEOGRAPHIC = Class.new {
 	def emoji_flag; end
 
 	def alpha2
-		"international"
+		"non-geographic"
 	end
 
 	def translation(_lang)
-		"International"
+		"Non-Geographic (sattelite phone, etc)"
 	end
 }.new
 
@@ -53,8 +53,8 @@ class Prefixes
 			prefix.start_with?(p)
 		}.max_by(&:length)&.first
 
-		if code == "International"
-			INTERNATIONAL
+		if code == "NonGeographic"
+			NON_GEOGRAPHIC
 		else
 			ISO3166::Country[code]
 		end
