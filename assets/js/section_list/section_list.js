@@ -33,7 +33,13 @@ function section_list(def) {
 
 	window.addEventListener("hashchange", function() {
 		sections.forEach(function(section) { section.style.display = "none"; });
-		document.querySelector(window.location.hash).style.display = "block";
+		if(window.location.hash) {
+			document.querySelector(window.location.hash).style.display = "block";
+		}
+		select.value = window.location.hash.replace(/^#/, "");
+		var event = document.createEvent("HTMLEvents");
+		event.initEvent("change", false, true);
+		select.dispatchEvent(event);
 	});
 
 	window.location.hash = "";

@@ -6,6 +6,7 @@
 		window.addEventListener("load", function() {
 			section_list(#{{plan[:currency].to_json}} == "CAD" ? "CA" : "US");
 			new TomSelect("#section-list > select", {
+				plugins: ["restore_on_backspace", "change_listener"],
 				highlight: false,
 				maxOptions: 500
 			});
