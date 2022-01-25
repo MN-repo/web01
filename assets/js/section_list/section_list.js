@@ -13,6 +13,7 @@ function section_list(def) {
 			section.style.display = "block";
 		});
 		group.style.display = "none";
+		select = null;
 	});
 
 	sections.forEach(function(section) {
@@ -32,6 +33,8 @@ function section_list(def) {
 		.insertAdjacentElement("afterend", group);
 
 	window.addEventListener("hashchange", function() {
+		if(!select) return;
+
 		sections.forEach(function(section) { section.style.display = "none"; });
 		if(window.location.hash) {
 			document.querySelector(window.location.hash).style.display = "block";
