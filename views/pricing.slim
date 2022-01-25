@@ -6,7 +6,11 @@
 		window.addEventListener("load", function() {
 			section_list(#{{plan[:currency].to_json}} == "CAD" ? "CA" : "US");
 			new TomSelect("#section-list > select", {
-				plugins: ["restore_on_backspace", "change_listener"],
+				plugins: [
+					"change_listener",
+					"no_backspace_delete",
+					"dropdown_input"
+				],
 				highlight: false,
 				maxOptions: 500
 			});
@@ -38,16 +42,9 @@
 			}
 
 			.ts-wrapper {
-				margin: 0 auto;
-				max-width: 30em;
 				text-align: left;
 
-				.ts-control { font-size: 1.2em; }
-				.ts-control > input { font-size: 1em; }
-				.option {
-					padding: 0.3em 0.5em;
-					font-size: 1.5em;
-				}
+				* { box-sizing: border-box; }
 			}
 		}
 
