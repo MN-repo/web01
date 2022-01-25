@@ -4,7 +4,7 @@
 	== assets [:js, :section_list]
 	javascript:
 		window.addEventListener("load", function() {
-			section_list("US");
+			section_list(#{{plan[:currency].to_json}} == "CAD" ? "CA" : "US");
 			new TomSelect("#section-list > select", {
 				highlight: false,
 				maxOptions: 500
