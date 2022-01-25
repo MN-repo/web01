@@ -20,7 +20,7 @@ NON_GEOGRAPHIC = Class.new {
 	end
 
 	def translation(_lang)
-		"Non-Geographic (sattelite phone, etc)"
+		"Non-Geographic (satelite phone, etc)"
 	end
 }.new
 
