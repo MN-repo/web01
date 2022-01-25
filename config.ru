@@ -262,10 +262,10 @@ class JmpRegister < Roda
 		end
 
 		r.on "pricing" do
-			r.get :plan do |plan_name|
-				plan = CONFIG[:plans].find { |p| p[:name] == plan_name }
+			r.get :currency do |currency|
+				plan = CONFIG[:plans].find { |p| p[:currency] == currency.to_sym }
 				if plan
-					RateRepo.new.plan_cards(plan_name).then do |cards|
+					RateRepo.new.plan_cards(plan[:name]).then do |cards|
 						view "pricing", locals: { plan: plan, cards: cards }
 					end
 				else
@@ -276,9 +276,9 @@ class JmpRegister < Roda
 
 			r.get true do
 				if canada?
-					r.redirect "/pricing/cad_beta_unlimited-v20210223", 303
+					r.redirect "/pricing/CAD", 303
 				else
-					r.redirect "/pricing/usd_beta_unlimited-v20210223", 303
+					r.redirect "/pricing/USD", 303
 				end
 			end
 		end
