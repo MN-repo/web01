@@ -4,7 +4,11 @@
 	== assets [:js, :section_list]
 	javascript:
 		window.addEventListener("load", function() {
-			section_list(#{{plan[:currency].to_json}} == "CAD" ? "CA" : "US");
+			section_list(
+				document.querySelectorAll("section.rate-card"),
+				document.querySelector("#outgoing > h1"),
+				#{{(plan.currency == "CAD" ? "CA" : "US").to_json}},
+			);
 			new TomSelect("#section-list > select", {
 				plugins: [
 					"change_listener",
@@ -17,6 +21,15 @@
 		});
 
 	scss:
+		body > section {
+			max-width: 32em;
+			margin: auto;
+
+			& > h1 {
+				text-align: center;
+			}
+		}
+
 		#section-list {
 			position: relative;
 			margin: 0 auto;
@@ -63,7 +76,17 @@
 			}
 		}
 
-h1= "Outgoing Call Rates (#{plan[:currency]})"
+section
+	h1 Plan
 
-- cards.each do |(country, card)|
-	== render "rate_card", locals: { country: country, card: card }
+	ul
+		li= "$#{'%.2f' % plan.monthly_price} / month"
+		li= "includes #{plan.message_limit.to_s}"
+		li= "includes #{plan.minute_limit.to_s}"
+		li= "incoming calls $#{'%.2f' % plan.minute_limit.price} / minute"
+
+section#outgoing
+	h1= "Outgoing Call Rates (#{plan.currency})"
+
+	- cards.each do |(country, card)|
+		== render "rate_card", locals: { country: country, card: card }
