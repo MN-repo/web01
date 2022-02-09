@@ -1,5 +1,4 @@
-function section_list(def) {
-	var sections = document.querySelectorAll("body > section");
+function section_list(sections, selectAfter, def) {
 	var group = document.createElement("div");
 	group.id = "section-list";
 	var select = document.createElement("select");
@@ -29,8 +28,7 @@ function section_list(def) {
 	});
 
 	group.appendChild(select);
-	document.querySelector("body > h1:nth-of-type(2)")
-		.insertAdjacentElement("afterend", group);
+	selectAfter.insertAdjacentElement("afterend", group);
 
 	window.addEventListener("hashchange", function() {
 		if(!select) return;

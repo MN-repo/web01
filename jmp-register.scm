@@ -993,6 +993,7 @@ country objects.  It includes data from ISO 3166")
         ruby-sentry
         ruby-slim
         ruby-statsd-instrument+graphite
+        ruby-value-semantics
         ruby
         ruby-thin))
     (native-inputs '(list dhall sassc))

@@ -10,6 +10,7 @@ require "blather/client/dsl"
 require "geoip"
 
 require_relative "lib/maxmind"
+require_relative "lib/plan"
 require_relative "lib/roda_em_promise"
 require_relative "lib/rates"
 require_relative "lib/rack_fiber"
@@ -263,9 +264,9 @@ class JmpRegister < Roda
 
 		r.on "pricing" do
 			r.get :currency do |currency|
-				plan = CONFIG[:plans].find { |p| p[:currency] == currency.to_sym }
+				plan = Plan.find_by_currency(currency)
 				if plan
-					RateRepo.new.plan_cards(plan[:name]).then do |cards|
+					RateRepo.new.plan_cards(plan.name).then do |cards|
 						view "pricing", locals: { plan: plan, cards: cards }
 					end
 				else

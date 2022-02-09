@@ -18,6 +18,7 @@ gem "sentry-ruby", "<= 4.3.1"
 gem "slim"
 gem "statsd-instrument", git: "https://github.com/singpolyma/statsd-instrument.git", branch: "graphite"
 gem "thin"
+gem "value_semantics"
 
 group(:development) do
 	gem "pry-reload"
