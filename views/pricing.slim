@@ -7,7 +7,7 @@
 			section_list(
 				document.querySelectorAll("section.rate-card"),
 				document.querySelector("#outgoing > h1"),
-				#{{(plan.currency == "CAD" ? "CA" : "US").to_json}},
+				#{{(plan.currency == :CAD ? "CA" : "US").to_json}},
 			);
 			new TomSelect("#section-list > select", {
 				plugins: [
