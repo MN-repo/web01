@@ -83,7 +83,7 @@ section
 		li= "$#{'%.2f' % plan.monthly_price} / month"
 		li= "includes #{plan.message_limit.to_s}"
 		li= "includes #{plan.minute_limit.to_s}"
-		li= "incoming calls $#{'%.2f' % plan.minute_limit.price} / minute"
+		li= "incoming calls $#{'%.4f' % plan.minute_limit.price} / minute"
 
 section#outgoing
 	h1= "Outgoing Call Rates (#{plan.currency})"
