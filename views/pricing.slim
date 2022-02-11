@@ -77,7 +77,7 @@
 		}
 
 section
-	h1 Plan
+	h1= "Plan (#{plan.currency})"
 
 	ul
 		li= "$#{'%.2f' % plan.monthly_price} / month"
@@ -86,7 +86,7 @@ section
 		li= "incoming calls $#{'%.4f' % plan.minute_limit.price} / minute"
 
 section#outgoing
-	h1= "Outgoing Call Rates (#{plan.currency})"
+	h1 Outgoing Call Rates
 
 	- cards.each do |(country, card)|
 		== render "rate_card", locals: { country: country, card: card }
