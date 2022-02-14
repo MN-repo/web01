@@ -139,7 +139,11 @@ class JmpRegister < Roda
 	plugin(
 		:assets,
 		css: { global: "style.scss", tom_select: "tom_select.scss" },
-		js: { section_list: "section_list.js", tom_select: "tom_select.js" },
+		js: {
+			section_list: "section_list.js",
+			tom_select: "tom_select.js",
+			htmx: "htmx.js"
+		},
 		add_suffix: true
 	)
 	plugin :public
@@ -265,7 +269,11 @@ class JmpRegister < Roda
 		r.on "pricing" do
 			r.get :currency do |currency|
 				plan = Plan.find_by_currency(currency)
-				if plan
+				if plan && (prefix = request.params["prefix"])
+					RateRepo.new.find_by_prefix(plan.name, prefix).then do |rate|
+						rate ? "$%.4f" % rate : ""
+					end
+				elsif plan
 					RateRepo.new.plan_cards(plan.name).then do |cards|
 						view "pricing", locals: { plan: plan, cards: cards }
 					end
