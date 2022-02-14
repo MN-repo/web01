@@ -2,11 +2,12 @@
 	== assets [:css, :tom_select]
 	== assets [:js, :tom_select]
 	== assets [:js, :section_list]
+	== assets [:js, :htmx]
 	javascript:
 		window.addEventListener("load", function() {
 			section_list(
 				document.querySelectorAll("section.rate-card"),
-				document.querySelector("#outgoing > h1"),
+				document.querySelector("#tel-search"),
 				#{{(plan.currency == :CAD ? "CA" : "US").to_json}},
 			);
 			new TomSelect("#section-list > select", {
@@ -76,6 +77,26 @@
 			}
 		}
 
+		#tel-search {
+			display: block;
+			margin-bottom: 0.2em;
+
+			> input {
+				display: inline-block;
+				font-size: 1em;
+				width: calc(100% - 6em);
+				max-width: 25em;
+
+				@media(min-width: 34em) {
+					margin-left: 1em;
+				}
+			}
+
+			> span {
+				padding-left: 1em;
+			}
+		}
+
 section
 	h1 Plan
 
@@ -87,6 +108,15 @@ section
 
 section#outgoing
 	h1= "Outgoing Call Rates (#{plan.currency})"
+
+	form#tel-search method="get" action="" hx-get="#" hx-target="#prefix-result"
+		input.ts-control{
+			type="tel"
+			name="prefix"
+			placeholder="Search by telephone number"
+			hx-get="#"
+			hx-trigger="keyup delay:500ms changed"}
+		span#prefix-result
 
 	- cards.each do |(country, card)|
 		== render "rate_card", locals: { country: country, card: card }

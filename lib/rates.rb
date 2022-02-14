@@ -90,4 +90,17 @@ class RateRepo
 			}.sort_by { |(country, _)| country.translation("en") }
 		end
 	end
+
+	PREFIX_SQL = <<~SQL
+		#{ALL_SQL} AND $2 LIKE prefix || '%'
+		ORDER BY prefix DESC
+		LIMIT 1
+	SQL
+
+	def find_by_prefix(plan, prefix)
+		prefix = "+#{prefix}" unless prefix.start_with?("+")
+		@db.query_defer(PREFIX_SQL, [plan, prefix]).then do |rate|
+			rate.first&.dig("rate")
+		end
+	end
 end
