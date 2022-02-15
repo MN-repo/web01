@@ -60,7 +60,7 @@ body > h1 {
 	margin-top: 0;
 
 	img {
-		height: 7em;
+		height: 15rem;
 		max-height: 25vh;
 	}
 
@@ -70,19 +70,19 @@ body > h1 {
 		margin: 0 auto;
 		width: max-content;
 		overflow: hidden;
-		padding-top: 0.2em;
+		padding-top: 0.3rem;
 
 		&::after {
 			position: absolute;
-			top: 0.75em;
-			left: -1em;
+			top: 1.25rem;
+			left: -2rem;
 			transform: rotate(-45deg);
 			content: "BETA";
 			color: #fff;
 			background-color: #f00;
 			font-weight: normal;
-			font-size: calc(min(3vh, 0.8em));
-			padding: 0.1em 1em;
+			font-size: calc(min(3vh, 1.5rem));
+			padding: 0.1rem 2rem;
 			border-radius: 100%;
 		}
 	}
