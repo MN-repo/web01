@@ -58,6 +58,34 @@ a {
 body > h1 {
 	text-align: center;
 	margin-top: 0;
+
+	img {
+		height: 7em;
+		max-height: 25vh;
+	}
+
+
+	&:first-of-type {
+		position: relative;
+		margin: 0 auto;
+		width: max-content;
+		overflow: hidden;
+		padding-top: 0.2em;
+
+		&::after {
+			position: absolute;
+			top: 0.75em;
+			left: -1em;
+			transform: rotate(-45deg);
+			content: "BETA";
+			color: #fff;
+			background-color: #f00;
+			font-weight: normal;
+			font-size: calc(min(3vh, 0.8em));
+			padding: 0.1em 1em;
+			border-radius: 100%;
+		}
+	}
 }
 
 body > nav {
@@ -75,7 +103,7 @@ body > nav {
 		background: #fff;
 
 		&[open] {
-			background-color: #ccc;
+			background-color: #84c7f7;
 			padding-bottom: 0.5em;
 
 			summary {
@@ -98,7 +126,7 @@ body > nav {
 
 	@media (hover: hover) {
 		li a:hover {
-			background-color: #aaa;
+			background-color: #2069cf;
 			color: black;
 		}
 	}
