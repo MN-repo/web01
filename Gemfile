@@ -24,5 +24,4 @@ group(:development) do
 	gem "pry-reload"
 	gem "pry-rescue"
 	gem "pry-stack_explorer"
-	gem "roda-bin"
 end
