@@ -1,20 +1,19 @@
-(define-module (jmp-register)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix packages)
-  #:use-module (guix download)
-  #:use-module (guix git-download)
-  #:use-module (guix build-system ruby)
-  #:use-module (guix build-system copy)
-  #:use-module (guix utils)
-  #:use-module (gnu packages dhall)
-  #:use-module (gnu packages ruby)
-  #:use-module (gnu packages rails)
-  #:use-module (gnu packages databases)
-  #:use-module (gnu packages tls)
-  #:use-module (gnu packages web)
-  #:use-module (ice-9 rdelim)
-  #:use-module (ice-9 popen)
-)
+(use-modules
+  ((guix licenses) #:prefix license:)
+  (guix packages)
+  (guix download)
+  (guix git-download)
+  (guix build-system ruby)
+  (guix build-system copy)
+  (guix utils)
+  (gnu packages dhall)
+  (gnu packages ruby)
+  (gnu packages rails)
+  (gnu packages databases)
+  (gnu packages tls)
+  (gnu packages web)
+  (ice-9 rdelim)
+  (ice-9 popen))
 
 (define-public ruby-statsd-instrument+graphite
   (package
@@ -906,14 +905,13 @@ country objects.  It includes data from ISO 3166")
 
 (define %source-dir (dirname (current-filename)))
 (define %git-dir (string-append %source-dir "/.git"))
-(define %module (current-module))
 
 ; Bake a template by eval'ing the leaves
 (define-public (bake tmpl)
  (list
   (car tmpl)
   (cons (caadr tmpl) (map
-   (lambda (x) (list (car x) (eval (cadr x) %module)))
+   (lambda (x) (list (car x) (eval (cadr x) (current-module))))
    (cdadr tmpl)))))
 
 ; double-escaped template of the jmp-register sexp
@@ -1004,8 +1002,12 @@ country objects.  It includes data from ISO 3166")
       "https://gitlab.com/ossguy/jmp-register")
     (license 'license:agpl3))))
 
+; Baked version of jmp-register-template with leaves eval'd
+(define-public jmp-register-baked
+  (bake jmp-register-template))
+
 ; Build clean from git the version from a local clone
 ; To build whatever is sitting in local use:
-; guix build --with-source=jmp-register=$PWD -L. jmp-register
-(define-public jmp-register
-  (eval (bake jmp-register-template) %module))
+; guix build --with-source=$PWD -f guix.scm
+
+(eval jmp-register-baked (current-module))

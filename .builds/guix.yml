@@ -11,19 +11,24 @@ artifacts:
 - jmp-register.nar.lz
 tasks:
 - bake: |
-    sed '/^;;;;$/q' jmp-register/jmp-register.scm > jmp-register.scm
+    printf "(define-module (jmp-register))\n" > jmp-register.scm
+    sed '/^;;;;$/q' jmp-register/guix.scm >> jmp-register.scm
     printf "(define-public jmp-register\n\t" >> jmp-register.scm
     cd jmp-register
-    printf "(use-modules (jmp-register))\n(write (bake jmp-register-template))\n" | guix repl -L. /dev/stdin >> ../jmp-register.scm
+    printf '(load "%s/guix.scm")\n(write jmp-register-baked)\n' "$(pwd)" | guix repl /dev/stdin >> ../jmp-register.scm
     cd -
-    printf ")" >> jmp-register.scm
-    rm -rf jmp-register
+    printf ")\n" >> jmp-register.scm
+    rm -f jmp-register/guix.scm
+    [ "$BUILD_REASON" = patchset ] || rm -rf jmp-register
 - build: |
-    guix build --no-grafts -L. jmp-register
+    if [ "$BUILD_REASON" = patchset ]; then with_source="--with-source=$PWD/jmp-register"; fi
+    guix build $with_source --no-grafts -r out -L. jmp-register
 - archive: |
-    sudo mv signing-key.pub /etc/guix/
-    sudo mv signing-key.sec /etc/guix/
-    sudo chown root:root /etc/guix/signing-key.sec
-    sudo chmod 0400 /etc/guix/signing-key.sec
-    guix archive --export -r --no-grafts -L. jmp-register > jmp-register.nar
+    if [ -e signing-key.sec ]; then
+      sudo mv signing-key.pub /etc/guix/
+      sudo mv signing-key.sec /etc/guix/
+      sudo chown root:root /etc/guix/signing-key.sec
+      sudo chmod 0400 /etc/guix/signing-key.sec
+    fi
+    guix archive --export -r --no-grafts $(readlink -f out) > jmp-register.nar
     plzip jmp-register.nar
