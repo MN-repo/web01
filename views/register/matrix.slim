@@ -1,0 +1,18 @@
+h1
+	' You've selected
+	= tel
+	- if city
+		= " (#{city})"
+	|  as your JMP number
+
+p This is an alpha test allowing creation of a JMP account using an <a href="https://matrix.org/faq/#what-is-a-mxid%3F">Matrix ID</a>.  This form will use the <a href="https://aria-net.org/SitePages/Portal/Bridges.aspx">aria-net.org</a> gateway.  If you wish to use another gateway instance, you may create the Jabber ID yourself and use <a href="/register/jabber?#{request.query_string}">this form</a>.
+
+p Using JMP from Matrix does not receive as much testing as from Jabber.  Matrix clients in general may not support all the features you want to have the best experience with JMP.  The gateway does not yet support voice for Matrix, so your only option for voice calls will be SIP at this time.  The gateway is not operated by JMP and JMP takes no responsibility for the security or reliability of the Matrix to Jabber gateway you use.  JMP support will attempt to help diagnose any issues, but no one at JMP is a Matrix user and so they may not have as much experience to help in this case.
+
+form action="" method="post"
+	label>
+		' Matrix ID:
+		input type="text" name="mxid"
+	button type="submit" Submit
+
+== render "register/fup"

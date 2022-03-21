@@ -10,10 +10,11 @@ require "blather/client/dsl"
 require "geoip"
 
 require_relative "lib/maxmind"
+require_relative "lib/mxid"
 require_relative "lib/plan"
-require_relative "lib/roda_em_promise"
-require_relative "lib/rates"
 require_relative "lib/rack_fiber"
+require_relative "lib/rates"
+require_relative "lib/roda_em_promise"
 require_relative "lib/tel_query_form"
 require_relative "lib/to_form"
 
@@ -257,6 +258,31 @@ class JmpRegister < Roda
 
 			r.get "snikket" do
 				view "register/snikket"
+			end
+
+			r.on "matrix" do
+				r.get true do
+					view "register/matrix"
+				end
+
+				r.post true do
+					Sentry.set_user(mxid: request.params["mxid"], tel: tel)
+					Jabber.execute(
+						"web-register",
+						{
+							jid: MXID.parse(request.params["mxid"]).jid,
+							tel: tel
+						}.to_form(:submit)
+					).then do |iq|
+						if iq.note_type
+							view "register/jabber/note", locals: { iq: iq }
+						else
+							view "register/matrix/success"
+						end
+					end
+				rescue MXID::BadFormat
+					$!.message
+				end
 			end
 
 			r.get true do
