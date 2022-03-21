@@ -46,7 +46,10 @@ class Plan
 	end
 
 	def message_limit
-		Limit.for("in/out SMS and MMS, including international message", @plan[:messages])
+		Limit.for(
+			"in/out SMS and MMS, including international message",
+			@plan[:messages]
+		)
 	end
 
 	class Limit
