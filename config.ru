@@ -133,7 +133,9 @@ class JmpRegister < Roda
 	using ToForm
 
 	plugin :common_logger, OriginalStdOutStdErr
-	plugin :render, engine: "slim"
+	plugin :render, engine: "slim", engine_opts: {
+		"slim" => { markdown: { f: "commonmark" } }
+	}
 	plugin :content_for
 	plugin :branch_locals
 	plugin(
