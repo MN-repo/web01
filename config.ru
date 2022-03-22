@@ -182,7 +182,7 @@ class JmpRegister < Roda
 	def tels(q, fallbacks=CONFIG[:fallback_searches])
 		Jabber.execute(
 			"jabber:iq:register",
-			TelQueryForm.new(q, request.params["max"] || 2000).to_node
+			TelQueryForm.new(q, request.params["max"] || 1000).to_node
 		).then do |iq|
 			Jabber.cancel(iq)
 			form = TelQueryForm.parse(iq)
