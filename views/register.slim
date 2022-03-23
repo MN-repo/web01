@@ -6,7 +6,6 @@
 			float: left;
 			width: calc(40% - 4em);
 			min-width: 10em;
-			vertical-align: top;
 			clear: left;
 			margin-top: 2em;
 			font-size: 1.5em;
@@ -18,13 +17,6 @@
 		body > a:nth-of-type(2n) {
 			float: right;
 			clear: right;
-		}
-
-		body > a:last-of-type {
-			float: none;
-			margin: auto;
-			position: relative;
-			top: 2em;
 		}
 
 		@media (max-width: 50rem) {
@@ -55,6 +47,9 @@
 			background-size: 3em;
 			background-position: 1em center;
 			padding-left: 4em;
+			min-height: 3em;
+			display: grid;
+			place-content: center;
 		}
 
 		a[href^="register/jabber/new"] {
@@ -67,6 +62,10 @@
 
 		a[href^="register/snikket"] {
 			background-image: url(static/snikket.svg);
+		}
+
+		a[href^="register/matrix"] {
+			background-image: url(static/matrix.svg);
 		}
 
 h1
@@ -84,3 +83,6 @@ a href="register/jabber?#{request.query_string}"
 
 a href="register/snikket?#{request.query_string}"
 	| I am a Snikket user
+
+a href="register/matrix?#{request.query_string}"
+	| I am a Matrix user
