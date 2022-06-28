@@ -213,7 +213,8 @@ class JmpRegister < Roda
 		r.get "tels" do
 			EMPromise.resolve(
 				request.params["q"] || MAXMIND.q(request.ip).then(&:to_q)
-			).catch {
+			).catch { |e|
+				OriginalStdOutStdErr.write("#{request.ip} lookup failed: #{e.inspect}")
 				CONFIG[:fallback_searches].first
 			}.then(&method(:tels)).then { |form|
 				if embed

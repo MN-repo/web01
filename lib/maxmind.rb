@@ -43,6 +43,7 @@ class Maxmind
 
 	def q(ip)
 		unless ["US", "CA"].include?(@geoip.country(ip).country_code2)
+			OriginalStdOutStdErr.write("#{ip} is not US or CA\n")
 			return EMPromise.reject(nil)
 		end
 
