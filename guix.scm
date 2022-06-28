@@ -39,11 +39,6 @@
     (home-page "https://github.com/Shopify/statsd-instrument")
     (license license:expat)))
 
-(define-public ruby-eventmachine-openssl
-  (package
-    (inherit ruby-eventmachine)
-    (inputs `(("openssl" ,openssl)))))
-
 (define-public ruby-hiredis
   (package
     (name "ruby-hiredis")
@@ -908,18 +903,17 @@ country objects.  It includes data from ISO 3166")
 
 ; Bake a template by eval'ing the leaves
 (define-public (bake tmpl)
- (list
+ (cons
   (car tmpl)
-  (cons (caadr tmpl) (map
+  (map
    (lambda (x) (list (car x) (eval (cadr x) (current-module))))
-   (cdadr tmpl)))))
+   (cdr tmpl))))
 
 ; double-escaped template of the jmp-register sexp
 ; This allows us to bake the expression without doing a full eval to a record,
 ; so it can be written
 (define-public jmp-register-template
-  '((package-input-rewriting `((,ruby-eventmachine . ,ruby-eventmachine-openssl)))
-  (package
+  '(package
     (name "jmp-register")
     (version (read-line (open-pipe* OPEN_READ "git" "--git-dir" %git-dir "describe" "--always" "--dirty")))
     (source
@@ -1000,7 +994,7 @@ country objects.  It includes data from ISO 3166")
     (description "")
     (home-page
       "https://gitlab.com/ossguy/jmp-register")
-    (license 'license:agpl3))))
+    (license 'license:agpl3)))
 
 ; Baked version of jmp-register-template with leaves eval'd
 (define-public jmp-register-baked
