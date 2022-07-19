@@ -1,7 +1,7 @@
 - content_for :title, "JMP: Get a Jabber ID"
 - content_for :head do
 	scss:
-		a#chatterboxtown {
+		a#service {
 			font-size: 10vw;
 			display: block;
 			text-align: center;
@@ -63,14 +63,13 @@ section
 
 	p A Jabber ID is an account identifier similar to an email address.  It is what you will log into your Jabber client with and how you will send and receive text messages with your new phone number.  You can use a Jabber ID from any standards-compliant service with JMP.
 
-	a#chatterboxtown{
-		href="https://chatterboxtown.us:5443/register/new/"
+	a#service{
+		href="https://trashserver.net/en/register/"
 		target="_blank"
-		} Get one from ChatterboxTown
+		} Get one from trashserver
 
-javascript:
-	document.querySelector("#chatterboxtown").href =
-		"https://movim.chatterboxtown.us/?account";
+	markdown:
+		or [contact support](/faq#support) to get set up with a [Snikket instance](https://snikket.org/hosting/) on your own domain or subdomain.
 
 section
 	h1 Step 2: Sign in with your new Jabber ID using a Jabber app
