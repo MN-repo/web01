@@ -872,17 +872,17 @@ country objects.  It includes data from ISO 3166")
 (define-public ruby-em-pg-client
   (package
     (name "ruby-em-pg-client")
-    (version "0.3.4-3e21faa")
+    (version "0.3.4-a32daf9")
     (source
      (origin
        (method git-fetch)
        (uri (git-reference
              (url "https://github.com/singpolyma/ruby-em-pg-client")
-             (commit "3e21faa3c1cce6a829419fd358e23e12dbb5c6bb")))
+             (commit "a32daf9c25ac9c44e73e843e80125e0fb4c2a8f1")))
        (file-name (git-file-name name version))
        (sha256
         (base32
-         "0v7j28vws4mdp6dmyrv2s7v7xf678r4fz14m9ms7s52anhpqqc7s"))))
+         "0c3vxy5cv5xiaxbbv9b1kdasbh6h865f6fl269fi327x0fdnyk15"))))
     (build-system ruby-build-system)
     (arguments
      `(#:test-target "spec"))
