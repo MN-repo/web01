@@ -22,7 +22,7 @@ use Rack::Fiber # Must go first!
 
 require "sentry-ruby"
 Sentry.init do |config|
-	config.traces_sample_rate = 1
+	config.traces_sample_rate = 0.01
 end
 use Sentry::Rack::CaptureExceptions
 
