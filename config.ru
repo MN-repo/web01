@@ -9,6 +9,7 @@ require "roda"
 require "blather/client/dsl"
 require "geoip"
 
+require_relative "lib/contact"
 require_relative "lib/maxmind"
 require_relative "lib/mxid"
 require_relative "lib/plan"
@@ -337,6 +338,21 @@ class JmpRegister < Roda
 
 		r.get "credits" do
 			view :credits
+		end
+
+		r.on "sim" do
+			r.get true do
+				view :sim
+			end
+
+			r.post true do
+				REDIS.rpush("jmp_sim_wait_list", Contact.for(
+					request.params.fetch("contact_type"),
+					request.params.fetch("contact")
+				)).then do
+					"Thanks!"
+				end
+			end
 		end
 
 		r.get "upgrade1" do
