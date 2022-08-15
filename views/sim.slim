@@ -1,0 +1,50 @@
+- content_for :title, "JMP: Data-only SIM"
+
+- content_for :head do
+	== assets [:js, :htmx]
+	scss:
+		.price {
+			background: #84C7F7;
+			color: #000;
+			border-radius: 2em;
+			padding: 1em;
+			display: table;
+			margin: 0 auto;
+			font-weight: bold;
+			font-size: 1.2em;
+			text-decoration: none;
+			text-align: center;
+			small {
+				display: block;
+				font-weight: normal;
+			}
+		}
+
+h1 Data-only eSIM
+
+.price
+	- if canada?
+		<abbr title="Canadian Dollars">$</abbr>8.99 / GB + $5.25 / year
+	- else
+		<abbr title="US Dollars">$</abbr>6.99 / GB + $4.25 / year
+	small Pricing not yet final.
+
+markdown:
+	JMP is preparing to launch a data-only mobile plan, starting with an [eSIM](https://en.wikipedia.org/wiki/ESIM) with other options possibly to follow.  We plan to have an option that roams over all of the USA and Canada (on all major carriers), with an option for Europe or other locations possible with enough interest.
+
+	This plan will be pay-as-you go, and purely LTE data, ideal for JMP users who already have a phone number through us.  No use-it-or-lose-it, no lock-in, just prepay 1 GB at a time for the data you actually use.  Prepaid data never expires no matter how long it takes you to use it.
+
+	We know that privacy is important to our customers, and that's why this plan will be available **without providing any personal details to us or the carrier** and with payments coming out of your JMP account, using all the payment mechanisms we already support.  Additionally, **all traffic will be routed via an IP address that does not match your current location** for extra privacy as you use the web.
+
+section
+	h1 Sign up for the waiting list
+
+	p Be the first to know when the eSIM is ready!  We will also be using this waitlist to guage demand, which helps in negotiations with network partners about costs.
+
+	form method="post" action="" hx-post="#" hx-swap="outerHTML"
+		select name="contact_type"
+			option value="xmpp" Jabber ID
+			option value="matrix" Matrix ID
+		input type="text" name="contact" required="required"
+
+		button Sign up
