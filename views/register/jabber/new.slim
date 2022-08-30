@@ -64,9 +64,12 @@ section
 	p A Jabber ID is an account identifier similar to an email address.  It is what you will log into your Jabber client with and how you will send and receive text messages with your new phone number.  You can use a Jabber ID from any standards-compliant service with JMP.
 
 	a#service{
-		href="https://trashserver.net/en/register/"
+		href="https://chatterboxtown.us:5443/register/new/"
 		target="_blank"
-		} Get one from trashserver
+		} Get one from ChatterboxTown
+
+	javascript:
+		document.querySelector("#service").href = "https://movim.chatterboxtown.us/?account";
 
 	markdown:
 		or [contact support](/faq#support) to get set up with a [Snikket instance](https://snikket.org/hosting/) on your own domain or subdomain.
