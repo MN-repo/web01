@@ -20,7 +20,7 @@
 			}
 		}
 
-h1 Data-only eSIM
+h1 Data-only SIM and eSIM
 
 .price
 	- if canada?
@@ -30,16 +30,31 @@ h1 Data-only eSIM
 	small Pricing not yet final.
 
 markdown:
-	JMP is preparing to launch a data-only mobile plan, starting with an [eSIM](https://en.wikipedia.org/wiki/ESIM) with other options possibly to follow.  We plan to have an option that roams over all of the USA and Canada (on all major carriers), with an option for Europe or other locations possible with enough interest.
+	JMP is preparing to launch a data-only mobile plan, with both SIM and [eSIM](https://en.wikipedia.org/wiki/ESIM) options.  Our initial offering is a plan that roams over all of the USA and Canada (on all major carriers), with options for other locations possible in the future with enough interest.
 
-	This plan will be pay-as-you go, and purely LTE data, ideal for JMP users who already have a phone number through us.  No use-it-or-lose-it, no lock-in, just prepay 1 GB at a time for the data you actually use.  Prepaid data never expires no matter how long it takes you to use it.
+	This plan is prepay pay-as-you go and purely LTE data, ideal for JMP users who already have a phone number through us.  No use-it-or-lose-it, no lock-in, just prepay 1 GB at a time for the data you actually use.  Prepaid data never expires no matter how long it takes you to use it.
 
-	We know that privacy is important to our customers, and that's why this plan will be available **without providing any personal details to us or the carrier** and with payments coming out of your JMP account, using all the payment mechanisms we already support.  Additionally, **all traffic will be routed via an IP address that does not match your current location** for extra privacy as you use the web.
+	We know that privacy is important to our customers, and that's why this plan will be available **without providing any personal details to us or the carrier** and with payments coming out of your JMP account balance, using all the payment mechanisms we already support.  Additionally, **all traffic will be routed via an IP address that does not match your current location** for extra privacy as you use the web.
 
 section
 	h1 Sign up for the waiting list
 
-	p Be the first to know when the eSIM is ready!  We will also be using this waitlist to gauge demand, which helps in negotiations with network partners about costs.
+	p Early testing of the data plan is happening now.  In this early phase data top-ups are not yet automatic and must be done manually by support, and top-ups may take some time to apply to your account.  Because of this, during the testing phase we are requiring data be purchased in increments of 5GB or higher instead of 1GB.
+
+	p
+		' Once contacted, eSIM users will be able to activate for just
+		- if canada?
+			<abbr title="Canadian Dollars">$</abbr>5.25
+		- else
+			<abbr title="US Dollars">$</abbr>4.25
+		'  which will include an initial 1GB for testing purposes.  Users needing a SIM card will be able to buy one for a
+		- if canada?
+			<abbr title="Canadian Dollars">$</abbr>40
+		- else
+			<abbr title="US Dollars">$</abbr>30
+		'  deposit (partially refundable on return of undamaged SIM) which will include an initial 1GB for testing purposes.
+
+	p We are rolling out the test phase in batches.  Sign up to be informed when there is a SIM or eSIM ready for you:
 
 	form method="post" action="" hx-post="#" hx-swap="outerHTML"
 		select name="contact_type"
